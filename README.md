@@ -55,3 +55,6 @@ Le but principal du jeu est de survivre le plus longtemps possible en gardant le
 ## Mockups
 <img src="Mockup/Mockup_Part1.jpg">
 <img src="Mockup/Mockup_Part2.jpg">
+
+## Landing page
+Lien pour accéder à la landing page : [lien](https://raynobrak.github.io/baton-bagarre-game)
