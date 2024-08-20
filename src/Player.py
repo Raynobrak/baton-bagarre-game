@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
-        PLAYER_IMAGE = pygame.image.load('../assets/textures/player_default.png').convert_alpha()
+        PLAYER_IMAGE = pygame.image.load('./assets/textures/player_default.png').convert_alpha()
 
         super().__init__()
         self.surf = pygame.Surface((30, 30))
