@@ -22,7 +22,7 @@ Executez la commande suivante
 
 `python run.py`
 
-Cela va initialiser un nouvel environnement python, installer les dependance puis executez le jeu
+Cela va initialiser un nouvel environnement python, installer les dependances puis executer le jeu
 
 
 ## Requirements Fonctionnels
