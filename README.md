@@ -22,7 +22,7 @@ Executez la commande suivante
 
 `python run.py`
 
-Cela va initialiser un nouvel environnement python, installer les dependance puis executez le jeu
+Cela va initialiser un nouvel environnement python, installer les dependances puis executer le jeu
 
 
 ## Requirements Fonctionnels
@@ -73,4 +73,15 @@ Cela va initialiser un nouvel environnement python, installer les dependance pui
 <img src="Mockup/Mockup_Part2.jpg">
 
 ## Landing page
-Lien pour accéder à la landing page : [lien](https://raynobrak.github.io/baton-bagarre-game)
+
+🔥 **Protégez le feu, sauvez l'avenir !** 🔥
+
+Plongez dans une bataille palpitante avec notre nouveau jeu de stickman où votre objectif est de défendre un précieux feu contre des vagues incessantes d'ennemis. Chaque attaque diminue non seulement la vie du feu, mais aussi la visibilité de l'écran, rendant chaque seconde cruciale!
+
+✨ **Êtes-vous prêt à relever le défi ?** ✨
+
+Rejoignez-nous maintenant et testez vos compétences dans cette aventure intense ! Découvrez plus sur notre landing page et préparez-vous à sauver le feu avant qu'il ne soit trop tard.
+
+👉 <a href="https://raynobrak.github.io/baton-bagarre-game" target="_blank">Découvrez le jeu ici !</a>
+
+

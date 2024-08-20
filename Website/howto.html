@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bâton Bagarre - How to</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+<body>
+
+<!--Navigation bar-->
+<div id="nav-placeholder"></div>
+
+<script>
+    $(function () {
+        $("#nav-placeholder").load("navbar.html");
+    });
+</script>
+
+<!-- Resume Section -->
+<section class="resume">
+    <h1>Comment installer et lancer le jeu</h1>
+    <p>Pour pouvoir lancer le jeu il vous faut python version supérieur 3.12</p>
+        Telechargez l'archive la plus récente
+    <p>Decompressez l'archive dans le repertoire de votre choix</p>
+    Dans un terminal, naviguez jusqu'à l'emplacement de l'archive décompresée
+    <p>Executez la commande suivante
+        python run.py
+    </p>
+    <p>
+        Cela va initialiser un nouvel environnement python, installer les dependance puis executer le jeu
+    </p>
+</section>
+
+<!--Navigation bar-->
+<div id="footer-placeholder"></div>
+
+<script>
+    $(function () {
+        $("#footer-placeholder").load("footer.html");
+    });
+</script>
+
+</body>
+</html>
