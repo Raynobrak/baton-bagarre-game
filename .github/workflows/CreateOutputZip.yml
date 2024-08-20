@@ -55,3 +55,5 @@ jobs:
         asset_path: ./output/game.zip
         asset_name: game.zip
         asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

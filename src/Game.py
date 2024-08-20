@@ -7,11 +7,10 @@ vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
 
 import src.Constant
-
-from src.Player import *
+from src.Player import Player
 
 class Game():
-    __player = None
+    __player: Player
     __displaysurface = None
     __spritegroup = pygame.sprite.Group()
 
@@ -22,7 +21,6 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.__player = Player()
-        self.__spritegroup.add(self.__player)
         self.run()
 
     def run(self):
@@ -35,9 +33,9 @@ class Game():
 
             self.__displaysurface.fill((0,0,0))
 
-            #for entity in self.__spritegroup:
-
             self.__player.draw(self.__displaysurface)
+
+            self.__player.update(1 / 60)
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
