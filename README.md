@@ -10,7 +10,20 @@ Le but principal du jeu est de survivre le plus longtemps possible en gardant le
 
 ## Installation and run
 
-Pour pouvoir lancer le jeu il vous faut python version supérieur 3.12 
+Pour pouvoir lancer le jeu il vous faut python version supérieur 3.12
+
+Telechargez l'archive la plus récente
+
+Decompressez l'archive dans le repertoire de votre choix
+
+Dans un terminal, naviguez jusqu'à l'emplacement de l'archive décompresée
+
+Executez la commande suivante
+
+`python run.py`
+
+Cela va initialiser un nouvel environnement python, installer les dependance puis executez le jeu
+
 
 ## Requirements Fonctionnels
 
