@@ -2,30 +2,29 @@
 
 ## Description du Projet
 
-**Bâton Bagarre** est un jeu d'action en 2D développé en Python à l'aide de la bibliothèque PyGame. Le jeu met en scène un stickman dont l'objectif est de protéger un feu de divers ennemis qui tentent de l'éteindre. Le feu s'éteint progressivement, réduisant la zone de lumière visible à l'écran. Le stickman peut réparer le feu, mais cela prend du temps, et il doit également combattre les ennemis pour les empêcher de détruire le feu.
+**Bâton Bagarre** est un jeu d'action en 2D développé en Python à l'aide de la bibliothèque PyGame. Le jeu met en scène un stickman dont l'objectif est de protéger un feu de divers ennemis qui tentent de l'éteindre. Le feu s'éteint progressivement, réduisant la visibilité du joueur. Le stickman peut raviver le feu en intéragissant avec, mais cela prend du temps et doit également combattre les ennemis pour les empêcher de détruire le feu.
 
 ### Objectif
 
-Le but principal du jeu est de survivre le plus longtemps possible en gardant le feu allumé. À mesure que le feu s'éteint, les bords de l'écran deviennent de plus en plus sombres jusqu'à ce que la visibilité soit réduite à néant. Le jeu se termine lorsque le feu est complètement éteint, et la visibilité est réduite à zéro. Le joueur doit donc jongler entre combattre les ennemis et réparer le feu pour maintenir une zone de lumière suffisante.
+Le but principal du jeu est de survivre le plus longtemps possible en gardant le feu allumé. Le jeu se termine lorsque le feu est complètement éteint, et la visibilité est réduite à zéro. Le joueur doit donc jongler entre combattre les ennemis et réparer le feu pour maintenir une zone de lumière suffisante.
 
 ## Requirements Fonctionnels
 
 1. **Gestion du Feu :**
     - Le feu doit réduire de taille au fil du temps.
-    - Le stickman peut réparer le feu, augmentant ainsi la taille de la lumière.
-    - La vitesse de réparation doit être lente, nécessitant un certain temps pour être efficace.
-    - Le jeu se termine lorsque le feu est complètement éteint et que la visibilité est nulle.
+    - Le stickman peut raviver le feu en intéragissant avec, à condition qu'il ne soit pas complètement éteint.
+    - Si le feu est complètement éteint, il n'est pas possible de le rallumer et le jeu se termine.
 
 2. **Ennemis :**
-    - Les ennemis doivent apparaître et tenter d'éteindre le feu.
-    - Les ennemis doivent être détruits par le stickman pour empêcher l'extinction du feu.
-    - Les ennemis doivent apparaître à des intervalles réguliers et augmenter en nombre et en difficulté au fil du temps.
-    - Les ennemis doivent avoir des comportements variés (ex. : se déplacer vers le feu, attaquer le feu).
+    - Les ennemis doivent apparaître et se diriger vers le feu.
+    - Les ennemis doivent pouvoir être éliminés par le stickman.
+    - Le nombre et la puissance des ennemis doit augmenter en difficulté au fil du temps.
+    - Si un ennemi attaque le feu, l'intensité du feu diminuera par acoups très rapidement.
 
 3. **Stickman :**
     - Le stickman doit être contrôlable par le joueur.
     - Le stickman doit pouvoir se déplacer et attaquer les ennemis.
-    - Le stickman doit pouvoir réparer le feu en restant immobile.
+    - Le stickman doit pouvoir réparer le feu en intéragissant avec.
     - Le stickman est invincible.
 
 4. **Effet de Lumière :**
@@ -34,7 +33,7 @@ Le but principal du jeu est de survivre le plus longtemps possible en gardant le
 
 5. **Interface Utilisateur :**
     - Afficher un compteur de temps ou un score indiquant combien de temps le joueur a survécu.
-    - Indiquer visuellement la taille du feu ou l’état de la réparation.
+    - Indiquer visuellement le temps de vie restant du feu.
 
 ## Requirements Non-Fonctionnels
 
