@@ -24,6 +24,11 @@ Le but principal du jeu est de survivre le plus longtemps possible en gardant le
 
 6. Cela va initialiser un nouvel environnement python, installer les dependances puis executer le jeu
 
+## Test
+
+Pour lancer les test il vous suffit d'utiliser la commande 
+
+`python test.py`
 
 ## Requirements Fonctionnels
 
