@@ -1,1 +1,37 @@
-<h1>Test 1</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bâton Bagarre</title>
+    <link rel="stylesheet" href="Website/styles.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+<body>
+
+<!--Navigation bar-->
+<div id="nav-placeholder"></div>
+
+<script>
+    $(function(){
+        $("#nav-placeholder").load("./Website/navbar.html");
+    });
+</script>
+
+<!-- Resume Section -->
+<header class="resume">
+    <h1>Bâton Bagarre</h1>
+    <p>Un jeu intense de stickman où chaque seconde compte pour protéger votre feu. Survivez à des vagues d'ennemis qui arrivent de <b>PARTOUT</b> pour étouffer votre feu.
+        Faites attention, votre vue disponible dépend de l'intensité du feu!</p>
+    <img src="Website/stickmanHome.png" alt="Image du jeu 1" class="imageGame"><br>
+    <a href="#download" class="cta-button">Télécharger le jeu</a><br>
+</header>
+
+<!-- Footer -->
+<footer>
+    <p>© 2024 Bâton Bagarre. Tous droits réservés.</p>
+    <p><a href="mailto:contact@votrejeu.com">Contactez-nous</a></p>
+</footer>
+</body>
+</html>
