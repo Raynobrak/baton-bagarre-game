@@ -10,19 +10,19 @@ Le but principal du jeu est de survivre le plus longtemps possible en gardant le
 
 ## Installation and run
 
-Pour pouvoir lancer le jeu il vous faut python version supérieur 3.12
+1. Pour pouvoir lancer le jeu il vous faut python version supérieure à 3.12
 
-Telechargez l'archive la plus récente
+2. Telechargez l'archive la plus récente
 
-Decompressez l'archive dans le repertoire de votre choix
+3. Decompressez l'archive dans le repertoire de votre choix
 
-Dans un terminal, naviguez jusqu'à l'emplacement de l'archive décompresée
+4. Dans un terminal, naviguez jusqu'à l'emplacement de l'archive décompresée
 
-Executez la commande suivante
+5. Executez la commande suivante
 
-`python run.py`
+    `python run.py`
 
-Cela va initialiser un nouvel environnement python, installer les dependances puis executer le jeu
+6. Cela va initialiser un nouvel environnement python, installer les dependances puis executer le jeu
 
 
 ## Requirements Fonctionnels
@@ -46,7 +46,7 @@ Cela va initialiser un nouvel environnement python, installer les dependances pu
 
 4. **Effet de Lumière :**
     - La zone de lumière visible doit diminuer à mesure que le feu s’éteint.
-    - Les bords de l'écran doivent devenir progressivement plus sombres en fonction de la taille du feu.
+    - Les bords de l'écran doivent devenir progressivement plus sombres en fonction de l'intensité du feu.
 
 5. **Interface Utilisateur :**
     - Afficher un compteur de temps ou un score indiquant combien de temps le joueur a survécu.
@@ -67,6 +67,54 @@ Cela va initialiser un nouvel environnement python, installer les dependances pu
 
 4. **Documentation :**
     - La documentation du code et du jeu doit être complète et bien structurée pour faciliter les futurs développements et la maintenance.
+
+## Choix Techniques
+Lorsque nous avons décidé de développer notre jeu de stickman avec Pygame, plusieurs facteurs techniques ont guidé notre choix. Voici pourquoi Python et Pygame étaient les meilleures options pour notre projet :
+
+1. **Accessibilité et simplicité de Python** : 
+Python est un langage reconnu par sa syntaxe claire et lisible, ce qui en fait un langage de programmation idéal pour les développeurs de tous les niveaux.
+
+2. **Richesse de la bibliothèque PyGame** : 
+PyGame est une bibliothèque Python spécialement conçue pour le développement de jeux. Elle fournit une série d'outils pour gérer les graphiques, les sons et les entrées utilisateurs. Avec cette bibliothèque on peut facilement implémenter les éléments essentiels d'un jeux vidéo comme les collisions, les animations et les contrôles, tout en bénéficiant d'une bonne performance graphique.
+
+3. **Flexibilité et portabilité** : 
+Python est un langage multiplateforme, et Pygame est compatible avec Windows, macOS, et Linux. Cette portabilité nous permet de développer et de tester notre jeu sur différents systèmes d'exploitation, garantissant ainsi une expérience cohérente pour tous les joueurs.
+
+4. **Coût et accessibilité** : 
+Python et PyGame sont tous les deux gratuits et open-source, cela réduit les coût de réalisation du projet à 0 et rend les outils accessibles à tout développeur, peu importe le budget.
+
+## Processus de travail
+1. **Idéation et Conceptualisation** : 
+Le processus a débuté par une phase de brainstorming où nous avons exploré différentes idées de projet à réaliser pendant ces 3 semaines. On était partis de la base de créer un jeu de combat de stickman en local. Après plusieurs discussions, nous avons opté pour un concept de défense de base tout en gardant le concept de stickman, mais avec la "Killer feature" où la vie du feu (objet à défendre) affecte directement la visibilité du joueur, ajoutant une dimension stratégique au jeu.
+
+ 2. **Planification et Conception** : 
+Une fois l'idée de base définie, nous avons établi un plan de développement détaillé. Cette phase comprenait la création des Mokups pour le jeu, la définition des principales mécaniques de jeu et la répartition des tâches à réaliser pour celui-ci sur un [Trello](https://trello.com/b/7f2iohaa/pdg24-baton-bagarre) crée pour le groupe . Nous avont également identifié les ressources nécessaires, telles que les assets graphiques, les sons, et les outils de développement.
+
+3. **Prototypage** : 
+Nous avons ensuite réalise un prototype fonctionnel qui nous permet de tester les principales mécaniques du jeu. On a aussi crée le "Landing page" qui permet de "vendre" le jeu aux clients.
+
+4. **Développement iteratif** : 
+Pour le développement nous avons suivi une approche itérative, ce qui signifie que nous avons développé le jeu par petites étapes, en testant et ajustant continuellement chaque fonctionnalité. 
+
+## Créer une nouvelle version du jeu
+ 
+Nous avons créer un workflow GitHub Actions configuré pour créer une nouvelle release contenant une archive zip avec uniquement les fichiers nécéssaire au jeu.
+ 
+Pour la déclencher, rien de plus simple, il faut :
+ 
+1. **Créer un tag** : Utilisez la commande suivante pour créer un tag avec un numéro de version (par exemple, `v1.0.0`).
+ 
+    ```bash
+    git tag v1.0.0
+    ```
+ 
+2. **Pousser le tag vers le dépôt distant** : Envoyez le tag créé vers le dépôt GitHub.
+ 
+    ```bash
+    git push origin v1.0.0
+    ```
+ 
+Cela déclenchera le workflow et créera une nouvelle release nommée "Release v1.0.0" avec le fichier ZIP généré et attaché automatiquement à cette release.
 
 ## Mockups
 <img src="Mockup/Mockup_Part1.jpg">
