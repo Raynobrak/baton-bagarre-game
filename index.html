@@ -13,7 +13,7 @@
 <!--Navigation bar-->
 <nav class="navbar">
     <div class="container">
-        <a href="../index.html" class="logo">Bâton Bagarre</a>
+        <a href="#" class="logo">Bâton Bagarre</a>
         <ul class="nav-links">
             <li><a href="./Website/about.html">À propos</a></li>
             <li><a href="./Website/team.html">Équipe</a></li>
@@ -32,10 +32,13 @@
     <a href="#download" class="cta-button">Télécharger le jeu</a><br>
 </header>
 
-<!-- Footer -->
-<footer>
-    <p>© 2024 Bâton Bagarre. Tous droits réservés.</p>
-    <p><a href="mailto:contact@votrejeu.com">Contactez-nous</a></p>
-</footer>
+<!--Navigation bar-->
+<div id="footer-placeholder"></div>
+
+<script>
+    $(function(){
+        $("#footer-placeholder").load("./Website/footer.html");
+    });
+</script>
 </body>
 </html>
