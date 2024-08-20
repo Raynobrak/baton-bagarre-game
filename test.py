@@ -19,5 +19,5 @@ venv_python = os.path.join(venv_path, 'Scripts', 'python.exe') if os.name == 'nt
 # Installation des packages avec l'environnement virtuel
 subprocess.check_call([venv_python, '-m', 'pip', 'install', '-r', 'requirements.txt'])
 
-# Exécution du jeu en utilisant l'environnement virtuel
+# Exécution de pytest dans l'environnement courant
 subprocess.check_call([venv_python, '-m', 'pytest'])
