@@ -1,13 +1,16 @@
 import pygame
 from pygame.locals import *
 
+from src.Player import Player
+
+from src.ImageManager import ImageManager
+
 from src.Constant import Constant
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
 
 import src.Constant
-from src.Player import Player
 
 class Game():
     __player: Player
@@ -17,8 +20,12 @@ class Game():
     def __init__(self):
         print("Hello")
         pygame.init()
+
+
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
+
+        ImageManager().load_image('./assets/textures/player_default.png', 'player')
 
         self.__player = Player()
         self.run()

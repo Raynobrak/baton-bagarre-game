@@ -1,4 +1,6 @@
 import pygame
+
+from src.ImageManager import ImageManager
 from src.Stickman import Stickman
 from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
@@ -11,7 +13,7 @@ class Player(Stickman):
 
         self.velocity = vec(20,20)
 
-        PLAYER_IMAGE = pygame.image.load('./assets/textures/player_default.png').convert_alpha()
+        PLAYER_IMAGE = ImageManager().get_image("player")
 
         self.__playerSprite = pygame.sprite.Sprite()
         self.__playerSprite.surf = pygame.Surface((30, 30))
