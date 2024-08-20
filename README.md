@@ -8,6 +8,10 @@
 
 Le but principal du jeu est de survivre le plus longtemps possible en gardant le feu allumé. Le jeu se termine lorsque le feu est complètement éteint, et la visibilité est réduite à zéro. Le joueur doit donc jongler entre combattre les ennemis et réparer le feu pour maintenir une zone de lumière suffisante.
 
+## Installation and run
+
+Pour pouvoir lancer le jeu il vous faut python version supérieur 3.12 
+
 ## Requirements Fonctionnels
 
 1. **Gestion du Feu :**

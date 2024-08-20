@@ -9,7 +9,7 @@ class Player(Stickman):
     def __init__(self):
         super().__init__()
 
-        PLAYER_IMAGE = pygame.image.load('../assets/textures/player_default.png').convert_alpha()
+        PLAYER_IMAGE = pygame.image.load('./assets/textures/player_default.png').convert_alpha()
 
         self.__playerSprite.surf = pygame.Surface((30, 30))
         self.__playerSprite.rect = self.surf.get_rect(center = (50, 50))

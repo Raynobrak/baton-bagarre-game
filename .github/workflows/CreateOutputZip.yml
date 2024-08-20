@@ -1,0 +1,27 @@
+name: Create game ZIP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  create-zip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up ZIP file
+      run: mkdir -p output
+
+    - name: Add files and folders to ZIP
+      run: zip -r output/game.zip assets src requirements.txt run.py
+
+    - name: Upload ZIP file as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: game
+        path: output/game.zip
