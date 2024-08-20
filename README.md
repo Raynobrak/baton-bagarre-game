@@ -82,4 +82,6 @@ Plongez dans une bataille palpitante avec notre nouveau jeu de stickman où votr
 
 Rejoignez-nous maintenant et testez vos compétences dans cette aventure intense ! Découvrez plus sur notre landing page et préparez-vous à sauver le feu avant qu'il ne soit trop tard.
 
-👉 [Découvrez le jeu ici !](https://raynobrak.github.io/baton-bagarre-game)
+👉 <a href="https://raynobrak.github.io/baton-bagarre-game" target="_blank">Découvrez le jeu ici !</a>
+
+
