@@ -1,45 +1,502 @@
 <!DOCTYPE html>
-<html lang="fr">
+<!--[if lt IE 9 ]><html class="no-js oldie" lang="fr"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js oldie ie9" lang="fr"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="fr">
+<!--<![endif]-->
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--- basic page needs
+   ================================================== -->
+    <meta charset="utf-8">
     <title>Bâton Bagarre</title>
-    <link rel="stylesheet" href="Website/styles.css">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <meta name="description" content="Landing page pour le projet PDG 2024">
+    <meta name="author" content="Esteban Lopez">
+
+    <!-- mobile specific metas
+   ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+   ================================================== -->
+    <link rel="stylesheet" href="./Website/css/base.css">
+    <link rel="stylesheet" href="./Website/css/vendor.css">
+    <link rel="stylesheet" href="./Website/css/main.css">
+
+    <!-- script
+   ================================================== -->
+    <script src="./Website/js/modernizr.js"></script>
+    <script src="./Website/js/pace.min.js"></script>
+
+    <!-- favicons
+	================================================== -->
+    <link rel="shortcut icon" href="./Website/images/logo.png" type="image/x-icon">
+    <link rel="icon" href="./Website/images/logo.png" type="image/x-icon">
 
 </head>
-<body>
 
-<!--Navigation bar-->
-<nav class="navbar">
-    <div class="container">
-        <a href="#" class="logo">Bâton Bagarre</a>
-        <ul class="nav-links">
-            <li><a href="./Website/about.html">À propos</a></li>
-            <li><a href="./Website/team.html">Équipe</a></li>
-            <li><a href="./Website/gallery.html">Galerie</a></li>
-            <li><a href="./Website/howto.html">How to</a></li>
+<body id="top">
+
+    <!-- header
+   ================================================== -->
+   <header id="header" class="row">
+
+   		<div class="header-logo">
+	        <a href="index.html">Bâton Bagarre</a>
+	    </div>
+
+	   	<nav id="header-nav-wrap">
+			<ul class="header-main-nav">
+				<li class="current"><a class="smoothscroll"  href="#home" title="home">Home</a></li>
+                <li><a class="smoothscroll"  href="#about" title="about">À propos</a></li>
+                <li><a class="smoothscroll"  href="#team" title="team">L'équipe</a></li>
+                <li><a class="smoothscroll"  href="#howto" title="howto">How to</a></li>
+				<li><a class="smoothscroll"  href="#gallery" title="gallery ">Galerie</a></li>
+				<li><a class="smoothscroll"  href="#download" title="download">Télécharger</a></li>
+			</ul>
+        </nav>
+
+		<a class="header-menu-toggle" href="#"><span>Menu</span></a>
+
+   </header> <!-- /header -->
+
+
+   <!-- home
+   ================================================== -->
+   <section id="home" data-parallax="scroll" data-image-src="./Website/images/bannerBaton.png" data-natural-width=3000 data-natural-height=2000>
+
+        <div class="overlay"></div>
+        <div class="home-content">
+
+            <div class="row contents">
+                <div class="home-content-left">
+
+                    <h3 data-aos="fade-up">Bâton Bagarre</h3>
+
+                    <h1 data-aos="fade-up">
+                        Protégez votre feu à tout prix<br>
+                        Évitez les vagues d'ennemis<br>
+                        Moins de feu, moins de visibilité.
+                    </h1>
+
+                    <div class="buttons" data-aos="fade-up">
+                        <a href="#download" class="smoothscroll button stroke">
+                            <span class="icon-circle-down" aria-hidden="true"></span>
+                            Télécharger le jeu
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="home-image-right">
+                    <img src="./Website/images/iphone-app-470.png"
+                        srcset="./Website/images/iphone-app-470.png 1x, images/iphone-app-940.png 2x"
+                        data-aos="fade-up">
+                </div>
+            </div>
+
+        </div> <!-- end home-content -->
+
+        <ul class="home-social-list">
+            <li>
+                <a href="#"><i class="fa fa-facebook-square"></i></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-youtube-play"></i></a>
+            </li>
         </ul>
+        <!-- end home-social-list -->
+
+        <div class="home-scrolldown">
+            <a href="#about" class="scroll-icon smoothscroll">
+                <span>Scroll Down</span>
+                <i class="icon-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+
+    </section> <!-- end home -->
+
+
+    <!-- about
+    ================================================== -->
+    <section id="about">
+
+        <div class="row about-intro">
+
+            <div class="col-four">
+                <h1 class="intro-header" data-aos="fade-up">À propos du jeu</h1>
+            </div>
+            <div class="col-eight">
+                <p>Bienvenue dans Bâton Bagarre, un jeu d'action palpitant où votre mission est de protéger la dernière
+                    flamme de l'humanité contre des vagues incessantes d'ennemis stickman. Dans ce monde sombre et impitoyable, vous
+                    êtes le seul rempart entre le feu sacré et l'extinction totale.</p>
+                <h3>Gameplay :</h3>
+                <p>Votre objectif est simple, mais le défi est immense. Un feu sacré brûle au centre de l'écran, symbolisant
+                    l'espoir et la vie. Chaque seconde, la vie de ce feu diminue lentement. Mais ce n'est pas tout : une horde
+                    d'ennemis stickman se lance à l'assaut pour éteindre cette flamme vitale. Vous devez utiliser toutes vos
+                    compétences de combat pour repousser ces assaillants et préserver la flamme.</p>
+
+                <h3>Une mécanique unique :</h3>
+
+                <p>La santé du feu n'affecte pas seulement votre score : elle modifie également votre perception du jeu. Au fur et à
+                    mesure que la vie du feu diminue, l'écran s'obscurcit, réduisant votre visibilité et rendant chaque mouvement
+                    plus risqué. Plus le feu s'affaiblit, plus il devient difficile de distinguer vos ennemis et d'anticiper leurs
+                    attaques. Vous devez donc agir rapidement et avec précision pour garder le feu aussi brillant que possible.</p>
+
+                <h3>Caractéristiques principales :</h3>
+                <ul>
+                    <li>Combats dynamiques : Vivez l'intensité des combats en temps réel contre des vagues d'ennemis de plus en plus
+                        puissants et stratégiques.
+                    </li>
+                    <li>Survie sous pression : Le feu diminue non seulement à cause des attaques ennemies mais aussi avec le temps.
+                        Chaque seconde compte, chaque ennemi vaincu est un souffle de plus pour la flamme.
+                    </li>
+                    <li>Visibilité évolutive : La lumière du feu guide vos actions. Une flamme forte illumine votre chemin, mais à
+                        mesure qu'elle s'affaiblit, l'obscurité s'empare de l'écran, augmentant le défi.
+                    </li>
+                    <li>Graphismes minimalistes et immersifs : Un design simple mais efficace qui met l'accent sur l'action et
+                        l'urgence du moment.
+                    </li>
+                    <li>Stratégie et réflexes : Choisissez judicieusement vos mouvements et utilisez les bonnes techniques pour
+                        maximiser votre efficacité en combat tout en protégeant le feu.
+                    </li>
+                </ul>
+                <p>Bâton Bagarre est un jeu qui mettra à l'épreuve vos réflexes, votre stratégie et votre persévérance.
+                    Serez-vous capable de défendre la dernière flamme et de repousser l'obscurité qui menace d'engloutir le monde
+                    ?</p>
+
+                <p>Préparez-vous à plonger dans l'action et à découvrir si vous avez ce qu'il faut pour devenir le dernier gardien
+                    de la flamme !</p>
+            </div>
+
+        </div><!-- end about-features -->
+
+        <div class="row about-bottom-image">
+
+           <img src="images/app-screens-1200.png"
+                srcset="images/app-screens-600.png 600w,
+                        images/app-screens-1200.png 1200w,
+                        images/app-screens-2800.png 2800w"
+                sizes="(max-width: 2800px) 100vw, 2800px"
+                alt="App Screenshots" data-aos="fade-up">
+
+        </div>  <!-- end about-bottom-image -->
+
+    </section> <!-- end about -->
+
+
+    <!-- pricing
+    ================================================== -->
+    <section id="team">
+        <div class="row pricing-content">
+
+            <div class="col-four pricing-intro">
+                <h1 class="intro-header" data-aos="fade-up">L'équipe</h1>
+
+                <p data-aos="fade-up">
+                    Notre équipe est composée de quatre passionnés des jeux vidéo qui veulent approfondir plus ses connaissances dans
+                    ce monde et veulent aussi apprendre le codage de jeux avec Python
+                </p>
+            </div>
+
+            <div class="col-eight pricing-table">
+                <div class="row">
+
+                    <div class="col-six plan-wrap">
+                        <div class="plan-block" data-aos="fade-up">
+
+                            <div class="plan-top-part">
+                                <h3 class="plan-block-title">Esteban Lopez</h3>
+                            </div>
+
+                            <div class="plan-bottom-part">
+                                <ul class="plan-block-features">
+                                    <li>23 ans</li>
+                                    <li>Informatique logicielle</li>
+                                    <li>Loupe beaucoup les maths</li>
+                                    <li>Compte rester 6 ans à l'HEIG</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div> <!-- end plan-wrap -->
+
+                    <div class="col-six plan-wrap">
+                        <div class="plan-block" data-aos="fade-up">
+
+                            <div class="plan-top-part">
+                                <h3 class="plan-block-title">Rémi Ançay</h3>
+                            </div>
+
+                            <div class="plan-bottom-part">
+                                <ul class="plan-block-features">
+                                    <li>Âge inconnu</li>
+                                    <li>Ingénierie des données</li>
+                                    <li>Est valaisan</li>
+                                    <li>Vive la montagne</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div> <!-- end plan-wrap -->
+
+                    <div class="col-six plan-wrap">
+                        <div class="plan-block" data-aos="fade-up">
+
+                            <div class="plan-top-part">
+                                <h3 class="plan-block-title">Lucas Charbonnier</h3>
+                            </div>
+
+                            <div class="plan-bottom-part">
+                                <ul class="plan-block-features">
+                                    <li>Un certain âge</li>
+                                    <li>Ingénierie des données</li>
+                                    <li>Il carry le groupe</li>
+                                    <li>N'a jamais fait du PyGame</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div> <!-- end plan-wrap -->
+
+                    <div class="col-six plan-wrap">
+                        <div class="plan-block" data-aos="fade-up">
+
+                            <div class="plan-top-part">
+                                <h3 class="plan-block-title">Benoît Delay</h3>
+                            </div>
+
+                            <div class="plan-bottom-part">
+                                <ul class="plan-block-features">
+                                    <li>Le papy du groupe</li>
+                                    <li>Systèmes informatiques embarqués</li>
+                                    <li>Membre de Baleinev</li>
+                                    <li>Adore faire la fête</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div> <!-- end plan-wrap -->
+                </div>
+            </div> <!-- end pricing-table -->
+
+        </div> <!-- end pricing-content -->
+    </section> <!-- end pricing -->
+
+
+    <!-- Testimonials Section
+    ================================================== -->
+    <section id="howto">
+
+        <div class="row">
+            <div class="col-twelve">
+                <h1 class="intro-header" data-aos="fade-up">What They Say About Our App.</h1>
+            </div>
+        </div>
+
+        <div class="row owl-wrap">
+
+            <div id="testimonial-slider"  data-aos="fade-up">
+
+                <div class="slides owl-carousel">
+
+                    <div>
+                        <p>
+                        Your work is going to fill a large part of your life, and the only way to be truly satisfied is
+                        to do what you believe is great work. And the only way to do great work is to love what you do.
+                        If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.
+                        </p>
+
+                        <div class="testimonial-author">
+                                <img src="images/avatars/user-02.jpg" alt="Author image">
+                                <div class="author-info">
+                                    Steve Jobs
+                                    <span class="position">CEO, Apple.</span>
+                                </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p>
+                        This is Photoshop's version  of Lorem Ipsum. Proin gravida nibh vel velit auctor aliquet.
+                        Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem
+                        nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet mauris.
+                        </p>
+
+                        <div class="testimonial-author">
+                                <img src="images/avatars/user-03.jpg" alt="Author image">
+                                <div class="author-info">
+                                    John Doe
+                                    <span>CEO, ABC Corp.</span>
+                                </div>
+                        </div>
+                    </div>
+
+                </div> <!-- end slides -->
+
+            </div> <!-- end testimonial-slider -->
+
+        </div> <!-- end flex-container -->
+
+    </section> <!-- end testimonials -->
+
+
+    <!-- download
+    ================================================== -->
+    <section id="download">
+
+        <div class="row">
+            <div class="col-full">
+                <h1 class="intro-header"  data-aos="fade-up">Download Our App Today!</h1>
+
+                <p class="lead" data-aos="fade-up">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                </p>
+
+                <ul class="download-badges">
+                    <li><a href="#" title="" class="badge-appstore"  data-aos="fade-up">App Store</a></li>
+                    <li><a href="#" title="" class="badge-googleplay" data-aos="fade-up">Play Store</a></li>
+                </ul>
+
+            </div>
+        </div>
+
+    </section> <!-- end download -->
+
+
+    <!-- footer
+    ================================================== -->
+    <footer>
+
+        <div class="footer-main">
+            <div class="row">
+
+                <div class="col-three md-1-3 tab-full footer-info">
+
+                    <div class="footer-logo"></div>
+
+                    <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in ipsum id orci porta dapibus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus.
+                    </p>
+
+                    <ul class="footer-social-list">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook-square"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-behance"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-dribbble"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </li>
+                    </ul>
+
+
+                </div> <!-- end footer-info -->
+
+                <div class="col-three md-1-3 tab-1-2 mob-full footer-contact">
+
+                    <h4>Contact</h4>
+
+                    <p>
+                    1600 Amphitheatre Parkway<br>
+                    Mountain View, CA <br>
+                    94043 US<br>
+                    </p>
+
+                    <p>
+                    someone@dazzlesite.com <br>
+                    Phone: (+63) 555 1212 <br>
+                    Fax: (+63) 555 0100
+                    </p>
+
+                </div> <!-- end footer-contact -->
+
+                <div class="col-two md-1-3 tab-1-2 mob-full footer-site-links">
+
+                    <h4>Site Links</h4>
+
+                    <ul class="list-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+
+                </div> <!-- end footer-site-links -->
+
+                <div class="col-four md-1-2 tab-full footer-subscribe">
+
+                    <h4>Our Newsletter</h4>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                    <div class="subscribe-form">
+
+                        <form id="mc-form" class="group" novalidate="true">
+
+                            <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Email Address" required="">
+
+                            <input type="submit" name="subscribe" value="Send">
+
+                            <label for="mc-email" class="subscribe-message"></label>
+
+                        </form>
+
+                    </div>
+
+                </div> <!-- end footer-subscribe -->
+
+            </div> <!-- /row -->
+        </div> <!-- end footer-main -->
+
+
+      <div class="footer-bottom">
+
+      	<div class="row">
+
+      		<div class="col-twelve">
+	      		<div class="copyright">
+		         	<span>© Copyright Dazzle 2018.</span>
+		         	<span>Design by <a href="http://www.styleshout.com/">styleshout</a></span>
+		         </div>
+
+		         <div id="go-top">
+		            <a class="smoothscroll" title="Back to Top" href="#top"><i class="icon-arrow-up"></i></a>
+		         </div>
+	      	</div>
+
+      	</div> <!-- end footer-bottom -->
+
+      </div>
+
+    </footer>
+
+    <div id="preloader">
+    	<div id="loader"></div>
     </div>
-</nav>
 
-<!-- Resume Section -->
-<header class="resume">
-    <h1>Bâton Bagarre</h1>
-    <p>Un jeu intense de stickman où chaque seconde compte pour protéger votre feu. Survivez à des vagues d'ennemis qui
-        arrivent de <b>PARTOUT</b> pour étouffer votre feu.
-        Faites attention, votre vue disponible dépend de l'intensité du feu!</p>
-    <img src="Website/stickmanHome.png" alt="Image du jeu 1" class="imageGame"><br>
-    <a href="https://github.com/Raynobrak/baton-bagarre-game/releases" target="_blank" class="cta-button">Télécharger le jeu</a><br>
-</header>
+    <!-- Java Script
+    ================================================== -->
+    <script src="./Website/js/jquery-2.1.3.min.js"></script>
+    <script src="./Website/js/plugins.js"></script>
+    <script src="./Website/js/main.js"></script>
 
-<!--Navigation bar-->
-<div id="footer-placeholder"></div>
-
-<script>
-    $(function () {
-        $("#footer-placeholder").load("./Website/footer.html");
-    });
-</script>
 </body>
+
 </html>
