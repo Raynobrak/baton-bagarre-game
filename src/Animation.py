@@ -55,6 +55,14 @@ class Animation():
         for index, surface in enumerate(self.surfaces) :
             self.surfaces[index] = pygame.transform.smoothscale(surface, newSize)
 
+    def flip_horizontally(self):
+        for index, surface in enumerate(self.surfaces) :
+            self.surfaces[index] = pygame.transform.flip(surface, True, False)
+        
+    def flip_vertically(self):
+        for index, surface in enumerate(self.surfaces) :
+            self.surfaces[index] = pygame.transform.flip(surface, False, True)
+
     def set_position(self, newPos):
         self.position = newPos
 
