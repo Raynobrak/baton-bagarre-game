@@ -13,17 +13,20 @@ class PlayerDirection(Enum):
     RIGHT = 2
 
 class Player(Stickman):
-    def __init__(self):
+    def __init__(self, size: vec):
         super().__init__()
 
         self.velocity = vec(20,20)
 
         PLAYER_IMAGE = ImageManager().get_image("player")
 
+        resized_image = pygame.transform.smoothscale(PLAYER_IMAGE, size)
         self.__playerSprite = pygame.sprite.Sprite()
-        self.__playerSprite.surf = pygame.Surface((30, 30))
+        self.__playerSprite.size = size
+        
+        self.__playerSprite.surf = pygame.Surface(size)
         self.__playerSprite.rect = self.__playerSprite.surf.get_rect(center = (50, 50))
-        self.__playerSprite.image = PLAYER_IMAGE
+        self.__playerSprite.image = resized_image
 
         self.currentDirection = PlayerDirection.IDLE
         self.isJumping = False
@@ -48,6 +51,13 @@ class Player(Stickman):
     def go_idle(self):
         self.currentDirection = PlayerDirection.IDLE
         self.velocity.x = 0
+
+    def check_collision_with_walls(self, mapSize: vec):
+        if self.position.y + self.__playerSprite.rect.height > mapSize.y:
+            self.isJumping = False
+            self.position.y = mapSize.y - self.__playerSprite.rect.height
+            print("coll")
+            self.velocity.y = 0
 
     def jump(self):
         if not self.isJumping:
