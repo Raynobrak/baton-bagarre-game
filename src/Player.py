@@ -32,7 +32,7 @@ class Player(Stickman):
         self.isJumping = False
 
     def update(self, dt: float):
-        movementSpeed = 50
+        movementSpeed = 150
         if self.currentDirection == PlayerDirection.LEFT:
             self.velocity.x = -movementSpeed
         elif self.currentDirection == PlayerDirection.RIGHT:
@@ -61,7 +61,7 @@ class Player(Stickman):
 
     def jump(self):
         if not self.isJumping:
-            self.accelerate(vec(0, -150))
+            self.accelerate(vec(0, -250))
             self.isJumping = True
 
     def draw(self, surface):
