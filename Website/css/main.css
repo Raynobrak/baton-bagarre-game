@@ -1158,7 +1158,7 @@ h1.intro-header::before {
   padding: 0;
   outline: 0;
   border: none;
-  width: 97px;
+  width: 100px;
   height: 22px;
   background: url("../images/logo.png") no-repeat center;
   background-size: 97px 22px;
