@@ -43,12 +43,20 @@ class Animation():
         self.isRunning = False
         self.timeSinceStart = 0
         self.spriteIndex = 0
-        self.position = position
-        self.size = size
+        self.set_position(position)
+        self.set_size(size)
 
         self.animSprite = pygame.sprite.Sprite()
         self.animSprite.surf = self.surfaces[0]
         self.animSprite.rect = pygame.rect.Rect(position, size)
+
+    def set_size(self, newSize: vec):
+        self.size = newSize
+        for index, surface in enumerate(self.surfaces) :
+            self.surfaces[index] = pygame.transform.smoothscale(surface, newSize)
+
+    def set_position(self, newPos):
+        self.position = newPos
 
     def initialize_surfaces(self, infos):
         spritesheet = ImageManager().get_image(infos.key)
