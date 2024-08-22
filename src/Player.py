@@ -2,6 +2,7 @@ import pygame
 
 from enum import Enum
 
+from src.Animation import *
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman
 from pygame.locals import *
@@ -16,9 +17,12 @@ class Player(Stickman):
     def __init__(self, size: vec):
         super().__init__()
 
+        self.size = size
+
         PLAYER_IMAGE = ImageManager().get_image("player")
 
         resized_image = pygame.transform.smoothscale(PLAYER_IMAGE, size)
+
         self.__playerSprite = pygame.sprite.Sprite()
         self.__playerSprite.size = size
         
@@ -29,6 +33,17 @@ class Player(Stickman):
         self.currentDirection = PlayerDirection.IDLE
         self.isJumping = False
 
+        self.set_animation(ANIM_PLAYER_IDLE)
+
+    def set_animation(self, animInfos):
+        self.animation = Animation(animInfos, self.position, self.size)
+        self.animation.set_position(self.position)
+        self.animation.start()
+
+    def update_animation(self, dt: float):
+        self.animation.update(dt)
+        self.animation.set_position(self.position)
+
     def update(self, dt: float):
         movementSpeed = 150
         if self.currentDirection == PlayerDirection.LEFT:
@@ -37,6 +52,9 @@ class Player(Stickman):
             self.velocity.x = movementSpeed
 
         super().update_position(dt)
+
+        self.update_animation(dt)
+
         self.__playerSprite.rect.x = self.position.x
         self.__playerSprite.rect.y = self.position.y
 
@@ -57,14 +75,29 @@ class Player(Stickman):
         self.apply_gravity(dt)
 
     def go_left(self):
-        self.currentDirection = PlayerDirection.LEFT
+        if self.currentDirection != PlayerDirection.LEFT:
+            self.currentDirection = PlayerDirection.LEFT
+            self.set_animation(ANIM_PLAYER_WALKING)
 
     def go_right(self):
-        self.currentDirection = PlayerDirection.RIGHT
+        if self.currentDirection != PlayerDirection.RIGHT:
+            self.currentDirection = PlayerDirection.RIGHT
+            self.set_animation(ANIM_PLAYER_WALKING)
+            self.animation.flip_horizontally()
 
     def go_idle(self):
-        self.currentDirection = PlayerDirection.IDLE
+        if self.currentDirection != PlayerDirection.IDLE:
+            self.set_animation(ANIM_PLAYER_IDLE)
+            if self.currentDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
+            self.currentDirection = PlayerDirection.IDLE
         self.velocity.x = 0
+
+    def try_punch(self):
+        pass
+        
+    def try_kick(self):
+        pass  
 
     def check_collision_with_walls(self, mapSize: vec):
         if self.position.y + self.__playerSprite.rect.height > mapSize.y:
@@ -79,4 +112,5 @@ class Player(Stickman):
             self.isJumping = True
 
     def draw(self, surface):
-        surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
+        #surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
+        self.animation.draw(surface)
