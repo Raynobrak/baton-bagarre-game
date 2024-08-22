@@ -1,5 +1,8 @@
 import pygame.mixer
 
+from src.VolumeManager import VolumeManager
+
+
 class AudioManager:
     __instance = None
     sound = dict()
@@ -14,7 +17,7 @@ class AudioManager:
         sound = pygame.mixer.Sound(path)
         AudioManager.sound.update({key:sound})
 
-    def play_sound(self, key, volume):
+    def play_sound(self, key):
         sound: pygame.mixer.Sound = AudioManager.sound[key]
-        sound.set_volume(volume)
+        sound.set_volume(VolumeManager.soundVolume)
         sound.play()
