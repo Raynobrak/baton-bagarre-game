@@ -60,17 +60,15 @@ class Player(Stickman):
         self.__playerSprite.rect.y = self.position.y
 
         keysPressed = pygame.key.get_pressed()
-        keyAorDPressed = False
         if keysPressed[pygame.K_a]: 
             self.go_left()
-            keyAorDPressed = True
         elif keysPressed[pygame.K_d]: 
             self.go_right()
-            keyAorDPressed = True
 
         if keysPressed[pygame.K_w]:
             self.jump()
-        if not keyAorDPressed:
+
+        if not keysPressed[pygame.K_a] and not keysPressed[pygame.K_d]:
             self.go_idle()
 
         self.apply_gravity(dt)
@@ -105,7 +103,6 @@ class Player(Stickman):
     def check_collision_with_walls(self, mapSize: vec):
         if self.position.y + self.__playerSprite.rect.height > mapSize.y:
             self.position.y = mapSize.y - self.__playerSprite.rect.height
-            print("coll")
             self.velocity.y = 0
 
             if self.isJumping == True:
