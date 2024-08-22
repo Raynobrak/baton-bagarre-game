@@ -21,6 +21,9 @@ class Entity():
     def accelerate(self, acc: vec):
         self.velocity += acc
 
+    def apply_gravity(self, deltaTime: float):
+        self.accelerate(deltaTime * vec(0, 981))
+
     def set_position(self, newPos: vec):
         self.position = newPos
 
