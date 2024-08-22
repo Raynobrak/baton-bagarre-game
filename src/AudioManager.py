@@ -1,8 +1,8 @@
 import pygame.mixer
 
-
 class AudioManager:
     __instance = None
+    sound = dict()
 
     def __new__(cls, *args, **kwargs):
         if not cls.__instance:
@@ -10,7 +10,11 @@ class AudioManager:
             pygame.mixer.init()
         return cls.__instance
 
-    def hurtSound(self):
-        sound = pygame.mixer.Sound("./assets/audio/snore.mp3")
-        sound.set_volume(1.0)
-        sound.play(loops=1)
+    def load_sound(self, path, key):
+        sound = pygame.mixer.Sound(path)
+        AudioManager.sound.update({key:sound})
+
+    def play_sound(self, key, volume):
+        sound: pygame.mixer.Sound = AudioManager.sound[key]
+        sound.set_volume(volume)
+        sound.play()
