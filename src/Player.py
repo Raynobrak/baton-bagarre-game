@@ -37,8 +37,8 @@ class Player(Stickman):
         self.lookingDirection = PlayerDirection.LEFT
         self.isJumping = False
 
-        self.punchCooldown = CooldownVariable(0.3)
-        self.kickCooldown = CooldownVariable(5)
+        self.punchCooldown = CooldownVariable(0.2)
+        self.kickCooldown = CooldownVariable(0.3)
 
         self.set_animation(ANIM_PLAYER_IDLE)
 
@@ -147,6 +147,12 @@ class Player(Stickman):
             if self.lookingDirection == PlayerDirection.RIGHT:
                 punchImage = pygame.transform.flip(punchImage, True, False)
             surface.blit(punchImage, Rect(self.position, self.size))
+        elif not self.kickCooldown.ready():
+            kickImage = ImageManager().get_image('player_kick')
+            kickImage = pygame.transform.smoothscale(kickImage, self.size)
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                kickImage = pygame.transform.flip(kickImage, True, False)
+            surface.blit(kickImage, Rect(self.position, self.size))
         else:
             self.animation.draw(surface)
 
