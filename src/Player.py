@@ -30,7 +30,8 @@ class Player(Stickman):
         self.__playerSprite.rect = self.__playerSprite.surf.get_rect(center = (50, 50))
         self.__playerSprite.image = resized_image
 
-        self.currentDirection = PlayerDirection.IDLE
+        self.movingDirection = PlayerDirection.IDLE
+        self.lookingDirection = PlayerDirection.LEFT
         self.isJumping = False
 
         self.set_animation(ANIM_PLAYER_IDLE)
@@ -46,9 +47,9 @@ class Player(Stickman):
 
     def update(self, dt: float):
         movementSpeed = 150
-        if self.currentDirection == PlayerDirection.LEFT:
+        if self.movingDirection == PlayerDirection.LEFT:
             self.velocity.x = -movementSpeed
-        elif self.currentDirection == PlayerDirection.RIGHT:
+        elif self.movingDirection == PlayerDirection.RIGHT:
             self.velocity.x = movementSpeed
 
         super().update_position(dt)
@@ -75,22 +76,24 @@ class Player(Stickman):
         self.apply_gravity(dt)
 
     def go_left(self):
-        if self.currentDirection != PlayerDirection.LEFT:
-            self.currentDirection = PlayerDirection.LEFT
+        self.lookingDirection = PlayerDirection.LEFT
+        if self.movingDirection != PlayerDirection.LEFT:
+            self.movingDirection = PlayerDirection.LEFT
             self.set_animation(ANIM_PLAYER_WALKING)
 
     def go_right(self):
-        if self.currentDirection != PlayerDirection.RIGHT:
-            self.currentDirection = PlayerDirection.RIGHT
+        self.lookingDirection = PlayerDirection.RIGHT
+        if self.movingDirection != PlayerDirection.RIGHT:
+            self.movingDirection = PlayerDirection.RIGHT
             self.set_animation(ANIM_PLAYER_WALKING)
             self.animation.flip_horizontally()
 
     def go_idle(self):
-        if self.currentDirection != PlayerDirection.IDLE:
+        if self.movingDirection != PlayerDirection.IDLE:
             self.set_animation(ANIM_PLAYER_IDLE)
-            if self.currentDirection == PlayerDirection.RIGHT:
+            if self.movingDirection == PlayerDirection.RIGHT:
                 self.animation.flip_horizontally()
-            self.currentDirection = PlayerDirection.IDLE
+            self.movingDirection = PlayerDirection.IDLE
         self.velocity.x = 0
 
     def try_punch(self):
@@ -101,15 +104,28 @@ class Player(Stickman):
 
     def check_collision_with_walls(self, mapSize: vec):
         if self.position.y + self.__playerSprite.rect.height > mapSize.y:
-            self.isJumping = False
             self.position.y = mapSize.y - self.__playerSprite.rect.height
             print("coll")
             self.velocity.y = 0
+
+            if self.isJumping == True:
+                self.isJumping = False
+
+                if self.movingDirection == PlayerDirection.IDLE:
+                    self.set_animation(ANIM_PLAYER_IDLE)
+                else:
+                    self.set_animation(ANIM_PLAYER_WALKING)
+
+                if self.lookingDirection == PlayerDirection.RIGHT:
+                    self.animation.flip_horizontally()
 
     def jump(self):
         if not self.isJumping:
             self.accelerate(vec(0, -250))
             self.isJumping = True
+            self.set_animation(ANIM_PLAYER_JUMPING)
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                    self.animation.flip_horizontally()
 
     def draw(self, surface):
         #surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
