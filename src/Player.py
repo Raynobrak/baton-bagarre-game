@@ -2,6 +2,8 @@ import pygame
 
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman
+
+
 from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
 
