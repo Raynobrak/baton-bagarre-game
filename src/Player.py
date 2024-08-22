@@ -2,6 +2,7 @@ import pygame
 
 from enum import Enum
 
+from src.CooldownVariable import CooldownVariable
 from src.Animation import *
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman
@@ -30,9 +31,14 @@ class Player(Stickman):
         self.__playerSprite.rect = self.__playerSprite.surf.get_rect(center = (50, 50))
         self.__playerSprite.image = resized_image
 
+        self.isPunchingOrKicking = False
+
         self.movingDirection = PlayerDirection.IDLE
         self.lookingDirection = PlayerDirection.LEFT
         self.isJumping = False
+
+        self.punchCooldown = CooldownVariable(0.3)
+        self.kickCooldown = CooldownVariable(5)
 
         self.set_animation(ANIM_PLAYER_IDLE)
 
@@ -55,6 +61,8 @@ class Player(Stickman):
         super().update_position(dt)
 
         self.update_animation(dt)
+        self.punchCooldown.update_cooldown(dt)
+        self.kickCooldown.update_cooldown(dt)
 
         self.__playerSprite.rect.x = self.position.x
         self.__playerSprite.rect.y = self.position.y
@@ -67,6 +75,11 @@ class Player(Stickman):
 
         if keysPressed[pygame.K_w]:
             self.jump()
+
+        if keysPressed[pygame.K_SPACE]:
+            self.try_punch()
+        elif keysPressed[pygame.K_k]:
+            self.try_kick()
 
         if not keysPressed[pygame.K_a] and not keysPressed[pygame.K_d]:
             self.go_idle()
@@ -95,10 +108,12 @@ class Player(Stickman):
         self.velocity.x = 0
 
     def try_punch(self):
-        pass
+        if self.punchCooldown.try_reset():
+            self.isPunchingOrKicking = True
         
     def try_kick(self):
-        pass  
+        if self.kickCooldown.try_reset():
+            self.isPunchingOrKicking = True  
 
     def check_collision_with_walls(self, mapSize: vec):
         if self.position.y + self.__playerSprite.rect.height > mapSize.y:
@@ -126,4 +141,13 @@ class Player(Stickman):
 
     def draw(self, surface):
         #surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
-        self.animation.draw(surface)
+        if not self.punchCooldown.ready():
+            punchImage = ImageManager().get_image('player_punch')
+            punchImage = pygame.transform.smoothscale(punchImage, self.size)
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                punchImage = pygame.transform.flip(punchImage, True, False)
+            surface.blit(punchImage, Rect(self.position, self.size))
+        else:
+            self.animation.draw(surface)
+
+        
