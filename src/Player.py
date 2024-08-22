@@ -16,8 +16,6 @@ class Player(Stickman):
     def __init__(self, size: vec):
         super().__init__()
 
-        self.velocity = vec(20,20)
-
         PLAYER_IMAGE = ImageManager().get_image("player")
 
         resized_image = pygame.transform.smoothscale(PLAYER_IMAGE, size)
@@ -41,6 +39,22 @@ class Player(Stickman):
         super().update_position(dt)
         self.__playerSprite.rect.x = self.position.x
         self.__playerSprite.rect.y = self.position.y
+
+        keysPressed = pygame.key.get_pressed()
+        keyAorDPressed = False
+        if keysPressed[pygame.K_a]: 
+            self.go_left()
+            keyAorDPressed = True
+        elif keysPressed[pygame.K_d]: 
+            self.go_right()
+            keyAorDPressed = True
+
+        if keysPressed[pygame.K_w]:
+            self.jump()
+        if not keyAorDPressed:
+            self.go_idle()
+
+        self.apply_gravity(dt)
 
     def go_left(self):
         self.currentDirection = PlayerDirection.LEFT
