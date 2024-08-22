@@ -7,12 +7,12 @@ class VolumeManager:
         pass
 
     def update_general_volume(self, volume):
-        self.generalVolume = volume
-        self.musicVolume = self.musicVolume / volume
-        self.soundVolume = self.soundVolume / volume
+        VolumeManager.generalVolume = volume
+        VolumeManager.musicVolume = VolumeManager.musicVolume * volume
+        VolumeManager.soundVolume = VolumeManager.soundVolume * volume
 
     def update_sound_volume(self, volume):
-        self.soundVolume = volume / self.generalVolume
+        VolumeManager.soundVolume = volume * VolumeManager.generalVolume
 
     def update_music_volume(self, volume):
-        self.musicVolume = volume / self.generalVolume
+        VolumeManager.musicVolume = volume * VolumeManager.generalVolume
