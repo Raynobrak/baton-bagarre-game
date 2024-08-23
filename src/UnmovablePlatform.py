@@ -12,8 +12,8 @@ class UnmovablePlatform(Platform):
     __platformSprite: pygame.sprite.Sprite
     PLATFORM_TYPE = {"LEFT": 0, "MID_1": 1, "MID_2": 2, "RIGHT": 3}
 
-    def __init__(self, x, y, heigth, width, type):
-        super().__init__(x, y, heigth, width)
+    def __init__(self, x, y, height, width, type):
+        super().__init__(x, y, width, height)
         self.type = self.PLATFORM_TYPE[type]
         self.velocity = vec(0, 0)
 
