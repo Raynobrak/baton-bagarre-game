@@ -102,17 +102,7 @@ Nous avons ensuite réalise un prototype fonctionnel qui nous permet de tester l
 Pour le développement nous avons suivi une approche itérative, ce qui signifie que nous avons développé le jeu par petites étapes, en testant et ajustant continuellement chaque fonctionnalité.
 
 ## Description de l'architecture
-### Fichiers principaux
-Pour la création du jeu, on a décidé de partager les fichiers en plusieurs catégories, cependant on possède surtout deux fichiers essentiels pour le fonctionnement du jeu. En premier le fichier `run.py` est le point d'entrée principal pour exécuter le jeu, il permet de configurer l'environnement et lance le processus principal du jeu. Le deuxième fichier est `test.py` qui permet de tester des fonctionnalités spécifiques du jeu.
-
-### Gestion des ressources
-Comme dans tous les jeux, il y a des ressources qui sont utilisées (comme de la musique, des bruits, des images...), on a donc crée des fichiers comme `AudioManager.py` et `ImageManager.py` qui s'occupent de gérer les ressources multimédia. De l'autre côté on a le fichier `Constant.py` qui centralise les paramètres globaux.
-
-### Logique du jeu
-Les interactions et la mécanique du jeu sont orchestrées par `Game.py`, avec les entités spécifiques (comme le joueur et les stickmen) définies dans `Entity.py`, `Player.py` et `Stickman.py`.
-
-### Tests
-On possède ainsi dans notre architecture un répertoire `test/` qui contient des scripts pour tester et valider différentes parties du code, aidant à maintenir la qualité du projet et permettant de trouver des erreurs plus facilement.
+L'intégralité du projet consiste en un programme Python, ce qui signifie qu'il n'y a aucun autre élément à gérer, comme des serveurs ou des bases de données. Toutes les fonctionnalités sont encapsulées dans des classes, chacune étant répartie dans différents fichiers. Le fichier principal, `Game.py`, contient la boucle du jeu et assure la gestion des éléments principaux de celui-ci.
 
 ## Créer une nouvelle version du jeu
  
