@@ -20,6 +20,7 @@ import src.Constant
 class Game():
     __displaysurface = None
     __spritegroup = pygame.sprite.Group()
+    visibility = 1
 
     def __init__(self):
         print("Hello")
@@ -65,6 +66,8 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
+        ImageManager().load_image('./assets/textures/light2.png', 'light')
+
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
 
     def run(self):
@@ -74,6 +77,13 @@ class Game():
         bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
+
+        # Scale the light image to the window size
+        light = pygame.transform.smoothscale(ImageManager().get_image('light'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+
+        # Set the opacity of the light image (0 is fully transparent, 255 is fully opaque)
+        light.set_alpha(120)  # Example: 50% opacity
+
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -82,7 +92,7 @@ class Game():
                     self.anim_test.flip_vertically()
                     self.anim_test.set_position(vec(10,10))
                     self.anim_test.set_size(vec(20,20))
-            
+
             self.__player.update(1 / 60)
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
@@ -96,6 +106,12 @@ class Game():
 
             self.__player.draw(self.__displaysurface)
             self.anim_test.draw(self.__displaysurface)
+
+            # Blit the light image
+            self.__displaysurface.blit(light, (0, 0))
+
+
+
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
