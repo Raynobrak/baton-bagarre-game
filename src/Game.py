@@ -2,6 +2,7 @@
 import pygame
 from pygame.locals import *
 
+from src.AudioManager import AudioManager
 from src.LevelGenerator import LevelGenerator
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
@@ -64,6 +65,8 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
+        AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
+
     def run(self):
         print("Game is running")
 
@@ -102,6 +105,7 @@ class Game():
         while True:
             action = main_menu.display_menu()
             if action == 'play':
+                AudioManager().play_music()
                 self.run()
             elif action == 'options':
                 print("Options")

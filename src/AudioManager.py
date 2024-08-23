@@ -21,3 +21,8 @@ class AudioManager:
         sound: pygame.mixer.Sound = AudioManager.sound[key]
         sound.set_volume(VolumeManager().soundVolume)
         sound.play()
+
+    def play_music(self):
+        music = pygame.mixer.Sound = AudioManager.sound['music']
+        music.set_volume(VolumeManager().musicVolume)
+        music.play(loops=1)
