@@ -125,8 +125,17 @@ Pour la déclencher, rien de plus simple, il faut :
 Cela déclenchera le workflow et créera une nouvelle release nommée "Release v1.0.0" avec le fichier ZIP généré et attaché automatiquement à cette release.
 
 ## Mockups
-<img src="Mockup/Mockup_Part1.jpg">
-<img src="Mockup/Mockup_Part2.jpg">
+![Mockup](Mockup/Mockup_Part1.jpg)
+1. **Menu Principal** : Il est la première interface que le joueur voit lorsqu'il lance le jeu. Il permet de lancer une nouvelle partie.
+2. **Début du jeu** : L'écran de jeu principal, où le joueur contrôle le stickman et défend le feu.
+3. **Ennemis** : Les ennemis apparaissent de l'extérieur de l'écran et se dirigent vers le feu. Le joueur doit les éliminer avant qu'ils n'atteignent le feu. La luminosité diminue à mesure que le feu s'éteint.
+4. **Feu** : L'objet à défendre. Sa taille diminue au fil du temps.
+
+![Mockup](Mockup/Mockup_Part2.jpg)
+5. **Raviver le feu** : Le joueur peut "réparer" le feu en intéragissant avec. Cela prend du temps et le joueur doit être vigilant pour ne pas être attaqué par les ennemis.
+6. **De nouvelles vagues d'ennemis** : Les ennemis apparaissent en vagues, de plus en plus nombreux et puissants.
+7. **Dégâts au feu** : Si un ennemi attaque le feu, l'intensité du feu diminue rapidement.
+8. **Fin du jeu** : Le jeu se termine lorsque le feu est complètement éteint. Le joueur peur voir son score.
 
 ## Landing page
 
