@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 
+from src.LevelGenerator import LevelGenerator
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
 
@@ -34,6 +35,12 @@ class Game():
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
 
+        ImageManager().load_image('./assets/textures/background.png', 'background')
+        ImageManager().load_image('./assets/textures/platform_left.png', 'platform_left')
+        ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
+        ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
+        ImageManager().load_image('./assets/textures/platform_right.png', 'platform_right')
+
         ImageManager().load_image('./assets/textures/player_idle.png', 'player_idle')
         ImageManager().load_image('./assets/textures/player_move.png', 'player_walking')
 
@@ -48,9 +55,15 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_big.png', 'fire_big')
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
+        ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
 
     def run(self):
         print("Game is running")
+
+        # Load level
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -64,7 +77,10 @@ class Game():
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
-            self.__displaysurface.fill((255,255,255))
+            # Draw Level
+            self.__displaysurface.blit(bg, (0,0))
+            for platform in platforms:
+                platform.draw(self.__displaysurface)
 
             self.anim_test.update(1 / 60)
 
