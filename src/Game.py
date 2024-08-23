@@ -1,16 +1,18 @@
+# src/Game.py
 import pygame
 from pygame.locals import *
 
 from src.LevelGenerator import LevelGenerator
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
-
 from src.ImageManager import ImageManager
-
 from src.Constant import Constant
+from src.Button import Button
+from src.MainMenu import MainMenu
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
+
 
 import src.Constant
 
@@ -30,7 +32,8 @@ class Game():
         self.anim_test.start()
 
         self.__player = Player(vec(50,50))
-        self.run()
+        self.main_menu()
+
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -56,6 +59,10 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
         ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
+        
+        ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
+        ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
+        ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
     def run(self):
         print("Game is running")
@@ -89,6 +96,15 @@ class Game():
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
+
+    def main_menu(self):
+        main_menu = MainMenu(self.__displaysurface)
+        while True:
+            action = main_menu.display_menu()
+            if action == 'play':
+                self.run()
+            elif action == 'options':
+                print("Options")
 
 if __name__ == "__main__":
     Game()
