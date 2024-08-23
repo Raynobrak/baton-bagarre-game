@@ -95,5 +95,21 @@ class Animation():
 
     def draw(self, surface):
         surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
-        
 
+# Animations declarations
+ANIM_TIME = 0.3
+
+ANIM_PLAYER_IDLE = SpritesheetAnimInfos("player_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_PLAYER_WALKING = SpritesheetAnimInfos("player_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
+
+ANIM_PLAYER_JUMPING = SpritesheetAnimInfos("player_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
+#ANIM_PLAYER_PUNCH = SpritesheetAnimInfos("player_punch", vec(32,32), vec(0,0), 1, ANIM_TIME)
+#ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32,32), vec(0,0), 1, ANIM_TIME)
+
+ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32), vec(0,0), 4, ANIM_TIME)
+
+ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32,32), vec(0,0), 4, ANIM_TIME)
