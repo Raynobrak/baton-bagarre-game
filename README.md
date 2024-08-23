@@ -132,10 +132,10 @@ Cela déclenchera le workflow et créera une nouvelle release nommée "Release v
 4. **Feu** : L'objet à défendre. Sa taille diminue au fil du temps.
 
 ![Mockup](Mockup/Mockup_Part2.jpg)
-5. **Raviver le feu** : Le joueur peut "réparer" le feu en intéragissant avec. Cela prend du temps et le joueur doit être vigilant pour ne pas être attaqué par les ennemis.
-6. **De nouvelles vagues d'ennemis** : Les ennemis apparaissent en vagues, de plus en plus nombreux et puissants.
-7. **Dégâts au feu** : Si un ennemi attaque le feu, l'intensité du feu diminue rapidement.
-8. **Fin du jeu** : Le jeu se termine lorsque le feu est complètement éteint. Le joueur peur voir son score.
+1. **Raviver le feu** : Le joueur peut "réparer" le feu en intéragissant avec. Cela prend du temps et le joueur doit être vigilant pour ne pas être attaqué par les ennemis.
+2. **De nouvelles vagues d'ennemis** : Les ennemis apparaissent en vagues, de plus en plus nombreux et puissants.
+3. **Dégâts au feu** : Si un ennemi attaque le feu, l'intensité du feu diminue rapidement.
+4. **Fin du jeu** : Le jeu se termine lorsque le feu est complètement éteint. Le joueur peur voir son score.
 
 ## Landing page
 
