@@ -4,6 +4,7 @@ from enum import Enum
 
 from src.CooldownVariable import CooldownVariable
 from src.Animation import *
+from src.Fire import Fire
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman
 
@@ -27,6 +28,7 @@ class Player(Stickman):
         self.movingDirection = PlayerDirection.IDLE
         self.lookingDirection = PlayerDirection.LEFT
         self.isJumping = True
+        self.isLevitating = False
 
         self.punchCooldown = CooldownVariable(0.2) # todo improve punch and kick cooldown mechanics
         self.kickCooldown = CooldownVariable(0.3)
@@ -40,11 +42,19 @@ class Player(Stickman):
     def update_animation(self, dt: float):
         self.animation.update(dt)
 
-    def update(self, dt: float):
+    def update(self, dt: float, fire: Fire):
         keysPressed = pygame.key.get_pressed()
-        if keysPressed[pygame.K_a]: 
+
+        if keysPressed[pygame.K_e] and self.is_near_fire(fire):
+            self.go_levitate()
+        else:
+            if self.isLevitating:
+                self.go_idle()
+            self.isLevitating = False
+
+        if keysPressed[pygame.K_a]:
             self.go_left()
-        elif keysPressed[pygame.K_d]: 
+        elif keysPressed[pygame.K_d]:
             self.go_right()
 
         if keysPressed[pygame.K_w]:
@@ -94,6 +104,14 @@ class Player(Stickman):
             self.movingDirection = PlayerDirection.IDLE
         self.velocity.x = 0
 
+    def go_levitate(self):
+        if not self.isLevitating:
+            self.set_animation(ANIM_PLAYER_LEVITATING)
+            self.isLevitating = True
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
+
+
     def try_punch(self):
         if self.punchCooldown.try_reset():
             self.isPunchingOrKicking = True
@@ -103,7 +121,7 @@ class Player(Stickman):
             self.isPunchingOrKicking = True
 
     def reset_jump(self):
-        if self.isJumping == True:
+        if self.isJumping:
             self.isJumping = False
 
             if self.movingDirection == PlayerDirection.IDLE:
@@ -145,4 +163,7 @@ class Player(Stickman):
             self.animation.set_position(self.position)
             self.animation.draw(surface)
 
+    def is_near_fire(self, fire: Fire):
+        distance = self.position.distance_to(fire.position)
+        return distance < 50
         

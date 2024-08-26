@@ -46,6 +46,9 @@ class Fire(Entity):
             self.lifePoints -= 1
             self.time_since_last_reduction = 0
 
+    def get_position(self):
+        return self.position
+
     def update(self, dt: float):
         self.reduce_life_points(dt)
         self.update_life_animation()

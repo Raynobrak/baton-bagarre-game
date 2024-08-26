@@ -34,7 +34,7 @@ class Game():
         
         self.__player = Player(vec(100,100))
 
-        self.__fire = Fire(600, 500, 50, 50)  # Initialize Fire object here
+        self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
 
@@ -55,6 +55,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
+        ImageManager().load_image('./assets/textures/player_yoga.png','player_levitating')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -86,7 +87,7 @@ class Game():
                 if event.type == QUIT:
                     pygame.quit()
 
-            self.__player.update(1 / 60)
+            self.__player.update(1 / 60, self.__fire)
 
             
 
