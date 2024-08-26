@@ -1,4 +1,3 @@
-# src/Game.py
 import pygame
 from pygame.locals import *
 
@@ -12,9 +11,10 @@ from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
 
+from src.Fire import Fire
+
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
-
 
 import src.Constant
 
@@ -31,10 +31,12 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
-
+        
         self.__player = Player(vec(100,100))
-        self.main_menu()
 
+        self.__fire = Fire(600, 500, 50, 50)  # Initialize Fire object here
+
+        self.main_menu()
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -62,7 +64,7 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
         ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
-        
+
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
@@ -71,8 +73,10 @@ class Game():
 
     def run(self):
         print("Game is running")
+        dt = 1 / 60
 
         # Load level
+
 
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
@@ -81,7 +85,7 @@ class Game():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
-            
+
             self.__player.update(1 / 60)
 
             
@@ -97,6 +101,11 @@ class Game():
             self.__displaysurface.blit(bg, (0,0))
             for platform in platforms:
                 platform.draw(self.__displaysurface)
+
+
+            # Update and draw fire object
+            self.__fire.update(dt)
+            self.__fire.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
 
