@@ -4,6 +4,7 @@ from pygame.locals import *
 from src.LevelGenerator import LevelGenerator
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
+from src.CollisionUtils import *
 
 from src.ImageManager import ImageManager
 
@@ -26,8 +27,6 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
-        self.anim_test = Animation(src.Animation.ANIM_PLAYER_IDLE, vec(100,100), vec(50,50))
-        self.anim_test.start()
 
         self.__player = Player(vec(50,50))
         self.run()
@@ -62,32 +61,33 @@ class Game():
 
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/collisions.png')
 
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    self.anim_test.flip_vertically()
-                    self.anim_test.set_position(vec(10,10))
-                    self.anim_test.set_size(vec(20,20))
             
             self.__player.update(1 / 60)
 
+            
+
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+
+            for platform in platforms:
+                handle_collision_player_vs_platform(self.__player, platform)
+
+            print(self.__player.position.y)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0,0))
             for platform in platforms:
                 platform.draw(self.__displaysurface)
 
-            self.anim_test.update(1 / 60)
-
             self.__player.draw(self.__displaysurface)
-            self.anim_test.draw(self.__displaysurface)
 
             pygame.display.update()
+
             FramePerSec.tick(Constant.FPS)
 
 if __name__ == "__main__":

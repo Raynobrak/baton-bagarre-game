@@ -20,53 +20,25 @@ class Player(Stickman):
 
         self.size = size
 
-        PLAYER_IMAGE = ImageManager().get_image("player")
-
-        resized_image = pygame.transform.smoothscale(PLAYER_IMAGE, size)
-
-        self.__playerSprite = pygame.sprite.Sprite()
-        self.__playerSprite.size = size
-        
-        self.__playerSprite.surf = pygame.Surface(size)
-        self.__playerSprite.rect = self.__playerSprite.surf.get_rect(center = (50, 50))
-        self.__playerSprite.image = resized_image
-
         self.isPunchingOrKicking = False
 
         self.movingDirection = PlayerDirection.IDLE
         self.lookingDirection = PlayerDirection.LEFT
-        self.isJumping = False
+        self.isJumping = True
 
-        self.punchCooldown = CooldownVariable(0.2)
+        self.punchCooldown = CooldownVariable(0.2) # todo improve punch and kick cooldown mechanics
         self.kickCooldown = CooldownVariable(0.3)
 
         self.set_animation(ANIM_PLAYER_IDLE)
 
     def set_animation(self, animInfos):
         self.animation = Animation(animInfos, self.position, self.size)
-        self.animation.set_position(self.position)
         self.animation.start()
 
     def update_animation(self, dt: float):
         self.animation.update(dt)
-        self.animation.set_position(self.position)
 
     def update(self, dt: float):
-        movementSpeed = 150
-        if self.movingDirection == PlayerDirection.LEFT:
-            self.velocity.x = -movementSpeed
-        elif self.movingDirection == PlayerDirection.RIGHT:
-            self.velocity.x = movementSpeed
-
-        super().update_position(dt)
-
-        self.update_animation(dt)
-        self.punchCooldown.update_cooldown(dt)
-        self.kickCooldown.update_cooldown(dt)
-
-        self.__playerSprite.rect.x = self.position.x
-        self.__playerSprite.rect.y = self.position.y
-
         keysPressed = pygame.key.get_pressed()
         if keysPressed[pygame.K_a]: 
             self.go_left()
@@ -84,7 +56,20 @@ class Player(Stickman):
         if not keysPressed[pygame.K_a] and not keysPressed[pygame.K_d]:
             self.go_idle()
 
+        movementSpeed = 150
+        if self.movingDirection == PlayerDirection.LEFT:
+            self.velocity.x = -movementSpeed
+        elif self.movingDirection == PlayerDirection.RIGHT:
+            self.velocity.x = movementSpeed
+
         self.apply_gravity(dt)
+
+        super().update_position(dt)
+
+        self.update_animation(dt)
+
+        self.punchCooldown.update_cooldown(dt)
+        self.kickCooldown.update_cooldown(dt)
 
     def go_left(self):
         self.lookingDirection = PlayerDirection.LEFT
@@ -113,47 +98,49 @@ class Player(Stickman):
         
     def try_kick(self):
         if self.kickCooldown.try_reset():
-            self.isPunchingOrKicking = True  
+            self.isPunchingOrKicking = True
+
+    def reset_jump(self):
+        if self.isJumping == True:
+            self.isJumping = False
+
+            if self.movingDirection == PlayerDirection.IDLE:
+                self.set_animation(ANIM_PLAYER_IDLE)
+            else:
+                self.set_animation(ANIM_PLAYER_WALKING)
+
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
 
     def check_collision_with_walls(self, mapSize: vec):
-        if self.position.y + self.__playerSprite.rect.height > mapSize.y:
-            self.position.y = mapSize.y - self.__playerSprite.rect.height
+        if self.position.y + self.size.y > mapSize.y:
+            self.position.y = mapSize.y - self.size.y
             self.velocity.y = 0
-
-            if self.isJumping == True:
-                self.isJumping = False
-
-                if self.movingDirection == PlayerDirection.IDLE:
-                    self.set_animation(ANIM_PLAYER_IDLE)
-                else:
-                    self.set_animation(ANIM_PLAYER_WALKING)
-
-                if self.lookingDirection == PlayerDirection.RIGHT:
-                    self.animation.flip_horizontally()
+            self.reset_jump()
 
     def jump(self):
         if not self.isJumping:
-            self.accelerate(vec(0, -250))
+            self.accelerate(vec(0, -350))
             self.isJumping = True
             self.set_animation(ANIM_PLAYER_JUMPING)
             if self.lookingDirection == PlayerDirection.RIGHT:
                     self.animation.flip_horizontally()
 
     def draw(self, surface):
-        #surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
         if not self.punchCooldown.ready():
             punchImage = ImageManager().get_image('player_punch')
-            punchImage = pygame.transform.smoothscale(punchImage, self.size)
+            punchImage = pygame.transform.scale(punchImage, self.size)
             if self.lookingDirection == PlayerDirection.RIGHT:
                 punchImage = pygame.transform.flip(punchImage, True, False)
             surface.blit(punchImage, Rect(self.position, self.size))
         elif not self.kickCooldown.ready():
             kickImage = ImageManager().get_image('player_kick')
-            kickImage = pygame.transform.smoothscale(kickImage, self.size)
+            kickImage = pygame.transform.scale(kickImage, self.size)
             if self.lookingDirection == PlayerDirection.RIGHT:
                 kickImage = pygame.transform.flip(kickImage, True, False)
             surface.blit(kickImage, Rect(self.position, self.size))
         else:
+            self.animation.set_position(self.position)
             self.animation.draw(surface)
 
         
