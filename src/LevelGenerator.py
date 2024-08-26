@@ -30,7 +30,7 @@ class LevelGenerator():
 
         if widow_ratio != image_ratio:
             print("Image ratio is not the same as window ratio")
-            return
+            return None, None
 
         scale = math.ceil(window_width/width)
 
@@ -53,11 +53,11 @@ class LevelGenerator():
                     case self.FIRE:
                         if fire is not None:
                             print("More than one fire in the level")
-                            return
+                            return None, None
                         fire = src.Fire.Fire(x*scale, y*scale, scale, scale)
 
         if fire is None:
             print("No fire in the level")
-            return
+            return None, None
 
         return platforms, fire
