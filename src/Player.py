@@ -24,7 +24,7 @@ class Player(Stickman):
 
         PLAYER_IMAGE = ImageManager().get_image("player")
 
-        resized_image = pygame.transform.smoothscale(PLAYER_IMAGE, size)
+        resized_image = pygame.transform.scale(PLAYER_IMAGE, size)
 
         self.__playerSprite = pygame.sprite.Sprite()
         self.__playerSprite.size = size
@@ -145,13 +145,13 @@ class Player(Stickman):
         #surface.blit(self.__playerSprite.image, self.__playerSprite.rect)
         if not self.punchCooldown.ready():
             punchImage = ImageManager().get_image('player_punch')
-            punchImage = pygame.transform.smoothscale(punchImage, self.size)
+            punchImage = pygame.transform.scale(punchImage, self.size)
             if self.lookingDirection == PlayerDirection.RIGHT:
                 punchImage = pygame.transform.flip(punchImage, True, False)
             surface.blit(punchImage, Rect(self.position, self.size))
         elif not self.kickCooldown.ready():
             kickImage = ImageManager().get_image('player_kick')
-            kickImage = pygame.transform.smoothscale(kickImage, self.size)
+            kickImage = pygame.transform.scale(kickImage, self.size)
             if self.lookingDirection == PlayerDirection.RIGHT:
                 kickImage = pygame.transform.flip(kickImage, True, False)
             surface.blit(kickImage, Rect(self.position, self.size))
