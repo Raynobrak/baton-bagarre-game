@@ -11,12 +11,13 @@ class Text(Entity):
 
     __font: pygame.font.Font
 
-    def __init__(self, position: vec, text: str, color=Color(0,0,0), font='default'):
+    def __init__(self, position: vec, text: str, color=Color(0,0,0), font='default', font_size=12):
         super().__init__()
         self.position = position
         if not pygame.font.get_init():
             pygame.font.init()
         self.__font = FontManager().get_font(font)
+        self.__font.size = font_size
         self.color = color
         self.text = text
 
@@ -45,3 +46,5 @@ class Text(Entity):
         self.draw(surface)
         self.position = old_pos
 
+    def update_font_size(self, size: int):
+        self.__font.size = size
