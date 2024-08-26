@@ -1,4 +1,3 @@
-# src/Game.py
 import pygame
 from pygame.locals import *
 
@@ -11,9 +10,10 @@ from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
 
+from src.Fire import Fire
+
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
-
 
 import src.Constant
 
@@ -33,8 +33,10 @@ class Game():
         self.anim_test.start()
 
         self.__player = Player(vec(50,50))
-        self.main_menu()
 
+        self.__fire = Fire(600, 500, 50, 50)  # Initialize Fire object here
+
+        self.main_menu()
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -60,7 +62,7 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
         ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
-        
+
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
@@ -69,10 +71,11 @@ class Game():
 
     def run(self):
         print("Game is running")
+        dt = 1 / 60
 
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         while True:
             for event in pygame.event.get():
@@ -82,7 +85,7 @@ class Game():
                     self.anim_test.flip_vertically()
                     self.anim_test.set_position(vec(10,10))
                     self.anim_test.set_size(vec(20,20))
-            
+
             self.__player.update(1 / 60)
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
@@ -92,10 +95,14 @@ class Game():
             for platform in platforms:
                 platform.draw(self.__displaysurface)
 
-            self.anim_test.update(1 / 60)
+            self.anim_test.update(dt)
 
             self.__player.draw(self.__displaysurface)
             self.anim_test.draw(self.__displaysurface)
+
+            # Update and draw fire object
+            self.__fire.update(dt)
+            self.__fire.draw(self.__displaysurface)
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
