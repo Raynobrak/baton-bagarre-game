@@ -24,6 +24,7 @@ class Game():
     def __init__(self):
         print("Hello")
         pygame.init()
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
 
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
@@ -32,7 +33,7 @@ class Game():
         self.anim_test = Animation(src.Animation.ANIM_PLAYER_IDLE, vec(100,100), vec(50,50))
         self.anim_test.start()
 
-        self.__player = Player(vec(50,50))
+        self.__player = Player(vec(100,100))
         self.main_menu()
 
 
@@ -71,7 +72,7 @@ class Game():
         print("Game is running")
 
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        bg = pygame.transform.scale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         while True:
