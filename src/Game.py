@@ -97,12 +97,13 @@ class Game():
 
             self.anim_test.update(dt)
 
-            self.__player.draw(self.__displaysurface)
-            self.anim_test.draw(self.__displaysurface)
-
             # Update and draw fire object
             self.__fire.update(dt)
             self.__fire.draw(self.__displaysurface)
+
+            # Draw player after fire
+            self.__player.draw(self.__displaysurface)
+            self.anim_test.draw(self.__displaysurface)
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
