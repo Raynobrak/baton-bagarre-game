@@ -9,7 +9,7 @@ class ImageManager():
     def load_image(self, path, key):
         image = pygame.image.load(path).convert_alpha()
         ImageManager.images.update({key : image})
-        print(ImageManager.images)
+        #print(ImageManager.images)
     
     def get_image(self, key):
         return ImageManager.images[key]

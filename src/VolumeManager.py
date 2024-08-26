@@ -8,11 +8,9 @@ class VolumeManager:
 
     def update_general_volume(self, volume):
         VolumeManager.generalVolume = volume
-        VolumeManager.musicVolume = VolumeManager.musicVolume * volume
-        VolumeManager.soundVolume = VolumeManager.soundVolume * volume
 
     def update_sound_volume(self, volume):
-        VolumeManager.soundVolume = volume * VolumeManager.generalVolume
+        VolumeManager.soundVolume = volume
 
     def update_music_volume(self, volume):
-        VolumeManager.musicVolume = volume * VolumeManager.generalVolume
+        VolumeManager.musicVolume = volume
