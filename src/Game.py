@@ -66,7 +66,7 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
-        ImageManager().load_image('./assets/textures/light2.png', 'light')
+        ImageManager().load_image('./assets/textures/light3.png', 'light')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
 
@@ -82,7 +82,7 @@ class Game():
         light = pygame.transform.smoothscale(ImageManager().get_image('light'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
         # Set the opacity of the light image (0 is fully transparent, 255 is fully opaque)
-        light.set_alpha(120)  # Example: 50% opacity
+        light.set_alpha(0)
 
         while True:
             for event in pygame.event.get():
