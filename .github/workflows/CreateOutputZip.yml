@@ -18,13 +18,13 @@ jobs:
         run: mkdir -p output
 
       - name: Add files and folders to ZIP
-        run: zip -r output/BatonBaguarre_${{ github.ref }}.zip assets src requirements.txt run.py
+        run: zip -r output/BatonBagarre_${{ github.ref_name }}.zip assets src requirements.txt run.py
 
       - name: Upload ZIP file as an artifact
         uses: actions/upload-artifact@v3
         with:
-          name: BatonBaguarre_zip
-          path: output/BatonBaguarre_${{ github.ref }}.zip
+          name: BatonBagarre_zip
+          path: output/BatonBagarre_${{ github.ref_name }}.zip
 
   create-release:
     needs: create-zip
@@ -33,7 +33,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v3
         with:
-          name: BatonBaguarre_zip
+          name: BatonBagarre_zip
           path: ./output
 
       - name: Create GitHub Release
@@ -52,8 +52,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/BatonBaguarre_${{ github.ref }}.zip
-          asset_name: BatonBaguarre_${{ github.ref }}.zip
+          asset_path: ./output/BatonBagarre_${{ github.ref_name }}.zip
+          asset_name: BatonBagarre_${{ github.ref_name }}.zip
           asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

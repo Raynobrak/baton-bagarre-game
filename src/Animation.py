@@ -52,7 +52,7 @@ class Animation():
     def set_size(self, newSize: vec):
         self.animSprite.rect.size = newSize
         for index, surface in enumerate(self.surfaces):
-            self.surfaces[index] = pygame.transform.smoothscale(surface, newSize)
+            self.surfaces[index] = pygame.transform.scale(surface, newSize)
 
     def set_position(self, newPos):
         self.animSprite.rect.left = newPos.x

@@ -102,17 +102,7 @@ Nous avons ensuite réalise un prototype fonctionnel qui nous permet de tester l
 Pour le développement nous avons suivi une approche itérative, ce qui signifie que nous avons développé le jeu par petites étapes, en testant et ajustant continuellement chaque fonctionnalité.
 
 ## Description de l'architecture
-### Fichiers principaux
-Pour la création du jeu, on a décidé de partager les fichiers en plusieurs catégories, cependant on possède surtout deux fichiers essentiels pour le fonctionnement du jeu. En premier le fichier `run.py` est le point d'entrée principal pour exécuter le jeu, il permet de configurer l'environnement et lance le processus principal du jeu. Le deuxième fichier est `test.py` qui permet de tester des fonctionnalités spécifiques du jeu.
-
-### Gestion des ressources
-Comme dans tous les jeux, il y a des ressources qui sont utilisées (comme de la musique, des bruits, des images...), on a donc crée des fichiers comme `AudioManager.py` et `ImageManager.py` qui s'occupent de gérer les ressources multimédia. De l'autre côté on a le fichier `Constant.py` qui centralise les paramètres globaux.
-
-### Logique du jeu
-Les interactions et la mécanique du jeu sont orchestrées par `Game.py`, avec les entités spécifiques (comme le joueur et les stickmen) définies dans `Entity.py`, `Player.py` et `Stickman.py`.
-
-### Tests
-On possède ainsi dans notre architecture un répertoire `test/` qui contient des scripts pour tester et valider différentes parties du code, aidant à maintenir la qualité du projet et permettant de trouver des erreurs plus facilement.
+L'intégralité du projet consiste en un programme Python, ce qui signifie qu'il n'y a aucun autre élément à gérer, comme des serveurs ou des bases de données. Toutes les fonctionnalités sont encapsulées dans des classes, chacune étant répartie dans différents fichiers. Le fichier principal, `Game.py`, contient la boucle du jeu et assure la gestion des éléments principaux de celui-ci.
 
 ## Créer une nouvelle version du jeu
  
@@ -135,8 +125,17 @@ Pour la déclencher, rien de plus simple, il faut :
 Cela déclenchera le workflow et créera une nouvelle release nommée "Release v1.0.0" avec le fichier ZIP généré et attaché automatiquement à cette release.
 
 ## Mockups
-<img src="Mockup/Mockup_Part1.jpg">
-<img src="Mockup/Mockup_Part2.jpg">
+![Mockup](Mockup/Mockup_Part1.jpg)
+1. **Menu Principal** : Il est la première interface que le joueur voit lorsqu'il lance le jeu. Il permet de lancer une nouvelle partie.
+2. **Début du jeu** : L'écran de jeu principal, où le joueur contrôle le stickman et défend le feu.
+3. **Ennemis** : Les ennemis apparaissent de l'extérieur de l'écran et se dirigent vers le feu. Le joueur doit les éliminer avant qu'ils n'atteignent le feu. La luminosité diminue à mesure que le feu s'éteint.
+4. **Feu** : L'objet à défendre. Sa taille diminue au fil du temps.
+
+![Mockup](Mockup/Mockup_Part2.jpg)
+1. **Raviver le feu** : Le joueur peut "réparer" le feu en intéragissant avec. Cela prend du temps et le joueur doit être vigilant pour ne pas être attaqué par les ennemis.
+2. **De nouvelles vagues d'ennemis** : Les ennemis apparaissent en vagues, de plus en plus nombreux et puissants.
+3. **Dégâts au feu** : Si un ennemi attaque le feu, l'intensité du feu diminue rapidement.
+4. **Fin du jeu** : Le jeu se termine lorsque le feu est complètement éteint. Le joueur peur voir son score.
 
 ## Landing page
 

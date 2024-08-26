@@ -33,8 +33,8 @@ class UnmovablePlatform(Platform):
 
         self.__platformSprite.rect = self.__platformSprite.surf.get_rect(topleft=self.position)
         self.__platformSprite.image = platform_image
-        self.__platformSprite.image = pygame.transform.smoothscale(self.__platformSprite.image, self.size)
-        pygame.transform.smoothscale(self.__platformSprite.surf, self.size)
+        self.__platformSprite.image = pygame.transform.scale(self.__platformSprite.image, self.size)
+        pygame.transform.scale(self.__platformSprite.surf, self.size)
 
     def draw(self, surface: pygame.Surface):
         surface.blit(self.__platformSprite.image, self.__platformSprite.rect)

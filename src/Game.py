@@ -1,17 +1,20 @@
+# src/Game.py
 import pygame
 from pygame.locals import *
 
+from src.AudioManager import AudioManager
 from src.LevelGenerator import LevelGenerator
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
-
 from src.ImageManager import ImageManager
-
 from src.Constant import Constant
+from src.Button import Button
+from src.MainMenu import MainMenu
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
+
 
 import src.Constant
 
@@ -22,19 +25,23 @@ class Game():
     def __init__(self):
         print("Hello")
         pygame.init()
+        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
 
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
 
         self.load_all_images()
 
-        self.__player = Player(vec(50,50))
-        self.run()
+        self.__player = Player(vec(100,100))
+        self.main_menu()
+
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
 
         ImageManager().load_image('./assets/textures/background.png', 'background')
+        ImageManager().load_image('./assets/textures/background2.png', 'background2')
+        ImageManager().load_image('./assets/textures/background3.png', 'background3')
         ImageManager().load_image('./assets/textures/platform_left.png', 'platform_left')
         ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
         ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
@@ -55,13 +62,20 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
         ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
+        
+        ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
+        ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
+        ImageManager().load_image('./assets/textures/logo.png', 'logo')
+
+        AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
 
     def run(self):
         print("Game is running")
 
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/collisions.png')
+
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         while True:
             for event in pygame.event.get():
@@ -89,6 +103,16 @@ class Game():
             pygame.display.update()
 
             FramePerSec.tick(Constant.FPS)
+
+    def main_menu(self):
+        main_menu = MainMenu(self.__displaysurface)
+        while True:
+            action = main_menu.display_menu()
+            if action == 'play':
+                AudioManager().play_music()
+                self.run()
+            elif action == 'options':
+                print("Options")
 
 if __name__ == "__main__":
     Game()
