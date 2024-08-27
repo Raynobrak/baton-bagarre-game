@@ -6,6 +6,7 @@ from src.FontManager import FontManager
 from src.LevelGenerator import LevelGenerator
 from src.OptionView import OptionView
 from src.Player import Player
+from src.Enemy import Enemy
 from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
 from src.ImageManager import ImageManager
@@ -22,9 +23,7 @@ import src.Constant
 
 
 class Game():
-    __displaysurface = None
-    __spritegroup = pygame.sprite.Group()
-    visibility = 1
+    DELTA_TIME = 1 / Constant.FPS
 
     def __init__(self):
         pygame.init()
@@ -34,8 +33,12 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
+        
+        self.visibility = 1
 
-        self.__player = Player(vec(100, 100))
+        self.__player = Player(vec(100,100))
+        self.enemy = Enemy(vec(900,100))
+        self.main_menu()
 
         self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
@@ -59,6 +62,8 @@ class Game():
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
         ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
+
+        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite') # todo fix this
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -101,21 +106,16 @@ class Game():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
-
-                    exit(0)
-
-                # Keyup events only can be done in the main loop
-                elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_e:
-                        self.__player.stop_levitate()
-
-            self.__player.update(dt, self.__fire)
-
+            
+            self.__player.update(self.DELTA_TIME)
+            self.enemy.update(self.DELTA_TIME)
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             for platform in platforms:
-                handle_collision_player_vs_platform(self.__player, platform)
+                handle_collision_stickman_vs_platform(self.__player, platform)
+                handle_collision_stickman_vs_platform(self.enemy, platform)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0, 0))
@@ -127,12 +127,10 @@ class Game():
             self.__fire.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
+            self.enemy.draw(self.__displaysurface)
 
             # Blit the light image
             self.__displaysurface.blit(light, (0, 0))
-
-
-
 
             pygame.display.update()
 

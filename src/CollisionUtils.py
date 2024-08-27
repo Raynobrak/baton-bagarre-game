@@ -95,25 +95,25 @@ def rect_collision_info(first: pygame.Rect, other: pygame.Rect) -> RectCollision
 
     return RectCollisionInfo(collisionNormal, delta)
 
-def handle_collision_player_vs_platform(player: Player, platform: UnmovablePlatform):
+def handle_collision_stickman_vs_platform(stickman: Stickman, platform: UnmovablePlatform):
     platformRect = pygame.Rect(platform.position, platform.size)
-    stickRect = pygame.Rect(player.position, player.size)
+    stickRect = pygame.Rect(stickman.position, stickman.size)
 
     collisionInfos = rect_collision_info(platformRect, stickRect)
     if collisionInfos == NO_COLLISION:
         return False
     
     if collisionInfos.normal == UP_VEC:
-        player.position.y = platform.position.y - player.size.y # set pos en dur
-        player.velocity.y = 0
-        player.reset_jump()
+        stickman.position.y = platform.position.y - stickman.size.y # set pos en dur
+        stickman.velocity.y = 0
+        stickman.reset_jump()
     else:
         correction = collisionInfos.normal * collisionInfos.absolutePenetrationDepthAlongNormal()
-        player.move(correction)
+        stickman.move(correction)
         if collisionInfos.normal == UP_VEC or collisionInfos.normal == DOWN_VEC:
-            player.velocity.y = 0
+            stickman.velocity.y = 0
         else:
-            player.velocity.x = 0
+            stickman.velocity.x = 0
     return True
 
     
