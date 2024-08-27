@@ -23,6 +23,8 @@ class Stickman(Entity):
         self.lookingDirection = Direction.RIGHT
         self.movementSpeed = movementSpeed
 
+        self.update_state(Direction.RIGHT, StickmanState.JUMPING)
+
     def update_state(self, newDir, newState):
         if self.lookingDirection is not newDir or self.state is not newState:
             self.lookingDirection = newDir
@@ -55,7 +57,7 @@ class Stickman(Entity):
         else:
             raise Exception("invalid state")
         
-    def jump(self):
+    def try_jump(self):
         if not self.state is StickmanState.JUMPING:
             self.accelerate(vec(0, -350))
             self.update_state(self.lookingDirection, StickmanState.JUMPING)

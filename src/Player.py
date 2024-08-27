@@ -17,8 +17,6 @@ class Player(Stickman):
     PLAYER_MOVEMENT_SPEED = 250
 
     def __init__(self, position, hitboxSize = PLAYER_HITBOX_SIZE):
-        super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
-
         self.isPunching = False
         self.isKicking = False
 
@@ -27,7 +25,8 @@ class Player(Stickman):
         self.punchCooldown = CooldownVariable(0.3)
         self.kickCooldown = CooldownVariable(0.5)
 
-        self.set_animation(ANIM_PLAYER_IDLE)
+        super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
+
     
     def on_state_changed(self):
         if not self.isPunching and not self.isKicking:
@@ -60,7 +59,7 @@ class Player(Stickman):
             self.go_right()
 
         if keysPressed[pygame.K_w]:
-            self.jump()
+            self.try_jump()
 
         if keysPressed[pygame.K_SPACE]:
             self.try_punch()

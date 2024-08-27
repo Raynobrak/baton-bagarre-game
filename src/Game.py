@@ -5,6 +5,7 @@ from pygame.locals import *
 from src.AudioManager import AudioManager
 from src.LevelGenerator import LevelGenerator
 from src.Player import Player
+from src.Enemy import Enemy
 from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
 from src.ImageManager import ImageManager
@@ -15,12 +16,10 @@ from src.MainMenu import MainMenu
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
 
-
 import src.Constant
 
 class Game():
-    __displaysurface = None
-    __spritegroup = pygame.sprite.Group()
+    DELTA_TIME = 1 / Constant.FPS
 
     def __init__(self):
         pygame.init()
@@ -32,6 +31,7 @@ class Game():
         self.load_all_images()
 
         self.__player = Player(vec(100,100))
+        self.enemy = Enemy(vec(900,100))
         self.main_menu()
 
 
@@ -83,14 +83,15 @@ class Game():
                 if event.type == QUIT:
                     pygame.quit()
             
-            self.__player.update(1 / 60)
-
-            
+            self.__player.update(self.DELTA_TIME)
+            self.enemy.update(self.DELTA_TIME)
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             for platform in platforms:
-                handle_collision_player_vs_platform(self.__player, platform)
+                handle_collision_stickman_vs_platform(self.__player, platform)
+                handle_collision_stickman_vs_platform(self.enemy, platform)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0,0))
@@ -98,6 +99,7 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
+            self.enemy.draw(self.__displaysurface)
 
             pygame.display.update()
 
