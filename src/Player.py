@@ -21,6 +21,8 @@ class Player(Stickman):
         self.isPunching = False
         self.isKicking = False
 
+        self.isLevitating = False
+
         self.punchingTime = CooldownVariable(0.1)
         self.kickingTime = CooldownVariable(0.2)
         self.punchCooldown = CooldownVariable(0.3)
@@ -56,10 +58,6 @@ class Player(Stickman):
         keysPressed = pygame.key.get_pressed()
         if keysPressed[pygame.K_e] and self.is_near_fire(fire):
             self.go_levitate()
-        else:
-            if self.isLevitating:
-                self.stop_levitate()
-
 
         if keysPressed[pygame.K_a]:
             self.go_left()

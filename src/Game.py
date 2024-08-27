@@ -38,8 +38,6 @@ class Game():
 
         self.__player = Player(vec(100,100))
         self.enemy = Enemy(vec(900,100))
-        self.main_menu()
-
         self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
@@ -54,6 +52,8 @@ class Game():
         ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
         ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
         ImageManager().load_image('./assets/textures/platform_right.png', 'platform_right')
+
+        ImageManager().load_image('./assets/textures/light2.png', 'light')
 
         ImageManager().load_image('./assets/textures/player_idle.png', 'player_idle')
         ImageManager().load_image('./assets/textures/player_move.png', 'player_walking')
