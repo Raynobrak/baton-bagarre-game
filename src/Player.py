@@ -1,21 +1,22 @@
-import pygame
-
 from enum import Enum
 
-from src.CooldownVariable import CooldownVariable
+from pygame.locals import *
+
 from src.Animation import *
+from src.CooldownVariable import CooldownVariable
 from src.Fire import Fire
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman
+from src.Constant import Constant
 
-
-from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
+
 
 class PlayerDirection(Enum):
     IDLE = 0
     LEFT = 1
     RIGHT = 2
+
 
 class Player(Stickman):
     def __init__(self, size: vec):
@@ -30,8 +31,9 @@ class Player(Stickman):
         self.isJumping = True
         self.isLevitating = False
 
-        self.punchCooldown = CooldownVariable(0.2) # todo improve punch and kick cooldown mechanics
+        self.punchCooldown = CooldownVariable(0.2)  # todo improve punch and kick cooldown mechanics
         self.kickCooldown = CooldownVariable(0.3)
+        self.healCooldown = CooldownVariable(Constant.FIRE_HEALING_COOLDOWN)  # Cooldown for healing fire
 
         self.set_animation(ANIM_PLAYER_IDLE)
 
@@ -50,6 +52,7 @@ class Player(Stickman):
         else:
             if self.isLevitating:
                 self.stop_levitate()
+
 
         if keysPressed[pygame.K_a]:
             self.go_left()
@@ -73,6 +76,9 @@ class Player(Stickman):
         elif self.movingDirection == PlayerDirection.RIGHT:
             self.velocity.x = movementSpeed
 
+        if self.isLevitating:
+            self.heal_fire(fire)
+
         self.apply_gravity(dt)
 
         super().update_position(dt)
@@ -81,6 +87,7 @@ class Player(Stickman):
 
         self.punchCooldown.update_cooldown(dt)
         self.kickCooldown.update_cooldown(dt)
+        self.healCooldown.update_cooldown(dt)
 
     def go_left(self):
         self.lookingDirection = PlayerDirection.LEFT
@@ -103,7 +110,7 @@ class Player(Stickman):
             self.movingDirection = PlayerDirection.IDLE
         self.velocity.x = 0
 
-    # Calling go_idle doesn't change the animation, why?
+    # Calling go_idle doesn't change the animation, why? :( Esteban
     def go_levitate(self):
         if not self.isLevitating:
             self.set_animation(ANIM_PLAYER_LEVITATING)
@@ -117,12 +124,22 @@ class Player(Stickman):
             if self.lookingDirection == PlayerDirection.RIGHT:
                 self.animation.flip_horizontally()
             self.isLevitating = False
+            self.healCooldown.reset()
 
+    def heal_fire(self, fire: Fire):
+        if self.healCooldown.try_reset() and self.isLevitating:
+            print("Healing fire...")
+            fire.heal_fire()
+
+
+    def is_near_fire(self, fire: Fire):
+        distance = self.position.distance_to(fire.position)
+        return distance < 50
 
     def try_punch(self):
         if self.punchCooldown.try_reset():
             self.isPunchingOrKicking = True
-        
+
     def try_kick(self):
         if self.kickCooldown.try_reset():
             self.isPunchingOrKicking = True
@@ -151,7 +168,7 @@ class Player(Stickman):
             self.isJumping = True
             self.set_animation(ANIM_PLAYER_JUMPING)
             if self.lookingDirection == PlayerDirection.RIGHT:
-                    self.animation.flip_horizontally()
+                self.animation.flip_horizontally()
 
     def draw(self, surface):
         if not self.punchCooldown.ready():
@@ -170,7 +187,4 @@ class Player(Stickman):
             self.animation.set_position(self.position)
             self.animation.draw(surface)
 
-    def is_near_fire(self, fire: Fire):
-        distance = self.position.distance_to(fire.position)
-        return distance < 50
-        
+

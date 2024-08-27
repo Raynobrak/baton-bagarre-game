@@ -7,9 +7,8 @@ class CooldownVariable:
         self.timeLeft -= dt
 
     def ready(self) -> bool:
-        if self.timeLeft <= 0:
-            return True
-        
+        return self.timeLeft <= 0
+
     def reset(self):
         self.timeLeft = self.max
 
@@ -18,5 +17,3 @@ class CooldownVariable:
             self.reset()
             return True
         return False
-        
-        
