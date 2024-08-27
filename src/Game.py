@@ -33,7 +33,7 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
-        
+
         self.visibility = 1
 
         self.__player = Player(vec(100,100))
@@ -54,8 +54,6 @@ class Game():
         ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
         ImageManager().load_image('./assets/textures/platform_right.png', 'platform_right')
 
-        ImageManager().load_image('./assets/textures/light2.png', 'light')
-
         ImageManager().load_image('./assets/textures/player_idle.png', 'player_idle')
         ImageManager().load_image('./assets/textures/player_move.png', 'player_walking')
 
@@ -64,7 +62,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
         ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
 
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite') # todo fix this
+        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -80,13 +78,11 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
-
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
-        FontManager().load_font('./assets/font/upheavtt.ttf','default')
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
 
-        FontManager().load_font('./assets/font/upheavtt.ttf','menu', font_size=50)
-
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
     def run(self):
         dt = 1 / 60
@@ -98,17 +94,11 @@ class Game():
         platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
 
-        # Scale the light image to the window size
-        light = pygame.transform.smoothscale(ImageManager().get_image('light'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-
-        # Set the opacity of the light image (0 is fully transparent, 255 is fully opaque)
-        light.set_alpha(0)
-
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
-            
+
             self.__player.update(self.DELTA_TIME)
             self.enemy.update(self.DELTA_TIME)
 
@@ -125,14 +115,11 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object
-            self.__fire.update(dt)
-            self.__fire.draw(self.__displaysurface)
+            fire.update(dt)
+            fire.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
-
-            # Blit the light image
-            self.__displaysurface.blit(light, (0, 0))
 
             pygame.display.update()
 
