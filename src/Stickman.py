@@ -58,7 +58,7 @@ class Stickman(Entity):
             raise Exception("invalid state")
         
     def try_jump(self):
-        if not self.state is StickmanState.JUMPING:
+        if not self.state is StickmanState.JUMPING and self.velocity.y == 0:
             self.accelerate(vec(0, -350))
             self.update_state(self.lookingDirection, StickmanState.JUMPING)
 

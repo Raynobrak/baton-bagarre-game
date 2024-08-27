@@ -38,6 +38,7 @@ class Game():
 
         self.__player = Player(vec(100,100))
         self.enemy = Enemy(vec(900,100))
+        self.enemy.set_target(self.__player)
         self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
@@ -67,6 +68,7 @@ class Game():
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
+        ImageManager().load_image('./assets/textures/enemy_jump.png', 'enemy_jumping')
         ImageManager().load_image('./assets/textures/enemy_water_bucket.png', 'enemy_water_bucket')
 
         ImageManager().load_image('./assets/textures/fire_big.png', 'fire_big')
