@@ -2,7 +2,9 @@ import pygame
 from pygame.locals import *
 
 from src.AudioManager import AudioManager
+from src.FontManager import FontManager
 from src.LevelGenerator import LevelGenerator
+from src.OptionView import OptionView
 from src.Player import Player
 from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
@@ -71,6 +73,10 @@ class Game():
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
 
+        FontManager().load_font('./assets/font/upheavtt.ttf','default')
+
+        FontManager().load_font('./assets/font/upheavtt.ttf','menu', font_size=50)
+
     def run(self):
         print("Game is running")
         dt = 1 / 60
@@ -115,13 +121,16 @@ class Game():
 
     def main_menu(self):
         main_menu = MainMenu(self.__displaysurface)
+        option_menu = OptionView(self.__displaysurface)
         while True:
+
             action = main_menu.display_menu()
             if action == 'play':
                 AudioManager().play_music()
                 self.run()
             elif action == 'options':
-                print("Options")
+                print("option")
+                action = option_menu.display_option()
 
 if __name__ == "__main__":
     Game()
