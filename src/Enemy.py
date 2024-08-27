@@ -6,6 +6,7 @@ from src.CooldownVariable import CooldownVariable
 from src.Animation import *
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
+from src.Entity import Entity
 
 class Enemy(Stickman):
     ENEMY_SPRITE_SIZE = vec(50,50)
@@ -15,6 +16,7 @@ class Enemy(Stickman):
 
     def __init__(self, position, hitboxSize = ENEMY_HITBOX_SIZE):
         super().__init__(position, hitboxSize, self.ENEMY_MOVEMENT_SPEED)
+        self.target = None
     
     def on_state_changed(self):
         match self.state:
@@ -23,7 +25,7 @@ class Enemy(Stickman):
             case StickmanState.WALKING:
                 self.set_animation(ANIM_ENEMY_WALKING)
             case StickmanState.JUMPING:
-                self.set_animation(ANIM_PLAYER_JUMPING)
+                self.set_animation(ANIM_ENEMY_JUMPING)
             case StickmanState.ATTACKING_FIRE:
                 pass
                 # todo
@@ -40,8 +42,27 @@ class Enemy(Stickman):
         self.animation.update(dt)
 
     def apply_strategy(self):
-        self.go_left()
-        self.try_jump()
+        self.goto_target()
+        #self.go_left()
+        #self.try_jump()
+
+    def goto_target(self):
+        if self.target is None:
+            return
+        
+        dist = self.position.distance_to(self.target.position)
+        if dist < 100:
+            self.go_idle()
+            return
+
+        if self.position.x > self.target.position.x:
+            self.go_left()
+        else:
+            self.go_right()
+        
+        if self.position.y > self.target.position.y:
+            print("enemy: ", self.position.y, "player: ", self.target.position.y)
+            self.try_jump()
 
     def update(self, dt: float):
         self.apply_strategy()
@@ -51,6 +72,9 @@ class Enemy(Stickman):
         super().update_position(dt)
 
         self.update_animation(dt)
+
+    def set_target(self, target: Entity):
+        self.target = target
 
     def draw(self, surface):
         sprites_pos = self.get_sprite_pos_centered_around_hitbox(self.ENEMY_SPRITE_SIZE)

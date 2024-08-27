@@ -113,6 +113,7 @@ ANIM_PLAYER_LEVITATING = SpritesheetAnimInfos("player_levitating", vec(32,32), v
 
 ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
 ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32), vec(0,0), 4, ANIM_TIME)
 
 ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
