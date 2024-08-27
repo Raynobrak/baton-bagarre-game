@@ -109,6 +109,8 @@ ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32,32), vec(0,0), 1, 
 
 ANIM_PLAYER_REIGNITE_FIRE = SpritesheetAnimInfos("player_reignite", vec(32,32), vec(0,0), 4, ANIM_TIME)
 
+ANIM_PLAYER_LEVITATING = SpritesheetAnimInfos("player_levitating", vec(32,32), vec(0,0), 4, ANIM_TIME)
+
 ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32), vec(0,0), 4, ANIM_TIME)
@@ -116,3 +118,5 @@ ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32),
 ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32,32),
+                                            vec(0,0), 4, ANIM_TIME)

@@ -1,9 +1,10 @@
-import pygame
-
 from enum import Enum
 
-from src.CooldownVariable import CooldownVariable
+from pygame.locals import *
+
 from src.Animation import *
+from src.CooldownVariable import CooldownVariable
+from src.Fire import Fire
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
 
@@ -53,9 +54,16 @@ class Player(Stickman):
 
     def handle_events(self):
         keysPressed = pygame.key.get_pressed()
-        if keysPressed[pygame.K_a]: 
+        if keysPressed[pygame.K_e] and self.is_near_fire(fire):
+            self.go_levitate()
+        else:
+            if self.isLevitating:
+                self.stop_levitate()
+
+
+        if keysPressed[pygame.K_a]:
             self.go_left()
-        elif keysPressed[pygame.K_d]: 
+        elif keysPressed[pygame.K_d]:
             self.go_right()
 
         if keysPressed[pygame.K_w]:
@@ -71,6 +79,9 @@ class Player(Stickman):
 
     def update(self, dt: float):
         self.handle_events()
+
+        if self.isLevitating:
+            self.heal_fire(fire)
 
         self.apply_gravity(dt)
 
@@ -96,6 +107,32 @@ class Player(Stickman):
     def is_attacking(self):
         return self.isPunching or self.isKicking
 
+    # Calling go_idle doesn't change the animation, why? :( Esteban
+    def go_levitate(self):
+        if not self.isLevitating:
+            self.set_animation(ANIM_PLAYER_LEVITATING)
+            self.isLevitating = True
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
+
+    def stop_levitate(self):
+        if self.isLevitating:
+            self.set_animation(ANIM_PLAYER_IDLE)
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
+            self.isLevitating = False
+            self.healCooldown.reset()
+
+    def heal_fire(self, fire: Fire):
+        if self.healCooldown.try_reset() and self.isLevitating:
+            print("Healing fire...")
+            fire.heal_fire()
+
+
+    def is_near_fire(self, fire: Fire):
+        distance = self.position.distance_to(fire.position)
+        return distance < 50
+
     def try_punch(self):
         if self.is_attacking():
             return
@@ -105,7 +142,7 @@ class Player(Stickman):
             self.set_animation(ANIM_PLAYER_PUNCH)
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
-        
+                
     def try_kick(self):
         if self.is_attacking():
             return
@@ -122,4 +159,4 @@ class Player(Stickman):
         self.animation.draw(surface)
         
 
-        
+

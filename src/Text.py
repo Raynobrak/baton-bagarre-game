@@ -11,7 +11,7 @@ class Text(Entity):
 
     __font: pygame.font.Font
 
-    def __init__(self, position: vec, text: str, color=Color(0,0,0), font='default'):
+    def __init__(self, position: vec, text: str, color=Color(0,0,0), font='default', font_size=12):
         super().__init__()
         self.position = position
         if not pygame.font.get_init():
@@ -44,4 +44,3 @@ class Text(Entity):
         self.update_position(vec(self.position.x - width, self.position.y - height))
         self.draw(surface)
         self.position = old_pos
-
