@@ -4,10 +4,10 @@ vec = pygame.math.Vector2  # 2 for two dimensional
 
 # Represents an object with a position and a velocity
 class Entity():
-    def __init__(self, position = vec(0,0), size = vec(0,0), vel = vec(0,0)):
-        self.position = position
-        self.size = size
-        self.velocity = vel
+    def __init__(self, position = None, size = None, vel = None):
+        self.position = position or vec(0,0)
+        self.size = size or vec(0,0)
+        self.velocity = vel or vec(0,0)
 
     def reset_velocity(self):
         self.velocity = vec(0,0)
