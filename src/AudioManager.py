@@ -29,6 +29,4 @@ class AudioManager:
 
     def update_music_volume(self):
         music: pygame.mixer.Sound = AudioManager.sound['music']
-        #print("new value " + str(VolumeManager().musicVolume))
-
         music.set_volume(VolumeManager().musicVolume * VolumeManager().generalVolume)

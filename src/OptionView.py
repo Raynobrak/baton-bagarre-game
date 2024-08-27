@@ -30,14 +30,16 @@ class OptionView:
     def __init__(self, display_surface: pygame.Surface):
         self.display_surface = display_surface
         #self.save_button = Button('play_button')
-        self.back_button = Button('play_button', (Constant.WINDOW_WIDTH / 2, 0), scale=(150,75))
-        self.volume_slider = Slider(vec(300,300), vec(100,20))
-        self.music_slider = Slider(vec(300,350), vec(100,20))
-        self.bruitage_slider = Slider(vec(300,400), vec(100,20))
-        self.main_text = Text(vec(Constant.WINDOW_WIDTH / 2, 50), "Option menu", color=pygame.Color("White"))
+        self.back_button = Button('play_button', (Constant.WINDOW_WIDTH / 2, Constant.WINDOW_HEIGHT - 100), scale=(150,75))
+        self.volume_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,200), vec(300,20))
+        self.music_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,250), vec(300,20))
+        self.bruitage_slider = Slider(vec(Constant.WINDOW_WIDTH / 2 ,300), vec(300,20))
+        self.main_text = Text(vec(Constant.WINDOW_WIDTH / 2, 100), "Option menu", color=pygame.Color("White"), font='menu')
+        self.volume_text = Text(vec(200, 200), "Volume general",color=pygame.Color("White"))
+        self.music_text = Text(vec(200, 250), "Music",color=pygame.Color("White"))
+        self.bruitage_text = Text((200, 300), "Bruitage",color=pygame.Color("White"))
 
     def display_option(self):
-        AudioManager().play_music()
         pygame.display.set_caption("Option")
         while True:
             self.display_surface.fill((0,0,0))
@@ -46,7 +48,10 @@ class OptionView:
             self.volume_slider.render(self.display_surface)
             self.music_slider.render(self.display_surface)
             self.bruitage_slider.render(self.display_surface)
+            self.volume_text.draw(self.display_surface)
             self.main_text.draw_center(self.display_surface)
+            self.music_text.draw(self.display_surface)
+            self.bruitage_text.draw(self.display_surface)
 
             handle_slider(self.volume_slider)
             handle_slider(self.music_slider)
@@ -63,8 +68,9 @@ class OptionView:
                     if self.back_button.is_clicked(option_mouse_pos):
                         return
 
-            print(self.volume_slider.value)
             VolumeManager().update_general_volume(self.volume_slider.value)
+            VolumeManager().musicVolume = self.music_slider.value
+            VolumeManager().soundVolume = self.bruitage_slider.value
             AudioManager().update_music_volume()
             pygame.display.update()
 

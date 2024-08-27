@@ -75,6 +75,8 @@ class Game():
 
         FontManager().load_font('./assets/font/upheavtt.ttf','default')
 
+        FontManager().load_font('./assets/font/upheavtt.ttf','menu', font_size=50)
+
     def run(self):
         print("Game is running")
         dt = 1 / 60

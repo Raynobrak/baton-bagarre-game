@@ -26,10 +26,8 @@ class Slider:
 
     def start_grabbing(self):
         self.is_grabbing = True
-        print("Started grabbing")
 
     def update_grabing_position(self, mouse_pos: vec):
-        print("Is grabbing")
         if self.border_rect.x > mouse_pos.x:
             self.value = 0
             return
@@ -40,7 +38,6 @@ class Slider:
         self.value = (mouse_pos.x - self.border_rect.x) / self.border_rect.width
 
     def stop_grabbing(self):
-        print("Stopped Grabbing")
         self.is_grabbing = False
 
     def is_grabed(self):
