@@ -49,8 +49,7 @@ class Player(Stickman):
             self.go_levitate()
         else:
             if self.isLevitating:
-                self.go_idle()
-            self.isLevitating = False
+                self.stop_levitate()
 
         if keysPressed[pygame.K_a]:
             self.go_left()
@@ -104,12 +103,20 @@ class Player(Stickman):
             self.movingDirection = PlayerDirection.IDLE
         self.velocity.x = 0
 
+    # Calling go_idle doesn't change the animation, why?
     def go_levitate(self):
         if not self.isLevitating:
             self.set_animation(ANIM_PLAYER_LEVITATING)
             self.isLevitating = True
             if self.lookingDirection == PlayerDirection.RIGHT:
                 self.animation.flip_horizontally()
+
+    def stop_levitate(self):
+        if self.isLevitating:
+            self.set_animation(ANIM_PLAYER_IDLE)
+            if self.lookingDirection == PlayerDirection.RIGHT:
+                self.animation.flip_horizontally()
+            self.isLevitating = False
 
 
     def try_punch(self):

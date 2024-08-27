@@ -18,12 +18,12 @@ FramePerSec = pygame.time.Clock()
 
 import src.Constant
 
+
 class Game():
     __displaysurface = None
     __spritegroup = pygame.sprite.Group()
 
     def __init__(self):
-        print("Hello")
         pygame.init()
         pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
 
@@ -31,8 +31,8 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
-        
-        self.__player = Player(vec(100,100))
+
+        self.__player = Player(vec(100, 100))
 
         self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
@@ -55,7 +55,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
-        ImageManager().load_image('./assets/textures/player_yoga.png','player_levitating')
+        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -70,39 +70,39 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
-        AudioManager().load_sound('./assets/audio/BatonBagarre.mp3','music')
+        AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
     def run(self):
-        print("Game is running")
         dt = 1 / 60
 
         # Load level
 
-
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms,fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
+                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+                    exit(0)
 
-            self.__player.update(1 / 60, self.__fire)
+                # Keyup events only can be done in the main loop
+                elif event.type == pygame.KEYUP:
+                    if event.key == pygame.K_e:
+                        self.__player.stop_levitate()
 
-            
+            self.__player.update(dt, self.__fire)
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             for platform in platforms:
                 handle_collision_player_vs_platform(self.__player, platform)
 
-            print(self.__player.position.y)
-
             # Draw Level
-            self.__displaysurface.blit(bg, (0,0))
+            self.__displaysurface.blit(bg, (0, 0))
             for platform in platforms:
                 platform.draw(self.__displaysurface)
-
 
             # Update and draw fire object
             self.__fire.update(dt)
@@ -123,6 +123,7 @@ class Game():
                 self.run()
             elif action == 'options':
                 print("Options")
+
 
 if __name__ == "__main__":
     Game()
