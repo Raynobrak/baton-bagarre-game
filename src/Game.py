@@ -38,7 +38,6 @@ class Game():
 
         self.__player = Player(vec(100,100))
         self.enemy = Enemy(vec(900,100))
-        self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
 
@@ -52,8 +51,6 @@ class Game():
         ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
         ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
         ImageManager().load_image('./assets/textures/platform_right.png', 'platform_right')
-
-        ImageManager().load_image('./assets/textures/light2.png', 'light')
 
         ImageManager().load_image('./assets/textures/player_idle.png', 'player_idle')
         ImageManager().load_image('./assets/textures/player_move.png', 'player_walking')
@@ -78,6 +75,7 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
+        ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
@@ -90,23 +88,17 @@ class Game():
         dt = 1 / 60
 
         # Load level
-
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
-
-        # Scale the light image to the window size
-        light = pygame.transform.smoothscale(ImageManager().get_image('light'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-
-        # Set the opacity of the light image (0 is fully transparent, 255 is fully opaque)
-        light.set_alpha(0)
+        original_circle = ImageManager().get_image('circle')
 
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
-            
+
             self.__player.update(self.DELTA_TIME)
             self.enemy.update(self.DELTA_TIME)
 
@@ -123,14 +115,35 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object
-            self.__fire.update(dt)
-            self.__fire.draw(self.__displaysurface)
+            fire.update(dt)
+            fire.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
 
-            # Blit the light image
-            self.__displaysurface.blit(light, (0, 0))
+            # Center the circle with the fire and scale it based on fire's life points
+            fire_pos = fire.get_position()
+            fire_size = fire.size
+            fire_life_points = fire.lifePoints
+
+            # Calculate new size for the circle
+            max_circle_size = 200  # Maximum size of the circle
+            min_circle_size = 50   # Minimum size of the circle
+            circle_size = min_circle_size + (max_circle_size - min_circle_size) * (fire_life_points / Constant.FIRE_HEALTH)
+
+            # Scale the circle image
+            circle = pygame.transform.smoothscale(original_circle, (int(circle_size), int(circle_size)))
+
+            # Calculate position to center the circle with the fire
+            circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
+                          fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
+
+            filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            filter.fill(pygame.color.Color('white'))
+            filter.set_alpha(200)
+            filter.blit(circle, circle_pos)
+            self.__displaysurface.blit(filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+            pygame.display.flip()
 
             pygame.display.update()
 
