@@ -23,7 +23,6 @@ class Game():
     __spritegroup = pygame.sprite.Group()
 
     def __init__(self):
-        print("Hello")
         pygame.init()
         pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
 
@@ -53,6 +52,8 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
+
+        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite') # todo fix this
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -90,8 +91,6 @@ class Game():
 
             for platform in platforms:
                 handle_collision_player_vs_platform(self.__player, platform)
-
-            print(self.__player.position.y)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0,0))
