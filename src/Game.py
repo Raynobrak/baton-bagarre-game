@@ -24,6 +24,7 @@ import src.Constant
 class Game():
     __displaysurface = None
     __spritegroup = pygame.sprite.Group()
+    visibility = 1
 
     def __init__(self):
         pygame.init()
@@ -72,11 +73,13 @@ class Game():
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
 
+
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
         FontManager().load_font('./assets/font/upheavtt.ttf','default')
 
         FontManager().load_font('./assets/font/upheavtt.ttf','menu', font_size=50)
+
 
     def run(self):
         dt = 1 / 60
@@ -87,10 +90,18 @@ class Game():
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
+
+        # Scale the light image to the window size
+        light = pygame.transform.smoothscale(ImageManager().get_image('light'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+
+        # Set the opacity of the light image (0 is fully transparent, 255 is fully opaque)
+        light.set_alpha(0)
+
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+
                     exit(0)
 
                 # Keyup events only can be done in the main loop
@@ -99,6 +110,7 @@ class Game():
                         self.__player.stop_levitate()
 
             self.__player.update(dt, self.__fire)
+
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
@@ -115,6 +127,12 @@ class Game():
             self.__fire.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
+
+            # Blit the light image
+            self.__displaysurface.blit(light, (0, 0))
+
+
+
 
             pygame.display.update()
 
