@@ -60,9 +60,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
-        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
-
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
+        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -84,9 +82,19 @@ class Game():
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
-    def run(self):
-        dt = 1 / 60
+    def check_player_interaction(self, player: Player, fire: Fire):
+        # Check if player is in range of fire and press E to interact
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+            if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
+                player.go_levitate()
 
+            # Check if player has finished reigniting the fire
+            has_finished_reigniting = player.try_stop_levitate()
+            if has_finished_reigniting:
+                fire.reignite()
+
+
+    def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
@@ -106,6 +114,8 @@ class Game():
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
             self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
+            self.check_player_interaction(self.__player, fire)
+
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 handle_collision_stickman_vs_platform(self.enemy, platform)
@@ -116,7 +126,7 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object and health bar
-            fire.update(dt)
+            fire.update(self.DELTA_TIME)
             fire.draw(self.__displaysurface)
             fire_health_bar.current_value = fire.lifePoints
             fire_health_bar.draw(self.__displaysurface)

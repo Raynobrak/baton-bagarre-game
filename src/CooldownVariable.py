@@ -17,3 +17,6 @@ class CooldownVariable:
             self.reset()
             return True
         return False
+
+    def get_percentage(self) -> float:
+        return self.timeLeft / self.max
