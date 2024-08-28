@@ -114,7 +114,10 @@ class Game():
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
             self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
+            self.__player.check_if_entity_is_hit(self.enemy)
+
             self.check_player_interaction(self.__player, fire)
+
 
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)

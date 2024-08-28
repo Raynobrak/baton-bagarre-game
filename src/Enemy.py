@@ -2,6 +2,8 @@ import pygame
 
 from enum import Enum
 
+import math
+
 from src.CooldownVariable import CooldownVariable
 from src.Animation import *
 from src.ImageManager import ImageManager
@@ -14,9 +16,16 @@ class Enemy(Stickman):
 
     ENEMY_MOVEMENT_SPEED = 150
 
+    ENEMY_DAMAGE_ANIMATION_TIME = 0.7
+    ENEMY_DAMAGE_ANIMATION_BLINK_COUNT = 10
+    BLINK_COLOR = (255, 0, 0)
+
     def __init__(self, position, hitboxSize = ENEMY_HITBOX_SIZE):
         super().__init__(position, hitboxSize, self.ENEMY_MOVEMENT_SPEED)
         self.target = None
+
+        self.isTakingDamage = False
+        self.damageAnimationTimeLeft = self.ENEMY_DAMAGE_ANIMATION_TIME
     
     def on_state_changed(self):
         match self.state:
@@ -46,6 +55,11 @@ class Enemy(Stickman):
         #self.go_left()
         #self.try_jump()
 
+    def take_damage(self, damage):
+        # todo: reduce health
+        self.isTakingDamage = True
+        self.damageAnimationTimeLeft = self.ENEMY_DAMAGE_ANIMATION_TIME
+
     def goto_target(self):
         if self.target is None:
             return
@@ -65,7 +79,8 @@ class Enemy(Stickman):
             self.try_jump()
 
     def update(self, dt: float):
-        self.apply_strategy()
+        if not self.isTakingDamage:
+            self.apply_strategy()
 
         self.apply_gravity(dt)
 
@@ -73,10 +88,26 @@ class Enemy(Stickman):
 
         self.update_animation(dt)
 
+        if self.isTakingDamage:
+            self.damageAnimationTimeLeft -= dt
+            if self.damageAnimationTimeLeft <= 0:
+                self.isTakingDamage = False
+
     def set_target(self, target: Entity):
         self.target = target
 
     def draw(self, surface):
         sprites_pos = self.get_sprite_pos_centered_around_hitbox(self.ENEMY_SPRITE_SIZE)
         self.animation.set_position(sprites_pos)
-        self.animation.draw(surface)
+
+        if not self.isTakingDamage:
+            self.animation.draw(surface)
+        else:
+            percentage = self.damageAnimationTimeLeft / self.ENEMY_DAMAGE_ANIMATION_TIME
+            current_value = math.sin(percentage * self.ENEMY_DAMAGE_ANIMATION_BLINK_COUNT * math.pi)
+            if current_value > 0:
+                red_filter = pygame.Surface(self.ENEMY_SPRITE_SIZE)
+                red_filter.fill(self.BLINK_COLOR)
+                self.animation.draw(surface, red_filter)
+            else:
+                self.animation.draw(surface)

@@ -93,8 +93,13 @@ class Animation():
     def goto_next_frame(self):
         self.spriteIndex = (self.spriteIndex + 1) % self.infos.frameCount
 
-    def draw(self, surface):
-        surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
+    def draw(self, surface, filter = None):
+        if filter is None:
+            surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
+        else:
+            imgCopy = self.surfaces[self.spriteIndex].copy()
+            imgCopy.blit(filter, (0, 0), special_flags=pygame.BLEND_ADD)
+            surface.blit(imgCopy, self.animSprite.rect)
 
 # Animations declarations
 ANIM_TIME = 0.3
