@@ -13,6 +13,7 @@ from src.ImageManager import ImageManager
 from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
+from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
 
@@ -39,7 +40,6 @@ class Game():
         self.__player = Player(vec(100,100))
         self.enemy = Enemy(vec(900,100))
         self.enemy.set_target(self.__player)
-        self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
 
@@ -60,9 +60,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
-        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
-
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
+        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -84,14 +82,25 @@ class Game():
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
+    def check_player_interaction(self, player: Player, fire: Fire):
+        # Check if player is in range of fire and press E to interact
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+            if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
+                player.go_levitate()
+
+            # Check if player has finished reigniting the fire
+            has_finished_reigniting = player.try_stop_levitate()
+            if has_finished_reigniting:
+                fire.reignite()
+
+
     def run(self):
-        dt = 1 / 60
-
         # Load level
-
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
 
         while True:
@@ -107,6 +116,9 @@ class Game():
 
             self.__player.check_if_entity_is_hit(self.enemy)
 
+            self.check_player_interaction(self.__player, fire)
+
+
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 handle_collision_stickman_vs_platform(self.enemy, platform)
@@ -116,9 +128,11 @@ class Game():
             for platform in platforms:
                 platform.draw(self.__displaysurface)
 
-            # Update and draw fire object
-            fire.update(dt)
+            # Update and draw fire object and health bar
+            fire.update(self.DELTA_TIME)
             fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = fire.lifePoints
+            fire_health_bar.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
