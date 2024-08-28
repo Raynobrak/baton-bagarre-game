@@ -13,6 +13,7 @@ from src.ImageManager import ImageManager
 from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
+from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
 
@@ -39,7 +40,6 @@ class Game():
         self.__player = Player(vec(100,100))
         self.enemy = Enemy(vec(900,100))
         self.enemy.set_target(self.__player)
-        self.__fire = Fire(600, 500, 100, 100)  # Initialize Fire object here
 
         self.main_menu()
 
@@ -93,6 +93,8 @@ class Game():
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
+
 
         while True:
             for event in pygame.event.get():
@@ -114,9 +116,11 @@ class Game():
             for platform in platforms:
                 platform.draw(self.__displaysurface)
 
-            # Update and draw fire object
+            # Update and draw fire object and health bar
             fire.update(dt)
             fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = fire.lifePoints
+            fire_health_bar.draw(self.__displaysurface)
 
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
