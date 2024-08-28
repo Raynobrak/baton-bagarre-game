@@ -6,7 +6,9 @@ from src.Animation import *
 from src.CooldownVariable import CooldownVariable
 from src.Fire import Fire
 from src.ImageManager import ImageManager
+from src.Entity import Entity
 from src.Stickman import Stickman, StickmanState, Direction
+from src.Hit import PunchHit, KickHit
 
 from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
@@ -27,6 +29,8 @@ class Player(Stickman):
         self.kickingTime = CooldownVariable(0.2)
         self.punchCooldown = CooldownVariable(0.3)
         self.kickCooldown = CooldownVariable(0.5)
+
+        self.hits = list()
 
         super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
 
@@ -76,6 +80,9 @@ class Player(Stickman):
             self.go_idle()
 
     def update(self, dt: float):
+        for hit in self.hits:
+            hit.update(dt)
+        
         self.handle_events()
 
         if self.isLevitating:
@@ -130,6 +137,19 @@ class Player(Stickman):
     def is_near_fire(self, fire: Fire):
         distance = self.position.distance_to(fire.position)
         return distance < 50
+    
+    def generate_punch(self):
+        self.hits.append(PunchHit(self))
+
+    def generate_kick(self):
+        self.hits.append(KickHit(self))
+
+    def check_if_entity_is_hit(self, entity: Entity):
+        for hit in self.hits:
+            if hit.is_active():
+                print("active", hit.timeLeft)
+                hit.check_for_collision(entity)
+            # todo: delete if not active anymore
 
     def try_punch(self):
         if self.is_attacking():
@@ -138,6 +158,7 @@ class Player(Stickman):
             self.punchingTime.reset()
             self.isPunching = True
             self.set_animation(ANIM_PLAYER_PUNCH)
+            self.generate_punch()
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
                 
@@ -148,6 +169,7 @@ class Player(Stickman):
             self.kickingTime.reset()
             self.isKicking = True
             self.set_animation(ANIM_PLAYER_KICK)
+            self.generate_kick()
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
 
