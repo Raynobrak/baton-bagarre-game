@@ -88,10 +88,9 @@ class Game():
         dt = 1 / 60
 
         # Load level
-
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
