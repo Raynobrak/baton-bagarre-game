@@ -109,8 +109,6 @@ ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32,32), vec(0,0), 1, 
 
 ANIM_PLAYER_REIGNITE_FIRE = SpritesheetAnimInfos("player_reignite", vec(32,32), vec(0,0), 4, ANIM_TIME)
 
-ANIM_PLAYER_LEVITATING = SpritesheetAnimInfos("player_levitating", vec(32,32), vec(0,0), 4, ANIM_TIME)
-
 ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
