@@ -33,11 +33,11 @@ class Game():
         pygame.display.set_caption("Game")
 
         self.load_all_images()
-        
+
         self.visibility = 1
 
-        self.__player = Player(vec(100,100))
-        self.enemy = Enemy(vec(900,100))
+        self.__player = Player(vec(100, 100))
+        self.enemy = Enemy(vec(900, 100))
 
         self.main_menu()
 
@@ -60,7 +60,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
         ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
 
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite') # todo fix this
+        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -79,10 +79,9 @@ class Game():
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
-        FontManager().load_font('./assets/font/upheavtt.ttf','default')
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
 
-        FontManager().load_font('./assets/font/upheavtt.ttf','menu', font_size=50)
-
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
     def run(self):
         dt = 1 / 60
@@ -127,7 +126,7 @@ class Game():
             fire_life_points = fire.lifePoints
 
             # Calculate new size for the circle
-            max_circle_size = 200  # Maximum size of the circle
+            max_circle_size = Constant.WINDOW_WIDTH*3  # Maximum size of the circle
             min_circle_size = 50   # Minimum size of the circle
             circle_size = min_circle_size + (max_circle_size - min_circle_size) * (fire_life_points / Constant.FIRE_HEALTH)
 
@@ -140,7 +139,7 @@ class Game():
 
             filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
             filter.fill(pygame.color.Color('white'))
-            filter.set_alpha(200)
+            filter.set_alpha(190)
             filter.blit(circle, circle_pos)
             self.__displaysurface.blit(filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
             pygame.display.flip()
