@@ -16,7 +16,7 @@ class Fire(Entity):
         self.current_animation = None  # Track current animation
         self.set_animation(ANIM_FIRE_BIG)
 
-        self.lifePoints = Constant.FIRE_HEALTH-50  # Initialize life points
+        self.lifePoints = Constant.FIRE_HEALTH  # Initialize life points
         self.time_since_last_reduction = 0  # Track time since last reduction
 
     def set_animation(self, animInfos):

@@ -39,6 +39,10 @@ class Game():
         self.__player = Player(vec(100, 100))
         self.enemy = Enemy(vec(900, 100))
 
+        # Calculate new size for the circle
+        self.__max_circle_size = Constant.WINDOW_WIDTH * 3  # Maximum size of the circle
+        self.__min_circle_size = 50  # Minimum size of the circle
+
         self.main_menu()
 
     def load_all_images(self):
@@ -125,10 +129,8 @@ class Game():
             fire_size = fire.size
             fire_life_points = fire.lifePoints
 
-            # Calculate new size for the circle
-            max_circle_size = Constant.WINDOW_WIDTH*3  # Maximum size of the circle
-            min_circle_size = 50   # Minimum size of the circle
-            circle_size = min_circle_size + (max_circle_size - min_circle_size) * (fire_life_points / Constant.FIRE_HEALTH)
+            circle_size = self.__min_circle_size + (self.__max_circle_size - self.__min_circle_size) * (
+                        fire_life_points / Constant.FIRE_HEALTH)
 
             # Scale the circle image
             circle = pygame.transform.smoothscale(original_circle, (int(circle_size), int(circle_size)))
@@ -139,7 +141,6 @@ class Game():
 
             filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
             filter.fill(pygame.color.Color('white'))
-            filter.set_alpha(190)
             filter.blit(circle, circle_pos)
             self.__displaysurface.blit(filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
             pygame.display.flip()
