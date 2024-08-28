@@ -17,6 +17,8 @@ class Enemy(Stickman):
     ENEMY_MOVEMENT_SPEED = 150
 
     ENEMY_DAMAGE_ANIMATION_TIME = 0.7
+    ENEMY_DAMAGE_ANIMATION_BLINK_COUNT = 10
+    BLINK_COLOR = (255, 0, 0)
 
     def __init__(self, position, hitboxSize = ENEMY_HITBOX_SIZE):
         super().__init__(position, hitboxSize, self.ENEMY_MOVEMENT_SPEED)
@@ -101,12 +103,11 @@ class Enemy(Stickman):
         if not self.isTakingDamage:
             self.animation.draw(surface)
         else:
-            blink_count = 10
             percentage = self.damageAnimationTimeLeft / self.ENEMY_DAMAGE_ANIMATION_TIME
-            current_value = math.sin(percentage * blink_count * math.pi)
+            current_value = math.sin(percentage * self.ENEMY_DAMAGE_ANIMATION_BLINK_COUNT * math.pi)
             if current_value > 0:
                 red_filter = pygame.Surface(self.ENEMY_SPRITE_SIZE)
-                red_filter.fill((255, 0, 0))  # (Rouge, Vert, Bleu, Alpha)
+                red_filter.fill(self.BLINK_COLOR)
                 self.animation.draw(surface, red_filter)
             else:
                 self.animation.draw(surface)
