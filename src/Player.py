@@ -84,9 +84,6 @@ class Player(Stickman):
 
         for hit in self.hits:
             hit.update(dt)
-        
-        if self.isLevitating:
-            self.heal_fire(fire)
 
         if not self.isLevitating:
             self.handle_events()
