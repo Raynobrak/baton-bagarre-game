@@ -13,6 +13,7 @@ from src.ImageManager import ImageManager
 from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
+from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
 
@@ -36,8 +37,9 @@ class Game():
 
         self.visibility = 1
 
-        self.__player = Player(vec(100, 100))
-        self.enemy = Enemy(vec(900, 100))
+        self.__player = Player(vec(100,100))
+        self.enemy = Enemy(vec(900,100))
+        self.enemy.set_target(self.__player)
 
         self.main_menu()
 
@@ -58,12 +60,12 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
-        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
 
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
+        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
+        ImageManager().load_image('./assets/textures/enemy_jump.png', 'enemy_jumping')
         ImageManager().load_image('./assets/textures/enemy_water_bucket.png', 'enemy_water_bucket')
 
         ImageManager().load_image('./assets/textures/fire_big.png', 'fire_big')
@@ -74,14 +76,14 @@ class Game():
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
-
+        
         ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
-
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
+        
 
     def update_light(self, fire: Fire, original_circle: pygame.Surface):
         # Center the circle with the fire and scale it based on fire's life points
@@ -105,15 +107,24 @@ class Game():
         light_filter.blit(circle, circle_pos)
         self.__displaysurface.blit(light_filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
 
+    def check_player_interaction(self, player: Player, fire: Fire):
+        # Check if player is in range of fire and press E to interact
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+            if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
+                player.go_levitate()
+
+            # Check if player has finished reigniting the fire
+            has_finished_reigniting = player.try_stop_levitate()
+            if has_finished_reigniting:
+                fire.reignite()
+
+
     def run(self):
-        dt = 1 / 60
-
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
-                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, fire = LevelGenerator().load_level_infos('./assets/levels/level1.png')
-
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
         original_circle = ImageManager().get_image('circle')
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
         while True:
             for event in pygame.event.get():
@@ -126,6 +137,10 @@ class Game():
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
             self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
+            self.__player.check_if_entity_is_hit(self.enemy)
+
+            self.check_player_interaction(self.__player, fire)
+
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 handle_collision_stickman_vs_platform(self.enemy, platform)
@@ -135,9 +150,11 @@ class Game():
             for platform in platforms:
                 platform.draw(self.__displaysurface)
 
-            # Update and draw fire object
-            fire.update(dt)
+            # Update and draw fire object and health bar
+            fire.update(self.DELTA_TIME)
             fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = fire.lifePoints
+            fire_health_bar.draw(self.__displaysurface)
 
             # Draw Player
             self.__player.draw(self.__displaysurface)

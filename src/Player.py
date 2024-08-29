@@ -6,7 +6,11 @@ from src.Animation import *
 from src.CooldownVariable import CooldownVariable
 from src.Fire import Fire
 from src.ImageManager import ImageManager
+from src.Entity import Entity
 from src.Stickman import Stickman, StickmanState, Direction
+from src.Hit import PunchHit, KickHit
+from src.Constant import Constant
+from src.ProgressBar import ProgressBar
 
 from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
@@ -20,16 +24,19 @@ class Player(Stickman):
     def __init__(self, position, hitboxSize = PLAYER_HITBOX_SIZE):
         self.isPunching = False
         self.isKicking = False
-
         self.isLevitating = False
+
+        self.levitatingTime = CooldownVariable(Constant.REIGNITE_FIRE_COOLDOWN)
+        self.reignitProgressBar = ProgressBar(position, vec(hitboxSize.x, hitboxSize.y/10), (255,255,0), (100,100,100))
 
         self.punchingTime = CooldownVariable(0.1)
         self.kickingTime = CooldownVariable(0.2)
         self.punchCooldown = CooldownVariable(0.3)
         self.kickCooldown = CooldownVariable(0.5)
 
-        super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
+        self.hits = list()
 
+        super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
     
     def on_state_changed(self):
         if not self.isPunching and not self.isKicking:
@@ -56,8 +63,6 @@ class Player(Stickman):
 
     def handle_events(self):
         keysPressed = pygame.key.get_pressed()
-        if keysPressed[pygame.K_e] and self.is_near_fire(fire):
-            self.go_levitate()
 
         if keysPressed[pygame.K_a]:
             self.go_left()
@@ -76,10 +81,12 @@ class Player(Stickman):
             self.go_idle()
 
     def update(self, dt: float):
-        self.handle_events()
 
-        if self.isLevitating:
-            self.heal_fire(fire)
+        for hit in self.hits:
+            hit.update(dt)
+
+        if not self.isLevitating:
+            self.handle_events()
 
         self.apply_gravity(dt)
 
@@ -88,6 +95,8 @@ class Player(Stickman):
         self.update_animation(dt)
 
         self.update_attack_animations(dt)
+
+        self.levitatingTime.update_cooldown(dt)
 
     def update_attack_animations(self, dt):
         self.punchCooldown.update_cooldown(dt)
@@ -105,31 +114,40 @@ class Player(Stickman):
     def is_attacking(self):
         return self.isPunching or self.isKicking
 
-    # Calling go_idle doesn't change the animation, why? :( Esteban
     def go_levitate(self):
         if not self.isLevitating:
-            self.set_animation(ANIM_PLAYER_LEVITATING)
+            self.velocity = vec(0, 0)
             self.isLevitating = True
-            if self.lookingDirection == PlayerDirection.RIGHT:
-                self.animation.flip_horizontally()
+            self.levitatingTime.reset()
+
+            self.update_state(self.lookingDirection, StickmanState.REIGNITE_FIRE)
+            self.on_state_changed()
+
+    def try_stop_levitate(self) -> bool:
+        if self.isLevitating and self.levitatingTime.ready():
+            self.stop_levitate()
+            return True
+        return False
 
     def stop_levitate(self):
         if self.isLevitating:
-            self.set_animation(ANIM_PLAYER_IDLE)
-            if self.lookingDirection == PlayerDirection.RIGHT:
-                self.animation.flip_horizontally()
             self.isLevitating = False
-            self.healCooldown.reset()
 
-    def heal_fire(self, fire: Fire):
-        if self.healCooldown.try_reset() and self.isLevitating:
-            print("Healing fire...")
-            fire.heal_fire()
+            self.update_state(self.lookingDirection, StickmanState.IDLE)
+            self.on_state_changed()
+    
+    def generate_punch(self):
+        self.hits.append(PunchHit(self))
 
+    def generate_kick(self):
+        self.hits.append(KickHit(self))
 
-    def is_near_fire(self, fire: Fire):
-        distance = self.position.distance_to(fire.position)
-        return distance < 50
+    def check_if_entity_is_hit(self, entity: Entity):
+        for hit in self.hits:
+            if hit.is_active():
+                print("active", hit.timeLeft)
+                hit.check_for_collision(entity)
+            # todo: delete if not active anymore
 
     def try_punch(self):
         if self.is_attacking():
@@ -138,6 +156,7 @@ class Player(Stickman):
             self.punchingTime.reset()
             self.isPunching = True
             self.set_animation(ANIM_PLAYER_PUNCH)
+            self.generate_punch()
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
                 
@@ -148,6 +167,7 @@ class Player(Stickman):
             self.kickingTime.reset()
             self.isKicking = True
             self.set_animation(ANIM_PLAYER_KICK)
+            self.generate_kick()
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
 
@@ -155,6 +175,12 @@ class Player(Stickman):
         sprites_pos = self.get_sprite_pos_centered_around_hitbox(self.PLAYER_SPRITE_SIZE)
         self.animation.set_position(sprites_pos)
         self.animation.draw(surface)
+
+        if self.isLevitating:
+            self.reignitProgressBar.set_position(self.position + vec(0, -self.size.y/5))
+            self.reignitProgressBar.update_value(100 - self.levitatingTime.get_percentage() * 100)
+            self.reignitProgressBar.draw(surface)
+
         
 
 

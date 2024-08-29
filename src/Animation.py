@@ -93,8 +93,13 @@ class Animation():
     def goto_next_frame(self):
         self.spriteIndex = (self.spriteIndex + 1) % self.infos.frameCount
 
-    def draw(self, surface):
-        surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
+    def draw(self, surface, filter = None):
+        if filter is None:
+            surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
+        else:
+            imgCopy = self.surfaces[self.spriteIndex].copy()
+            imgCopy.blit(filter, (0, 0), special_flags=pygame.BLEND_ADD)
+            surface.blit(imgCopy, self.animSprite.rect)
 
 # Animations declarations
 ANIM_TIME = 0.3
@@ -109,10 +114,9 @@ ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32,32), vec(0,0), 1, 
 
 ANIM_PLAYER_REIGNITE_FIRE = SpritesheetAnimInfos("player_reignite", vec(32,32), vec(0,0), 4, ANIM_TIME)
 
-ANIM_PLAYER_LEVITATING = SpritesheetAnimInfos("player_levitating", vec(32,32), vec(0,0), 4, ANIM_TIME)
-
 ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
 ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32), vec(0,0), 4, ANIM_TIME)
 
 ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
