@@ -13,6 +13,7 @@ from src.ImageManager import ImageManager
 from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
+from src.PauseMenu import PauseMenu
 from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
@@ -59,9 +60,8 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
-        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_levitating')
 
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_reignite')  # todo fix this
+        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
         ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
@@ -76,30 +76,65 @@ class Game():
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
+        
+        ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
-
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
+        
+
+    def update_light(self, fire: Fire, original_circle: pygame.Surface):
+        # Center the circle with the fire and scale it based on fire's life points
+        fire_pos = fire.get_position()
+        fire_size = fire.size
+        fire_life_points = fire.lifePoints
+
+        circle_size = fire_size.x + (Constant.WINDOW_WIDTH * 3) * (fire_life_points / Constant.FIRE_HEALTH)
+
+        # Scale the circle image
+        circle = pygame.transform.smoothscale(original_circle, vec(int(circle_size), int(circle_size)))
+
+        # Calculate position to center the circle with the fire
+        circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
+                      fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
+
+        # Create a light filter to darken the screen
+        light_filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        color_ratio = 255 * (1 - fire_life_points / Constant.FIRE_HEALTH)
+        light_filter.fill((color_ratio, color_ratio, color_ratio))
+        light_filter.blit(circle, circle_pos)
+        self.__displaysurface.blit(light_filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
+    def check_player_interaction(self, player: Player, fire: Fire):
+        # Check if player is in range of fire and press E to interact
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+            if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
+                player.go_levitate()
+
+            # Check if player has finished reigniting the fire
+            has_finished_reigniting = player.try_stop_levitate()
+            if has_finished_reigniting:
+                fire.reignite()
+
 
     def run(self):
-        dt = 1 / 60
-
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
-                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
-
+        original_circle = ImageManager().get_image('circle')
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
         self.wave_manager = WaveManager(spawn_points,self.enemies, self.__player)
-
         while True:
             #print("Ennemy size = " + str(len(self.enemies)))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.pause_menu()
+                    
             self.wave_manager.update_wave(self.DELTA_TIME)
             self.__player.update(self.DELTA_TIME)
             for enemy in self.enemies:
@@ -107,6 +142,10 @@ class Game():
                 enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+
+            self.__player.check_if_entity_is_hit(self.enemy)
+
+            self.check_player_interaction(self.__player, fire)
 
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
@@ -119,14 +158,18 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object and health bar
-            fire.update(dt)
+            fire.update(self.DELTA_TIME)
             fire.draw(self.__displaysurface)
             fire_health_bar.current_value = fire.lifePoints
             fire_health_bar.draw(self.__displaysurface)
 
+            # Draw Player
             self.__player.draw(self.__displaysurface)
             for enemy in self.enemies:
                 enemy.draw(self.__displaysurface)
+
+            # Update and draw light
+            self.update_light(fire, original_circle)
 
             pygame.display.update()
 
@@ -145,6 +188,22 @@ class Game():
                 print("option")
                 option_menu.display_option()
 
+
+    def pause_menu(self):
+        pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])
+        option_menu = OptionView(self.__displaysurface)
+
+        while True:
+            pause_menu.display_menu()
+            action = pause_menu.handle_input()
+            if action == 'Resume':
+                break
+            elif action == 'Options':
+                option_menu.display_option()
+                pass
+            elif action == 'Quit':
+                pygame.quit()
+                exit()
 
 
 if __name__ == "__main__":

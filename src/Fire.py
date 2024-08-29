@@ -7,6 +7,7 @@ from src.Constant import *
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Fire(Entity):
     def __init__(self, x, y, width, height):
         super().__init__()
@@ -16,7 +17,7 @@ class Fire(Entity):
         self.current_animation = None  # Track current animation
         self.set_animation(ANIM_FIRE_BIG)
 
-        self.lifePoints = Constant.FIRE_HEALTH-50  # Initialize life points
+        self.lifePoints = Constant.FIRE_HEALTH  # Initialize life points
         self.time_since_last_reduction = 0  # Track time since last reduction
 
     def set_animation(self, animInfos):
@@ -44,12 +45,16 @@ class Fire(Entity):
         self.time_since_last_reduction += dt
 
         if self.time_since_last_reduction >= 1:  # Reduce life points every second
+            if self.lifePoints <= 0:
+                return  # Fire is already dead
             self.lifePoints -= Constant.FIRE_DAMAGE_PER_SECOND
+
             self.time_since_last_reduction = 0
             print(f"Fire life points: {self.lifePoints}")
 
-    def heal_fire(self):
-        self.lifePoints = min(self.lifePoints + Constant.FIRE_HEALING, Constant.FIRE_HEALTH)
+    def reignite(self):
+        self.lifePoints = min(self.lifePoints + Constant.REIGNITE_HEALING, Constant.FIRE_HEALTH)
+        print(f"Fire is healed: {self.lifePoints}")
 
     def get_position(self):
         return self.position

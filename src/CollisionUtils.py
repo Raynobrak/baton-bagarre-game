@@ -4,7 +4,6 @@ from enum import IntEnum
 
 from src.UnmovablePlatform import UnmovablePlatform
 from src.Stickman import Stickman
-from src.Player import Player
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 UP_VEC = vec(0,-1)
