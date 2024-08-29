@@ -145,6 +145,10 @@ class Game():
             for enemy in self.enemies:
                 self.__player.check_if_entity_is_hit(enemy)
 
+            for enemy in self.enemies:
+                if enemy.is_dead():
+                    self.enemies.remove(enemy)
+
             self.check_player_interaction(self.__player, fire)
 
             for platform in platforms:
