@@ -38,8 +38,8 @@ class Game():
 
         self.visibility = 1
 
-        self.__player = Player(vec(100,100))
-        self.enemy = Enemy(vec(900,100))
+        self.__player = Player(vec(100, 100))
+        self.enemy = Enemy(vec(900, 100))
         self.enemy.set_target(self.__player)
 
         self.main_menu()
@@ -77,14 +77,13 @@ class Game():
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
-        
+
         ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
-        
 
     def update_light(self, fire: Fire, original_circle: pygame.Surface):
         # Center the circle with the fire and scale it based on fire's life points
@@ -97,9 +96,16 @@ class Game():
         # Scale the circle image
         circle = pygame.transform.smoothscale(original_circle, vec(int(circle_size), int(circle_size)))
 
-        # Calculate position to center the circle with the fire
-        circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
-                      fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
+        sub_pos = vec(circle_size, circle_size) / 2 - (fire_pos + fire_size / 2)
+        if circle_size > Constant.WINDOW_WIDTH and circle_size > Constant.WINDOW_HEIGHT and sub_pos.x > 0 and sub_pos.y > 0:
+            # Get the sub-surface of the circle image to fit in the screen
+            sub_size = vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT)
+            circle = circle.subsurface(pygame.Rect(sub_pos, sub_size))
+            circle_pos = (0, 0)
+        else:
+            # Calculate position to center the circle with the fireee
+            circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
+                          fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
 
         # Create a light filter to darken the screen
         light_filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
@@ -119,13 +125,14 @@ class Game():
             if has_finished_reigniting:
                 fire.reignite()
 
-
     def run(self):
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
+                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
         original_circle = ImageManager().get_image('circle')
-        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
+                                      max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
         while True:
             for event in pygame.event.get():

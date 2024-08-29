@@ -45,9 +45,10 @@ class Fire(Entity):
         self.time_since_last_reduction += dt
 
         if self.time_since_last_reduction >= 1:  # Reduce life points every second
-            if self.lifePoints <= 0:
-                return  # Fire is already dead
-            self.lifePoints -= Constant.FIRE_DAMAGE_PER_SECOND
+            if self.lifePoints - Constant.FIRE_DAMAGE_PER_SECOND < 0:
+                self.lifePoints = 0
+            else:
+                self.lifePoints -= Constant.FIRE_DAMAGE_PER_SECOND
 
             self.time_since_last_reduction = 0
             print(f"Fire life points: {self.lifePoints}")
