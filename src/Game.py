@@ -142,8 +142,8 @@ class Game():
                 enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-
-            self.__player.check_if_entity_is_hit(self.enemy)
+            for enemy in self.enemies:
+                self.__player.check_if_entity_is_hit(enemy)
 
             self.check_player_interaction(self.__player, fire)
 
