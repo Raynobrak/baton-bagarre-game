@@ -60,6 +60,7 @@ class Game():
         ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
         ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
         ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
+
         ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
 
         ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
@@ -75,12 +76,36 @@ class Game():
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
+        
+        ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
-
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
+        
+
+    def update_light(self, fire: Fire, original_circle: pygame.Surface):
+        # Center the circle with the fire and scale it based on fire's life points
+        fire_pos = fire.get_position()
+        fire_size = fire.size
+        fire_life_points = fire.lifePoints
+
+        circle_size = fire_size.x + (Constant.WINDOW_WIDTH * 3) * (fire_life_points / Constant.FIRE_HEALTH)
+
+        # Scale the circle image
+        circle = pygame.transform.smoothscale(original_circle, vec(int(circle_size), int(circle_size)))
+
+        # Calculate position to center the circle with the fire
+        circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
+                      fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
+
+        # Create a light filter to darken the screen
+        light_filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        color_ratio = 255 * (1 - fire_life_points / Constant.FIRE_HEALTH)
+        light_filter.fill((color_ratio, color_ratio, color_ratio))
+        light_filter.blit(circle, circle_pos)
+        self.__displaysurface.blit(light_filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
 
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
@@ -96,12 +121,10 @@ class Game():
 
     def run(self):
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
-                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'), (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
-
+        original_circle = ImageManager().get_image('circle')
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10), max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
-
 
         while True:
             for event in pygame.event.get():
@@ -118,7 +141,6 @@ class Game():
 
             self.check_player_interaction(self.__player, fire)
 
-
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 handle_collision_stickman_vs_platform(self.enemy, platform)
@@ -134,8 +156,12 @@ class Game():
             fire_health_bar.current_value = fire.lifePoints
             fire_health_bar.draw(self.__displaysurface)
 
+            # Draw Player
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
+
+            # Update and draw light
+            self.update_light(fire, original_circle)
 
             pygame.display.update()
 
