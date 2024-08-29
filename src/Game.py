@@ -13,6 +13,7 @@ from src.ImageManager import ImageManager
 from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
+from src.PauseMenu import PauseMenu
 from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
@@ -130,6 +131,8 @@ class Game():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    self.pause_menu()
 
             self.__player.update(self.DELTA_TIME)
             self.enemy.update(self.DELTA_TIME)
@@ -179,6 +182,22 @@ class Game():
             elif action == 'options':
                 print("option")
                 action = option_menu.display_option()
+
+    def pause_menu(self):
+        pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])
+        option_menu = OptionView(self.__displaysurface)
+
+        while True:
+            pause_menu.display_menu()
+            action = pause_menu.handle_input()
+            if action == 'Resume':
+                break
+            elif action == 'Options':
+                option_menu.display_option()
+                pass
+            elif action == 'Quit':
+                pygame.quit()
+                exit()
 
 
 if __name__ == "__main__":
