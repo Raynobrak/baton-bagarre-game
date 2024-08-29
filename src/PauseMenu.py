@@ -15,7 +15,7 @@ class PauseMenu:
     def display_menu(self):
         # Create a transparent overlay
         overlay = pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA)
-        overlay.fill((0, 0, 0, 1)) 
+        overlay.fill((0, 0, 0, 1))
 
         # Blit the overlay onto the display surface
         self.display_surface.blit(overlay, (0, 0))
