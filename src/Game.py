@@ -39,10 +39,6 @@ class Game():
         self.__player = Player(vec(100, 100))
         self.enemy = Enemy(vec(900, 100))
 
-        # Calculate new size for the circle
-        self.__max_circle_size = Constant.WINDOW_WIDTH * 3  # Maximum size of the circle
-        self.__min_circle_size = 50  # Minimum size of the circle
-
         self.main_menu()
 
     def load_all_images(self):
@@ -87,6 +83,28 @@ class Game():
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
+    def update_light(self, fire: Fire, original_circle: pygame.Surface):
+        # Center the circle with the fire and scale it based on fire's life points
+        fire_pos = fire.get_position()
+        fire_size = fire.size
+        fire_life_points = fire.lifePoints
+
+        circle_size = fire_size.x + (Constant.WINDOW_WIDTH * 3) * (fire_life_points / Constant.FIRE_HEALTH)
+
+        # Scale the circle image
+        circle = pygame.transform.smoothscale(original_circle, vec(int(circle_size), int(circle_size)))
+
+        # Calculate position to center the circle with the fire
+        circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
+                      fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
+
+        # Create a light filter to darken the screen
+        light_filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        color_ratio = 255 * (1 - fire_life_points / Constant.FIRE_HEALTH)
+        light_filter.fill((color_ratio, color_ratio, color_ratio))
+        light_filter.blit(circle, circle_pos)
+        self.__displaysurface.blit(light_filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
     def run(self):
         dt = 1 / 60
 
@@ -121,29 +139,12 @@ class Game():
             fire.update(dt)
             fire.draw(self.__displaysurface)
 
+            # Draw Player
             self.__player.draw(self.__displaysurface)
             self.enemy.draw(self.__displaysurface)
 
-            # Center the circle with the fire and scale it based on fire's life points
-            fire_pos = fire.get_position()
-            fire_size = fire.size
-            fire_life_points = fire.lifePoints
-
-            circle_size = self.__min_circle_size + (self.__max_circle_size - self.__min_circle_size) * (
-                        fire_life_points / Constant.FIRE_HEALTH)
-
-            # Scale the circle image
-            circle = pygame.transform.smoothscale(original_circle, (int(circle_size), int(circle_size)))
-
-            # Calculate position to center the circle with the fire
-            circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
-                          fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
-
-            filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-            filter.fill(pygame.color.Color('white'))
-            filter.blit(circle, circle_pos)
-            self.__displaysurface.blit(filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
-            pygame.display.flip()
+            # Update and draw light
+            self.update_light(fire, original_circle)
 
             pygame.display.update()
 
