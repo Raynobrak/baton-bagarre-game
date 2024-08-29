@@ -9,12 +9,16 @@ from src.Animation import *
 from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
 from src.Entity import Entity
+from src.ProgressBar import ProgressBar
 
 class Enemy(Stickman):
     ENEMY_SPRITE_SIZE = vec(50,50)
     ENEMY_HITBOX_SIZE = vec(30,50)
 
     ENEMY_MOVEMENT_SPEED = 150
+
+    ENEMY_HEALTH = 100
+    ENEMY_HEALTH_BAR_SIZE = vec(40,20)
 
     ENEMY_DAMAGE_ANIMATION_TIME = 0.7
     ENEMY_DAMAGE_ANIMATION_BLINK_COUNT = 10
@@ -24,6 +28,8 @@ class Enemy(Stickman):
         super().__init__(position, hitboxSize, self.ENEMY_MOVEMENT_SPEED)
         self.target = None
 
+        self.health = self.ENEMY_HEALTH
+        self.healthbar = ProgressBar(vec(0,0), self.ENEMY_HEALTH_BAR_SIZE, (255,0,0), (0,0,0,255), 100)
         self.isTakingDamage = False
         self.damageAnimationTimeLeft = self.ENEMY_DAMAGE_ANIMATION_TIME
     
@@ -56,9 +62,12 @@ class Enemy(Stickman):
         #self.try_jump()
 
     def take_damage(self, damage):
-        # todo: reduce health
+        self.health -= damage
         self.isTakingDamage = True
         self.damageAnimationTimeLeft = self.ENEMY_DAMAGE_ANIMATION_TIME
+
+    def is_dead(self):
+        return self.health <= 0
 
     def goto_target(self):
         if self.target is None:
@@ -111,3 +120,9 @@ class Enemy(Stickman):
                 self.animation.draw(surface, red_filter)
             else:
                 self.animation.draw(surface)
+
+        xPos = self.position.x + self.size.x / 2
+        yPos = self.position.y - 30
+        self.healthbar.set_center(vec(xPos, yPos))
+        self.healthbar.update_value(100 * self.health / self.ENEMY_HEALTH)
+        self.healthbar.draw(surface)
