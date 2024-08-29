@@ -25,6 +25,7 @@ class ProgressBar(Entity):
         self.max_value = max_value
         self.current_value = current_value
 
+    # todo : remove this because set_position() is already defined in Entity
     def update_position(self, new_position: vec):
         self.position = new_position
 
@@ -36,6 +37,9 @@ class ProgressBar(Entity):
 
     def update_value(self, value):
         self.current_value = value
+
+    def set_center(self, centerPosition: vec):
+        self.set_position(centerPosition - self.size / 2)
 
     def draw(self, surface: pygame.Surface):
         # Draw a border around the bar
