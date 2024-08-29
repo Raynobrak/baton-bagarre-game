@@ -1,6 +1,5 @@
 import pygame
 
-
 class PauseMenu:
     def __init__(self, display_surface, options=None):
         self.option_rects = None
@@ -14,7 +13,13 @@ class PauseMenu:
         self.options.append(option)
 
     def display_menu(self):
-        self.display_surface.fill((0, 0, 0))
+        # Create a transparent overlay
+        overlay = pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 1)) 
+
+        # Blit the overlay onto the display surface
+        self.display_surface.blit(overlay, (0, 0))
+
         self.option_rects = []
         for i, option in enumerate(self.options):
             if i == self.selected_option:
