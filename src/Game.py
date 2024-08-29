@@ -17,6 +17,7 @@ from src.PauseMenu import PauseMenu
 from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
+from src.WaveManager import WaveManager
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
@@ -26,23 +27,21 @@ import src.Constant
 
 class Game():
     DELTA_TIME = 1 / Constant.FPS
-
     def __init__(self):
         pygame.init()
         pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
-
+        self.enemies : list[Enemy] = []
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
-
         self.load_all_images()
 
         self.visibility = 1
 
-        self.__player = Player(vec(100, 100))
-        self.enemy = Enemy(vec(900, 100))
-        self.enemy.set_target(self.__player)
-
+        self.__player = Player(vec(100,100))
+        self.wave_manager = None
         self.main_menu()
+
+
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -134,26 +133,35 @@ class Game():
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
                                       max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
 
+        self.wave_manager = WaveManager(spawn_points,self.enemies, self.__player)
         while True:
+            #print("Ennemy size = " + str(len(self.enemies)))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.pause_menu()
-
+                    
+            self.wave_manager.update_wave(self.DELTA_TIME)
             self.__player.update(self.DELTA_TIME)
-            self.enemy.update(self.DELTA_TIME)
+            for enemy in self.enemies:
+                enemy.update(self.DELTA_TIME)
+                enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-            self.enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            for enemy in self.enemies:
+                self.__player.check_if_entity_is_hit(enemy)
 
-            self.__player.check_if_entity_is_hit(self.enemy)
+            for enemy in self.enemies:
+                if enemy.is_dead():
+                    self.enemies.remove(enemy)
 
             self.check_player_interaction(self.__player, fire)
 
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
-                handle_collision_stickman_vs_platform(self.enemy, platform)
+                for enemy in self.enemies:
+                    handle_collision_stickman_vs_platform(enemy, platform)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0, 0))
@@ -168,7 +176,8 @@ class Game():
 
             # Draw Player
             self.__player.draw(self.__displaysurface)
-            self.enemy.draw(self.__displaysurface)
+            for enemy in self.enemies:
+                enemy.draw(self.__displaysurface)
 
             # Update and draw light
             self.update_light(fire, original_circle)
@@ -188,7 +197,8 @@ class Game():
                 self.run()
             elif action == 'options':
                 print("option")
-                action = option_menu.display_option()
+                option_menu.display_option()
+
 
     def pause_menu(self):
         pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])

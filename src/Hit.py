@@ -36,7 +36,7 @@ class Hit(Entity):
 
         if rects_intersect(hitbox, entity_hitbox):
             self.timeLeft = 0
-            enemy.take_damage(10)
+            enemy.take_damage(30)
 
             impulse = vec(1,0)
             impulse.rotate_ip(self.IMPULSE_ANGLE)
