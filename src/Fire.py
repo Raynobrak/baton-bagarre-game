@@ -75,6 +75,9 @@ class Fire(Entity):
     def splash(self):
         self.remove_life_points(self.WATER_BUCKET_DAMAGE)
 
+    def is_dead(self) -> bool:
+        return self.life_points <= 0
+
     def get_position(self):
         return self.position
 

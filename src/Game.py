@@ -39,15 +39,14 @@ class Game:
 
         self.score = 0
 
-        
         self.platforms, self.fire, self.spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
 
         self.particleHolder = EnemyParticleHolder(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT), self.platforms)
 
-
         self.__player = Player(vec(100, 100))
-        self.wave_manager = None
-        self.spawn_points = None
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
+        self.light_manager = LightManager(self.fire)
+
         self.main_menu()
 
     def load_all_images(self):
@@ -122,16 +121,10 @@ class Game:
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
-        
-
         fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
                                       max_value=Fire.MAX_HEALTH, current_value=self.fire.life_points)
 
-        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
-
-
-        light_manager = LightManager(self.fire)
-        light_manager.update()
+        self.light_manager.update()
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -166,7 +159,6 @@ class Game:
                     self.enemies.remove(enemy)
                     self.score += 100
 
-
             self.check_player_interaction(self.__player, self.fire)
 
             for platform in self.platforms:
@@ -184,7 +176,7 @@ class Game:
             fire_health_bar.current_value = self.fire.life_points
             fire_health_bar.draw(self.__displaysurface)
 
-            if fire.life_points <= 0:
+            if self.fire.is_dead():
                 self.end_menu()
                 break
 
@@ -198,9 +190,9 @@ class Game:
             self.particleHolder.draw(self.__displaysurface)
 
             if self.fire.has_life_points_changed():
-                light_manager.update()
+                self.light_manager.update()
 
-            light_manager.draw(self.__displaysurface)
+            self.light_manager.draw(self.__displaysurface)
 
             pygame.display.update()
 
@@ -236,7 +228,7 @@ class Game:
 
     def end_menu(self):
         end_menu = EndMenu(self.__displaysurface, self.score,
-                             self.__player, self.enemies)
+                           self.__player, self.enemies)
         end_menu.display()
         while True:
             action = end_menu.handle_input()
@@ -244,9 +236,6 @@ class Game:
             if action == 'play_again':
                 self.reset_game()
                 self.run()
-
-
-
 
             pygame.display.update()
 
@@ -256,8 +245,8 @@ class Game:
         self.score = 0
         self.__player = Player(vec(100, 100))
         self.enemies = []
-        self.wave_manager = WaveManager(self.spawn_points, self.enemies,
-                                        self.__player)
+        self.fire.set_life_points(Fire.MAX_HEALTH)
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
 
 
 if __name__ == "__main__":
