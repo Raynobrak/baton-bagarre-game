@@ -1,7 +1,8 @@
 import pygame
 
-class ImageManager():
-    images = dict() # static attribute
+
+class ImageManager:
+    images = dict()  # static attribute
 
     def __init__(self):
         pass

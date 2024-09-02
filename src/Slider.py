@@ -1,6 +1,7 @@
 import pygame
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Slider:
 
     def __init__(self, position: vec, size:vec, initialvalue: float = 1.0):

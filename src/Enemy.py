@@ -1,23 +1,19 @@
 import pygame
 
-from enum import Enum
-
 import math
 
 from src.CooldownVariable import CooldownVariable
 from src.Animation import *
-from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
 from src.Entity import Entity
 from src.ProgressBar import ProgressBar
-from src.Constant import Constant
 
 
 class Enemy(Stickman):
     ENEMY_SPRITE_SIZE = vec(50, 50)
     ENEMY_HITBOX_SIZE = vec(30, 50)
 
-    ENEMY_MOVEMENT_SPEED = 150
+    ENEMY_MOVEMENT_SPEED = 40
 
     ENEMY_HEALTH = 100
     ENEMY_HEALTH_BAR_SIZE = vec(40, 10)
@@ -25,6 +21,8 @@ class Enemy(Stickman):
     ENEMY_DAMAGE_ANIMATION_TIME = 0.7
     ENEMY_DAMAGE_ANIMATION_BLINK_COUNT = 10
     BLINK_COLOR = (255, 0, 0)
+
+    WATER_BUCKET_COOLDOWN = 1
 
     def __init__(self, position, hitboxSize=ENEMY_HITBOX_SIZE):
         super().__init__(position, hitboxSize, self.ENEMY_MOVEMENT_SPEED)
@@ -34,7 +32,7 @@ class Enemy(Stickman):
         self.healthbar = ProgressBar(vec(0, 0), self.ENEMY_HEALTH_BAR_SIZE, (255, 0, 0), (0, 0, 0, 255), 100)
         self.isTakingDamage = False
         self.damageAnimationTimeLeft = self.ENEMY_DAMAGE_ANIMATION_TIME
-        self.waterBucketCooldown = CooldownVariable(Constant.WATER_BUCKET_COOLDOWN)
+        self.waterBucketCooldown = CooldownVariable(self.WATER_BUCKET_COOLDOWN)
 
     def on_state_changed(self):
         match self.state:
@@ -60,8 +58,6 @@ class Enemy(Stickman):
 
     def apply_strategy(self):
         self.goto_target()
-        # self.go_left()
-        # self.try_jump()
 
     def take_damage(self, damage):
         self.health -= damage

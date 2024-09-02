@@ -31,8 +31,8 @@ class LightManager:
         if fire_life_points == 0:  # Prevent division by zero
             fire_life_points = 1
 
-        new_screen_width = (Constant.WINDOW_WIDTH / ratio) * self.K * (Constant.FIRE_HEALTH / fire_life_points)
-        new_screen_height = (Constant.WINDOW_HEIGHT / ratio) * self.K * (Constant.FIRE_HEALTH / fire_life_points)
+        new_screen_width = (Constant.WINDOW_WIDTH / ratio) * self.K * (Fire.MAX_HEALTH / fire_life_points)
+        new_screen_height = (Constant.WINDOW_HEIGHT / ratio) * self.K * (Fire.MAX_HEALTH / fire_life_points)
 
         fire_ratio_x = fire_center.x / Constant.WINDOW_WIDTH
         fire_ratio_y = fire_center.y / Constant.WINDOW_HEIGHT
@@ -50,12 +50,12 @@ class LightManager:
             circle_pos = (0, 0)
         else:
             # Calculate the size and position to center the circle with the fire
-            new_circle_size = (Constant.WINDOW_WIDTH * (1 / self.K)) * (fire_life_points / Constant.FIRE_HEALTH)
+            new_circle_size = (Constant.WINDOW_WIDTH * (1 / self.K)) * (fire_life_points / Fire.MAX_HEALTH)
             circle = pygame.transform.smoothscale(self.original_circle, (int(new_circle_size), int(new_circle_size)))
             circle_pos = (fire_center.x - circle.get_width() / 2, fire_center.y - circle.get_height() / 2)
 
         # Create a light filter to darken the screen
-        self.filter_color = 255 * (1 - fire_life_points / Constant.FIRE_HEALTH)
+        self.filter_color = 255 * (1 - fire_life_points / Fire.MAX_HEALTH)
         self.light_filter.fill((self.filter_color, self.filter_color, self.filter_color))
         self.light_filter.blit(circle, circle_pos)
 

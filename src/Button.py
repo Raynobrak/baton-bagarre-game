@@ -1,6 +1,7 @@
 import pygame
 from src.ImageManager import ImageManager
 
+
 class Button:
     def __init__(self, image_key, pos, scale=None):
         self.image = ImageManager().get_image(image_key)
