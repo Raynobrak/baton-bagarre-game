@@ -67,6 +67,9 @@ class Fire(Entity):
     def reignite(self):
         self.add_life_points(Constant.REIGNITE_HEALING)
 
+    def splash(self):
+        self.remove_life_points(Constant.WATER_BUCKET_DAMAGE)
+
     def get_position(self):
         return self.position
 

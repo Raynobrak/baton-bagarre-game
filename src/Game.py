@@ -86,7 +86,7 @@ class Game():
 
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
-        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) <= player.size.x:
             if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
                 player.go_levitate()
 
@@ -94,6 +94,17 @@ class Game():
             has_finished_reigniting = player.try_stop_levitate()
             if has_finished_reigniting:
                 fire.reignite()
+
+    def check_enemies_interaction(self, enemies: list[Enemy], fire: Fire):
+        # Check if an enemy is in range of fire
+        for enemy in enemies:
+            if (enemy.position + enemy.size / 2).distance_to(fire.position + fire.size / 2) <= enemy.size.x:
+                enemy.go_water_bucket()
+
+            # Check if enemy has finished throwing water bucket
+            has_finished_water_bucket = enemy.try_stop_water_bucket()
+            if has_finished_water_bucket:
+                fire.splash()
 
     def run(self):
         # Load level
@@ -104,7 +115,7 @@ class Game():
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
                                       max_value=Constant.FIRE_HEALTH, current_value=fire.life_points)
 
-        self.wave_manager = WaveManager(spawn_points,self.enemies, self.__player)
+        self.wave_manager = WaveManager(spawn_points,self.enemies, fire)
 
         light_manager = LightManager(fire)
         light_manager.update()
@@ -124,6 +135,7 @@ class Game():
             # Update Fire
             fire.update(self.DELTA_TIME)
             self.check_player_interaction(self.__player, fire)
+            self.check_enemies_interaction(self.enemies, fire)
 
             # Update Enemies
             for enemy in self.enemies:

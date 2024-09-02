@@ -121,7 +121,6 @@ class Player(Stickman):
             self.levitatingTime.reset()
 
             self.update_state(self.lookingDirection, StickmanState.REIGNITE_FIRE)
-            self.on_state_changed()
 
     def try_stop_levitate(self) -> bool:
         if self.isLevitating and self.levitatingTime.ready():
