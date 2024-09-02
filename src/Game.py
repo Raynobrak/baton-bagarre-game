@@ -18,6 +18,9 @@ from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
 from src.WaveManager import WaveManager
+from src.surface_utils import *
+
+from src.EnemyParticleHolder import EnemyParticleHolder
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
@@ -36,12 +39,14 @@ class Game():
         self.load_all_images()
 
         self.visibility = 1
+        
+        self.platforms, self.fire, self.spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+
+        self.particleHolder = EnemyParticleHolder(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT), self.platforms)
 
         self.__player = Player(vec(100,100))
         self.wave_manager = None
         self.main_menu()
-
-
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -86,9 +91,9 @@ class Game():
 
     def update_light(self, fire: Fire, original_circle: pygame.Surface):
         # Center the circle with the fire and scale it based on fire's life points
-        fire_pos = fire.get_position()
-        fire_size = fire.size
-        fire_life_points = fire.lifePoints
+        fire_pos = self.fire.get_position()
+        fire_size = self.fire.size
+        fire_life_points = self.fire.lifePoints
 
         circle_size = fire_size.x + (Constant.WINDOW_WIDTH * 3) * (fire_life_points / Constant.FIRE_HEALTH)
 
@@ -124,18 +129,19 @@ class Game():
             if has_finished_reigniting:
                 fire.reignite()
 
+    def make_enemy_explode(self, enemy: Enemy):
+        self.particleHolder.generate_destruction_particles_for_enemy(enemy)
+
     def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
         original_circle = ImageManager().get_image('circle')
-        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
-                                      max_value=Constant.FIRE_HEALTH, current_value=fire.lifePoints)
+        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
+                                      max_value=Constant.FIRE_HEALTH, current_value=self.fire.lifePoints)
 
-        self.wave_manager = WaveManager(spawn_points,self.enemies, self.__player)
+        self.wave_manager = WaveManager(self.spawn_points,self.enemies, self.__player)
         while True:
-            #print("Ennemy size = " + str(len(self.enemies)))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -152,26 +158,29 @@ class Game():
             for enemy in self.enemies:
                 self.__player.check_if_entity_is_hit(enemy)
 
+            self.particleHolder.update(self.DELTA_TIME)
+
             for enemy in self.enemies:
                 if enemy.is_dead():
+                    self.make_enemy_explode(enemy)
                     self.enemies.remove(enemy)
 
-            self.check_player_interaction(self.__player, fire)
+            self.check_player_interaction(self.__player, self.fire)
 
-            for platform in platforms:
+            for platform in self.platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 for enemy in self.enemies:
                     handle_collision_stickman_vs_platform(enemy, platform)
 
             # Draw Level
             self.__displaysurface.blit(bg, (0, 0))
-            for platform in platforms:
+            for platform in self.platforms:
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object and health bar
-            fire.update(self.DELTA_TIME)
-            fire.draw(self.__displaysurface)
-            fire_health_bar.current_value = fire.lifePoints
+            self.fire.update(self.DELTA_TIME)
+            self.fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = self.fire.lifePoints
             fire_health_bar.draw(self.__displaysurface)
 
             # Draw Player
@@ -180,7 +189,9 @@ class Game():
                 enemy.draw(self.__displaysurface)
 
             # Update and draw light
-            self.update_light(fire, original_circle)
+            self.update_light(self.fire, original_circle)
+
+            self.particleHolder.draw(self.__displaysurface)
 
             pygame.display.update()
 
@@ -196,7 +207,6 @@ class Game():
                 AudioManager().play_music()
                 self.run()
             elif action == 'options':
-                print("option")
                 option_menu.display_option()
 
 
