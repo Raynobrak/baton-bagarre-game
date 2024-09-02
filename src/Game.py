@@ -169,7 +169,6 @@ class Game:
                 platform.draw(self.__displaysurface)
 
             # Update and draw fire object and health bar
-            self.fire.update(self.DELTA_TIME)
             self.fire.draw(self.__displaysurface)
             fire_health_bar.current_value = self.fire.life_points
             fire_health_bar.draw(self.__displaysurface)
