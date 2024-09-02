@@ -145,7 +145,6 @@ class Player(Stickman):
     def check_if_entity_is_hit(self, entity: Entity):
         for hit in self.hits:
             if hit.is_active():
-                print("active", hit.timeLeft)
                 hit.check_for_collision(entity)
             # todo: delete if not active anymore
 

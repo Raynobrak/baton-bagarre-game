@@ -51,11 +51,9 @@ class Fire(Entity):
                 self.lifePoints -= Constant.FIRE_DAMAGE_PER_SECOND
 
             self.time_since_last_reduction = 0
-            print(f"Fire life points: {self.lifePoints}")
 
     def reignite(self):
         self.lifePoints = min(self.lifePoints + Constant.REIGNITE_HEALING, Constant.FIRE_HEALTH)
-        print(f"Fire is healed: {self.lifePoints}")
 
     def get_position(self):
         return self.position

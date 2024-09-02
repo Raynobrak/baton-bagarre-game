@@ -22,7 +22,6 @@ class Slider:
     def update_slider(self, mouse_pos: vec):
         if self.border_rect.collidepoint(mouse_pos):
             self.value = (mouse_pos.x - self.border_rect.x) / self.border_rect.width
-            print(self.value)
 
     def start_grabbing(self):
         self.is_grabbing = True
