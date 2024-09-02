@@ -69,8 +69,8 @@ class OptionView:
                         return
 
             VolumeManager().update_general_volume(self.volume_slider.value)
-            VolumeManager().musicVolume = self.music_slider.value
-            VolumeManager().soundVolume = self.bruitage_slider.value
+            VolumeManager().update_music_volume(self.music_slider.value)
+            VolumeManager().update_sound_volume(self.bruitage_slider.value)
             AudioManager().update_music_volume()
             pygame.display.update()
 
