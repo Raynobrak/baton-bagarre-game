@@ -93,6 +93,9 @@ class Animation():
     def goto_next_frame(self):
         self.spriteIndex = (self.spriteIndex + 1) % self.infos.frameCount
 
+    def get_current_frame(self):
+        return self.surfaces[self.spriteIndex]
+
     def draw(self, surface, filter = None):
         if filter is None:
             surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)

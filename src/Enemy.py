@@ -105,6 +105,9 @@ class Enemy(Stickman):
     def set_target(self, target: Entity):
         self.target = target
 
+    def get_current_frame(self):
+        return self.animation.get_current_frame()
+
     def draw(self, surface):
         sprites_pos = self.get_sprite_pos_centered_around_hitbox(self.ENEMY_SPRITE_SIZE)
         self.animation.set_position(sprites_pos)
