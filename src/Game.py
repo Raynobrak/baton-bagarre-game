@@ -14,6 +14,7 @@ from src.Constant import Constant
 from src.Button import Button
 from src.MainMenu import MainMenu
 from src.PauseMenu import PauseMenu
+from src.EndMenu import EndMenu
 from src.ProgressBar import ProgressBar
 from src.LightManager import LightManager
 from src.Fire import Fire
@@ -35,10 +36,13 @@ class Game():
         pygame.display.set_caption("Game")
         self.load_all_images()
 
+        self.fire = None
         self.visibility = 1
+        self.score = 0
 
         self.__player = Player(vec(100,100))
         self.wave_manager = None
+        self.spawn_points = None
         self.main_menu()
 
 
@@ -72,6 +76,7 @@ class Game():
         ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
         ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
         ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
+        ImageManager().load_image('./assets/textures/fire_dead.png', 'fire_dead')
 
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
@@ -86,27 +91,31 @@ class Game():
 
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
-        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+        if (player.position + player.size / 2).distance_to(self.fire.position + self.fire.size / 2) < player.size.x:
             if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
                 player.go_levitate()
 
             # Check if player has finished reigniting the fire
             has_finished_reigniting = player.try_stop_levitate()
             if has_finished_reigniting:
-                fire.reignite()
+                self.fire.reignite()
 
     def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        platforms, self.fire, self.spawn_points = LevelGenerator(
+
+        ).load_level_infos(
+            './assets/levels/level1.png')
         original_circle = ImageManager().get_image('circle')
-        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
-                                      max_value=Constant.FIRE_HEALTH, current_value=fire.life_points)
+        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
+                                      max_value=Constant.FIRE_HEALTH, current_value=self.fire.life_points)
 
-        self.wave_manager = WaveManager(spawn_points,self.enemies, self.__player)
+        self.wave_manager = WaveManager(self.spawn_points,self.enemies,
+                                        self.__player)
 
-        light_manager = LightManager(fire)
+        light_manager = LightManager(self.fire)
         light_manager.update()
         while True:
             #print("Ennemy size = " + str(len(self.enemies)))
@@ -122,8 +131,8 @@ class Game():
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             # Update Fire
-            fire.update(self.DELTA_TIME)
-            self.check_player_interaction(self.__player, fire)
+            self.fire.update(self.DELTA_TIME)
+            self.check_player_interaction(self.__player, self.fire)
 
             # Update Enemies
             for enemy in self.enemies:
@@ -137,6 +146,8 @@ class Game():
             for enemy in self.enemies:
                 if enemy.is_dead():
                     self.enemies.remove(enemy)
+                    self.score += 100
+
 
             for platform in platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
@@ -149,9 +160,12 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Draw fire object and health bar
-            fire.draw(self.__displaysurface)
-            fire_health_bar.current_value = fire.life_points
+            self.fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = self.fire.life_points
             fire_health_bar.draw(self.__displaysurface)
+
+            if self.fire.life_points <= 0:
+                self.end_screen()
 
             # Draw Player
             self.__player.draw(self.__displaysurface)
@@ -159,8 +173,9 @@ class Game():
                 enemy.draw(self.__displaysurface)
 
             # Update and draw light
-            if fire.has_life_points_changed():
+            if self.fire.has_life_points_changed():
                 light_manager.update()
+
             light_manager.draw(self.__displaysurface)
 
             pygame.display.update()
@@ -196,6 +211,26 @@ class Game():
             elif action == 'Quit':
                 pygame.quit()
                 exit()
+
+    def end_screen(self):
+        end_screen = EndMenu(self.__displaysurface, self.score, self.__player, self.enemies)
+
+        while True:
+            end_screen.display()
+            action = end_screen.handle_input()
+            self.fire.update(self.DELTA_TIME)
+
+            self.fire.draw(self.__displaysurface)
+            if action == 'play_again':
+                self.reset_game()
+                self.run()
+
+    def reset_game(self):
+        self.score = 0
+        self.__player = Player(vec(100, 100))
+        self.enemies = []
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies,
+                                        self.__player)
 
 
 if __name__ == "__main__":

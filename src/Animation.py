@@ -122,5 +122,6 @@ ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32),
 ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32,32), vec(0,0), 4, ANIM_TIME)
 ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32,32),
-                                            vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32,32),vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_DEAD = SpritesheetAnimInfos("fire_dead", vec(32,32), vec(0,0), 4,
+                                      ANIM_TIME)
