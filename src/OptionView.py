@@ -29,11 +29,10 @@ def handle_slider(slider: Slider):
 class OptionView:
     def __init__(self, display_surface: pygame.Surface):
         self.display_surface = display_surface
-        #self.save_button = Button('play_button')
         self.back_button = Button('play_button', (Constant.WINDOW_WIDTH / 2, Constant.WINDOW_HEIGHT - 100), scale=(150,75))
-        self.volume_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,200), vec(300,20))
-        self.music_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,250), vec(300,20))
-        self.bruitage_slider = Slider(vec(Constant.WINDOW_WIDTH / 2 ,300), vec(300,20))
+        self.volume_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,200), vec(300,20), VolumeManager().generalVolume)
+        self.music_slider = Slider(vec(Constant.WINDOW_WIDTH / 2,250), vec(300,20), VolumeManager().musicVolume)
+        self.bruitage_slider = Slider(vec(Constant.WINDOW_WIDTH / 2 ,300), vec(300,20), VolumeManager().soundVolume)
         self.main_text = Text(vec(Constant.WINDOW_WIDTH / 2, 100), "Option menu", color=pygame.Color("White"), font='menu')
         self.volume_text = Text(vec(200, 200), "Volume general",color=pygame.Color("White"))
         self.music_text = Text(vec(200, 250), "Music",color=pygame.Color("White"))
