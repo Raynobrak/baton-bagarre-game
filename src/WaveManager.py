@@ -5,6 +5,7 @@ from src.Entity import Entity
 from src.Enemy import Enemy
 from src.SpawnPoint import SpawnPoint
 
+
 class WaveManager:
 
     def __init__(self, spawn_points: list[SpawnPoint], enemies: list[Enemy], target: Entity):
@@ -23,7 +24,6 @@ class WaveManager:
 
         if self.coolDown.try_reset():
             spawn = randint(0, len(self.spawn_points) - 1)
-            #print("Spawn an enemy at spawn point number " + str(spawn))
             self.spawn_points[spawn].spawn_enemy(self.enemies, self.target)
 
 

@@ -1,14 +1,17 @@
 import pygame
 
 from src.Entity import Entity
-from src.ImageManager import ImageManager
 from src.Animation import *
-from src.Constant import *
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
 
 class Fire(Entity):
+    MAX_HEALTH = 100
+    DAMAGE_PER_SECOND = 1
+    REIGNITE_HEALING = 15
+    WATER_BUCKET_DAMAGE = 10
+
     def __init__(self, x, y, width, height):
         super().__init__()
         self.set_position(vec(x, y))
@@ -17,7 +20,7 @@ class Fire(Entity):
         self.current_animation = None  # Track current animation
         self.set_animation(ANIM_FIRE_BIG)
 
-        self.life_points = Constant.FIRE_HEALTH  # Initialize life points
+        self.life_points = self.MAX_HEALTH  # Initialize life points
         self.time_since_last_reduction = 0  # Track time since last reduction
         self.has_lifePoints_changed_since_last_update = False
 
@@ -53,8 +56,8 @@ class Fire(Entity):
     def set_life_points(self, life_points: int):
         if life_points < 0:
             self.life_points = 0
-        elif life_points > Constant.FIRE_HEALTH:
-            self.life_points = Constant.FIRE_HEALTH
+        elif life_points > self.MAX_HEALTH:
+            self.life_points = self.MAX_HEALTH
         else:
             self.life_points = life_points
         self.has_lifePoints_changed_since_last_update = True
@@ -63,11 +66,14 @@ class Fire(Entity):
         self.time_since_last_reduction += dt
 
         if self.time_since_last_reduction >= 1:  # Reduce life points every second
-            self.remove_life_points(Constant.FIRE_DAMAGE_PER_SECOND)
+            self.remove_life_points(self.DAMAGE_PER_SECOND)
             self.time_since_last_reduction = 0
 
     def reignite(self):
-        self.add_life_points(Constant.REIGNITE_HEALING)
+        self.add_life_points(self.REIGNITE_HEALING)
+
+    def splash(self):
+        self.remove_life_points(self.WATER_BUCKET_DAMAGE)
 
     def get_position(self):
         return self.position

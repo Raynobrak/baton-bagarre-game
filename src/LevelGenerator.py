@@ -9,7 +9,7 @@ import src.SpawnPoint
 vec = pygame.math.Vector2  # 2 for two dimensional
 
 
-class LevelGenerator():
+class LevelGenerator:
     # Color matching
     LEFT_PLATFORM = (255, 0, 0)  # Left platform
     MID_1_PLATFORM = (255, 255, 0)  # Mid_1 platform

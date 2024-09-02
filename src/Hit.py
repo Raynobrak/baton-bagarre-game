@@ -12,17 +12,21 @@ from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
 
 from pygame.locals import *
+
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Hit(Entity):
-    HIT_IMPULSE_ACCELERATION = 200
     IMPULSE_ANGLE = 45
 
-    def __init__(self, position: vec, size: vec, hitter: Entity, lifetime: float):
-        super().__init__(position, size, vec(0,0))
-        
+    def __init__(self, position: vec, size: vec, hitter: Stickman, lifetime: float, damage: int,
+                 impulse_acceleration: int):
+        super().__init__(position, size, vec(0, 0))
+
         self.timeLeft = lifetime
         self.hitter = hitter
+        self.damage = damage
+        self.impulse_acceleration = impulse_acceleration
 
     def update(self, dt):
         self.timeLeft -= dt
@@ -36,11 +40,11 @@ class Hit(Entity):
 
         if rects_intersect(hitbox, entity_hitbox):
             self.timeLeft = 0
-            enemy.take_damage(30)
+            enemy.take_damage(self.damage)
 
-            impulse = vec(1,0)
+            impulse = vec(1, 0)
             impulse.rotate_ip(self.IMPULSE_ANGLE)
-            impulse *= self.HIT_IMPULSE_ACCELERATION
+            impulse *= self.impulse_acceleration
             impulse.y = -impulse.y
             dir = vec(entity_hitbox.center) - vec(self.hitter.get_hitbox().center)
             if dir.x < 0:
@@ -48,31 +52,38 @@ class Hit(Entity):
 
             enemy.accelerate(impulse)
 
+
 class PunchHit(Hit):
-    def __init__(self, hitter: Entity):
+    DAMAGE = 30
+    IMPULSE_ACCELERATION = 200
+
+    def __init__(self, hitter: Stickman):
         playerHitbox = hitter.get_hitbox()
-        punchHitboxSize = playerHitbox.size
+        punchHitboxSize = vec(playerHitbox.size)
 
         punchOffset = playerHitbox.width / 2
 
         punchDirection = hitter.lookingDirection
         punchHitboxXPos = playerHitbox.left + punchOffset
         if punchDirection is Direction.LEFT:
-            punchHitboxXPos -= 2 * punchOffset
+            punchHitboxXPos -= punchHitboxSize.x
 
-        super().__init__(vec(punchHitboxXPos, playerHitbox.top), punchHitboxSize, hitter, 0.01)
+        super().__init__(vec(punchHitboxXPos, playerHitbox.top), punchHitboxSize, hitter, 0.01, self.DAMAGE, self.IMPULSE_ACCELERATION)
+
 
 class KickHit(Hit):
-    def __init__(self, hitter: Entity):
-        # todo : change values so the kick is different from the punch
+    DAMAGE = 50
+    IMPULSE_ACCELERATION = 400
+
+    def __init__(self, hitter: Stickman):
         playerHitbox = hitter.get_hitbox()
-        punchHitboxSize = playerHitbox.size
+        kickHitboxSize = vec(playerHitbox.size) * 1.5
 
-        punchOffset = playerHitbox.width / 2
+        kickOffset = playerHitbox.width / 2
 
-        punchDirection = hitter.lookingDirection
-        punchHitboxXPos = playerHitbox.left + punchOffset
-        if punchDirection is Direction.LEFT:
-            punchHitboxXPos -= 2 * punchOffset
+        kickDirection = hitter.lookingDirection
+        kickHitboxXPos = playerHitbox.left + kickOffset
+        if kickDirection is Direction.LEFT:
+            kickHitboxXPos -= kickHitboxSize.x
 
-        super().__init__(vec(punchHitboxXPos, playerHitbox.top), punchHitboxSize, hitter, 0.01)
+        super().__init__(vec(kickHitboxXPos, playerHitbox.top), kickHitboxSize, hitter, 0.01, self.DAMAGE, self.IMPULSE_ACCELERATION)

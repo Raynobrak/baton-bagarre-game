@@ -1,33 +1,30 @@
-from enum import Enum
-
-from pygame.locals import *
-
 from src.Animation import *
 from src.CooldownVariable import CooldownVariable
-from src.Fire import Fire
-from src.ImageManager import ImageManager
 from src.Entity import Entity
 from src.Stickman import Stickman, StickmanState, Direction
 from src.Hit import PunchHit, KickHit
-from src.Constant import Constant
 from src.ProgressBar import ProgressBar
 
-from pygame.locals import *
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Player(Stickman):
-    PLAYER_SPRITE_SIZE = vec(50,50)
-    PLAYER_HITBOX_SIZE = vec(30,50)
+    PLAYER_SPRITE_SIZE = vec(50, 50)
+    PLAYER_HITBOX_SIZE = vec(30, 50)
 
     PLAYER_MOVEMENT_SPEED = 250
 
-    def __init__(self, position, hitboxSize = PLAYER_HITBOX_SIZE):
+    REIGNITE_FIRE_COOLDOWN = 2
+
+    def __init__(self, position, hitboxSize=PLAYER_HITBOX_SIZE):
+        self.animation = None
         self.isPunching = False
         self.isKicking = False
         self.isLevitating = False
 
-        self.levitatingTime = CooldownVariable(Constant.REIGNITE_FIRE_COOLDOWN)
-        self.reignitProgressBar = ProgressBar(position, vec(hitboxSize.x, hitboxSize.y/10), (255,255,0), (100,100,100))
+        self.levitatingTime = CooldownVariable(self.REIGNITE_FIRE_COOLDOWN)
+        self.reignitProgressBar = ProgressBar(position, vec(hitboxSize.x, hitboxSize.y / 10), (255, 255, 0),
+                                              (100, 100, 100))
 
         self.punchingTime = CooldownVariable(0.1)
         self.kickingTime = CooldownVariable(0.2)
@@ -37,7 +34,7 @@ class Player(Stickman):
         self.hits = list()
 
         super().__init__(position, hitboxSize, self.PLAYER_MOVEMENT_SPEED)
-    
+
     def on_state_changed(self):
         if not self.isPunching and not self.isKicking:
             match self.state:
@@ -49,7 +46,7 @@ class Player(Stickman):
                     self.set_animation(ANIM_PLAYER_JUMPING)
                 case StickmanState.REIGNITE_FIRE:
                     self.set_animation(ANIM_PLAYER_REIGNITE_FIRE)
-        
+
         if self.lookingDirection is Direction.RIGHT:
             self.animation.flip_horizontally()
 
@@ -121,7 +118,6 @@ class Player(Stickman):
             self.levitatingTime.reset()
 
             self.update_state(self.lookingDirection, StickmanState.REIGNITE_FIRE)
-            self.on_state_changed()
 
     def try_stop_levitate(self) -> bool:
         if self.isLevitating and self.levitatingTime.ready():
@@ -135,7 +131,7 @@ class Player(Stickman):
 
             self.update_state(self.lookingDirection, StickmanState.IDLE)
             self.on_state_changed()
-    
+
     def generate_punch(self):
         self.hits.append(PunchHit(self))
 
@@ -145,7 +141,6 @@ class Player(Stickman):
     def check_if_entity_is_hit(self, entity: Entity):
         for hit in self.hits:
             if hit.is_active():
-                print("active", hit.timeLeft)
                 hit.check_for_collision(entity)
             # todo: delete if not active anymore
 
@@ -159,7 +154,7 @@ class Player(Stickman):
             self.generate_punch()
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
-                
+
     def try_kick(self):
         if self.is_attacking():
             return
@@ -177,10 +172,6 @@ class Player(Stickman):
         self.animation.draw(surface)
 
         if self.isLevitating:
-            self.reignitProgressBar.set_position(self.position + vec(0, -self.size.y/5))
+            self.reignitProgressBar.set_position(self.position + vec(0, -self.size.y / 5))
             self.reignitProgressBar.update_value(100 - self.levitatingTime.get_percentage() * 100)
             self.reignitProgressBar.draw(surface)
-
-        
-
-

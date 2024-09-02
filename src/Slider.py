@@ -1,6 +1,7 @@
 import pygame
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Slider:
 
     def __init__(self, position: vec, size:vec, initialvalue: float = 1.0):
@@ -22,7 +23,6 @@ class Slider:
     def update_slider(self, mouse_pos: vec):
         if self.border_rect.collidepoint(mouse_pos):
             self.value = (mouse_pos.x - self.border_rect.x) / self.border_rect.width
-            print(self.value)
 
     def start_grabbing(self):
         self.is_grabbing = True

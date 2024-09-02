@@ -1,5 +1,6 @@
 import pygame
 
+
 class PauseMenu:
     def __init__(self, display_surface, options=None):
         self.option_rects = None
