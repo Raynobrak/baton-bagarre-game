@@ -108,7 +108,6 @@ class Game():
 
         ).load_level_infos(
             './assets/levels/level1.png')
-        original_circle = ImageManager().get_image('circle')
         fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
                                       max_value=Constant.FIRE_HEALTH, current_value=self.fire.life_points)
 
@@ -165,7 +164,8 @@ class Game():
             fire_health_bar.draw(self.__displaysurface)
 
             if self.fire.life_points <= 0:
-                self.end_screen()
+                self.end_menu()
+                break
 
             # Draw Player
             self.__player.draw(self.__displaysurface)
@@ -212,18 +212,24 @@ class Game():
                 pygame.quit()
                 exit()
 
-    def end_screen(self):
-        end_screen = EndMenu(self.__displaysurface, self.score, self.__player, self.enemies)
-
+    def end_menu(self):
+        end_menu = EndMenu(self.__displaysurface, self.score,
+                             self.__player, self.enemies,self.fire)
+        end_menu.display()
+        self.fire.update_life_animation()
         while True:
-            end_screen.display()
-            action = end_screen.handle_input()
-            self.fire.update(self.DELTA_TIME)
+            action = end_menu.handle_input()
 
-            self.fire.draw(self.__displaysurface)
             if action == 'play_again':
                 self.reset_game()
                 self.run()
+
+
+
+
+            pygame.display.update()
+
+            FramePerSec.tick(Constant.FPS)
 
     def reset_game(self):
         self.score = 0

@@ -39,6 +39,8 @@ class Fire(Entity):
             self.set_animation(ANIM_FIRE_MEDIUM)
         elif self.life_points >= 25:
             self.set_animation(ANIM_FIRE_SMALL)
+        elif self.life_points==0:
+            self.set_animation(ANIM_FIRE_DEAD)
         else:
             self.set_animation(ANIM_FIRE_VERY_SMALL)
 

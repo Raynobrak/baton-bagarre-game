@@ -1,11 +1,12 @@
 import pygame
 
 class EndMenu:
-    def __init__(self, display_surface, score, player, enemies):
+    def __init__(self, display_surface, score, player, enemies,fire):
         self.display_surface = display_surface
         self.score = score
         self.player = player
         self.enemies = enemies
+        self.fire = fire
         self.font = pygame.font.Font('./assets/font/upheavtt.ttf', 50)
         self.button_font = pygame.font.Font('./assets/font/upheavtt.ttf', 30)
         self.button_rect = pygame.Rect(0, 0, 200, 50)
@@ -31,7 +32,8 @@ class EndMenu:
         for enemy in self.enemies:
             enemy.draw(self.display_surface)
 
-        pygame.display.update()
+        # Display fire
+        self.fire.update(1/60)
 
     def handle_input(self):
         for event in pygame.event.get():
