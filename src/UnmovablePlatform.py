@@ -1,5 +1,3 @@
-from sys import platform
-
 from src.ImageManager import ImageManager
 from src.Platform import Platform
 

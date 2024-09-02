@@ -4,12 +4,13 @@ from src.ImageManager import ImageManager
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 # Describes the information needed for an animation
 # Used in the ctor of Animation
 # Requirements :
 # 1. All the frames of the animation must be contained and be aligned in a single file (a spritesheet)
 # 2. The file must be loaded in the ImageManager
-class SpritesheetAnimInfos():
+class SpritesheetAnimInfos:
     # textureManagerKey : key of the texture in the ImageManager
     # frameSize : size of a single frame on the sprite sheet
     # origin : top left coordinates of the first frame on the spritesheet 
@@ -22,6 +23,7 @@ class SpritesheetAnimInfos():
         self.frameCount = frameCount
         self.animationTime = animationTime
 
+
 # Represents an Animation that can be drawn on a surface
 # Example usage :
 #
@@ -33,7 +35,7 @@ class SpritesheetAnimInfos():
 # anim_test.update(0.5)
 #
 # anim_test.draw(displaysurface)
-class Animation():
+class Animation:
     def __init__(self, infos: SpritesheetAnimInfos, position: vec, size: vec):
         self.surfaces = list()
         self.infos = infos
@@ -61,9 +63,9 @@ class Animation():
     def flip_horizontally(self):
         for index, surface in enumerate(self.surfaces):
             self.surfaces[index] = pygame.transform.flip(surface, True, False)
-        
+
     def flip_vertically(self):
-        for index, surface in enumerate(self.surfaces) :
+        for index, surface in enumerate(self.surfaces):
             self.surfaces[index] = pygame.transform.flip(surface, False, True)
 
     def initialize_surfaces(self, infos):
@@ -75,7 +77,7 @@ class Animation():
 
     def start(self):
         self.isRunning = True
-    
+
     def stop(self):
         self.isRunning = False
 
@@ -85,7 +87,7 @@ class Animation():
             return
         self.timeSinceStart += dt
         timePerFrame = self.infos.animationTime / self.infos.frameCount
-        if(self.timeSinceStart > timePerFrame):
+        if (self.timeSinceStart > timePerFrame):
             self.goto_next_frame()
             self.timeSinceStart -= timePerFrame
 
@@ -93,7 +95,7 @@ class Animation():
     def goto_next_frame(self):
         self.spriteIndex = (self.spriteIndex + 1) % self.infos.frameCount
 
-    def draw(self, surface, filter = None):
+    def draw(self, surface, filter=None):
         if filter is None:
             surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
         else:
@@ -101,26 +103,27 @@ class Animation():
             imgCopy.blit(filter, (0, 0), special_flags=pygame.BLEND_ADD)
             surface.blit(imgCopy, self.animSprite.rect)
 
+
 # Animations declarations
 ANIM_TIME = 0.3
 
-ANIM_PLAYER_IDLE = SpritesheetAnimInfos("player_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_PLAYER_WALKING = SpritesheetAnimInfos("player_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_PLAYER_IDLE = SpritesheetAnimInfos("player_idle", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_PLAYER_WALKING = SpritesheetAnimInfos("player_walking", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
 
-ANIM_PLAYER_JUMPING = SpritesheetAnimInfos("player_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
+ANIM_PLAYER_JUMPING = SpritesheetAnimInfos("player_jumping", vec(32, 32), vec(0, 0), 1, ANIM_TIME)
 
-ANIM_PLAYER_PUNCH = SpritesheetAnimInfos("player_punch", vec(32,32), vec(0,0), 1, ANIM_TIME)
-ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32,32), vec(0,0), 1, ANIM_TIME)
+ANIM_PLAYER_PUNCH = SpritesheetAnimInfos("player_punch", vec(32, 32), vec(0, 0), 1, ANIM_TIME)
+ANIM_PLAYER_KICK = SpritesheetAnimInfos("player_kick", vec(32, 32), vec(0, 0), 1, ANIM_TIME)
 
-ANIM_PLAYER_REIGNITE_FIRE = SpritesheetAnimInfos("player_reignite", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_PLAYER_REIGNITE_FIRE = SpritesheetAnimInfos("player_reignite", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
 
-ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32,32), vec(0,0), 1, ANIM_TIME)
-ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_ENEMY_IDLE = SpritesheetAnimInfos("enemy_idle", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32, 32), vec(0, 0), 1, ANIM_TIME)
+ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
 
-ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32,32), vec(0,0), 4, ANIM_TIME)
-ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32,32),
-                                            vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
+ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32, 32),
+                                            vec(0, 0), 4, ANIM_TIME)

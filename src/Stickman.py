@@ -1,9 +1,9 @@
 from src.Entity import Entity
-from enum import Enum
 from enum import IntEnum
 
 import pygame
 vec = pygame.math.Vector2  # 2 for two dimensional
+
 
 class StickmanState(IntEnum):
     IDLE = 0
@@ -12,11 +12,15 @@ class StickmanState(IntEnum):
     REIGNITE_FIRE = 3
     ATTACKING_FIRE = 4
 
+
 class Direction(IntEnum):
     LEFT = 0
     RIGHT = 1
 
+
 class Stickman(Entity):
+    JUMP_FORCE = 880
+
     def __init__(self, position, hitboxSize, movementSpeed):
         super().__init__(position, hitboxSize)
         self.state = StickmanState.IDLE
@@ -59,7 +63,7 @@ class Stickman(Entity):
         
     def try_jump(self):
         if not self.state is StickmanState.JUMPING and self.velocity.y == 0:
-            self.accelerate(vec(0, -350))
+            self.accelerate(vec(0, -self.JUMP_FORCE))
             self.update_state(self.lookingDirection, StickmanState.JUMPING)
 
     def reset_jump(self):

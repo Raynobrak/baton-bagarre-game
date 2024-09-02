@@ -5,6 +5,7 @@ from src.Button import Button
 from src.ImageManager import ImageManager
 from src.Constant import Constant
 
+
 class MainMenu:
     def __init__(self, displaysurface):
         self.displaysurface = displaysurface
