@@ -7,11 +7,9 @@ from src.LevelGenerator import LevelGenerator
 from src.OptionView import OptionView
 from src.Player import Player
 from src.Enemy import Enemy
-from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
 from src.ImageManager import ImageManager
 from src.Constant import Constant
-from src.Button import Button
 from src.MainMenu import MainMenu
 from src.PauseMenu import PauseMenu
 from src.ProgressBar import ProgressBar
@@ -22,26 +20,23 @@ from src.WaveManager import WaveManager
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
 
-import src.Constant
 
-
-class Game():
+class Game:
     DELTA_TIME = 1 / Constant.FPS
+
     def __init__(self):
         pygame.init()
         pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
-        self.enemies : list[Enemy] = []
+        self.enemies: list[Enemy] = []
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
         self.load_all_images()
 
         self.visibility = 1
 
-        self.__player = Player(vec(100,100))
+        self.__player = Player(vec(100, 100))
         self.wave_manager = None
         self.main_menu()
-
-
 
     def load_all_images(self):
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
@@ -113,14 +108,14 @@ class Game():
         platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
         original_circle = ImageManager().get_image('circle')
         fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
-                                      max_value=Constant.FIRE_HEALTH, current_value=fire.life_points)
+                                      max_value=Fire.MAX_HEALTH, current_value=fire.life_points)
 
-        self.wave_manager = WaveManager(spawn_points,self.enemies, fire)
+        self.wave_manager = WaveManager(spawn_points, self.enemies, fire)
 
         light_manager = LightManager(fire)
         light_manager.update()
         while True:
-            #print("Ennemy size = " + str(len(self.enemies)))
+            # print("Ennemy size = " + str(len(self.enemies)))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -191,7 +186,6 @@ class Game():
             elif action == 'options':
                 print("option")
                 option_menu.display_option()
-
 
     def pause_menu(self):
         pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])

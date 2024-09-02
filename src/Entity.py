@@ -1,9 +1,12 @@
 import pygame
-from pygame.locals import *
+
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 # Represents an object with a position and a velocity
-class Entity():
+class Entity:
+    GRAVITY = 981 * 1.5
+
     def __init__(self, position = None, size = None, vel = None):
         self.position = position or vec(0,0)
         self.size = size or vec(0,0)
@@ -22,7 +25,7 @@ class Entity():
         self.velocity += acc
 
     def apply_gravity(self, deltaTime: float):
-        self.accelerate(deltaTime * vec(0, 981))
+        self.accelerate(deltaTime * vec(0, self.GRAVITY))
 
     def move(self, delta):
         self.position += delta

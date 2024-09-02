@@ -1,12 +1,6 @@
-class Constant():
+class Constant:
     WINDOW_HEIGHT = 600
     WINDOW_WIDTH = 1000
     FPS = 60
-    FIRE_HEALTH = 100
-    FIRE_DAMAGE_PER_SECOND = 1
-    REIGNITE_HEALING = 15
-    REIGNITE_FIRE_COOLDOWN = 2
-    WATER_BUCKET_DAMAGE = 10
-    WATER_BUCKET_COOLDOWN = 1
     def __init__(self):
         pass
