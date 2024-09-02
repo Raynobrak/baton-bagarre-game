@@ -116,12 +116,12 @@ class Game:
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         original_circle = ImageManager().get_image('circle')
 
-        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
-                                      max_value=Fire.MAX_HEALTH, current_value=fire.life_points)
+        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
+                                      max_value=Fire.MAX_HEALTH, current_value=self.fire.life_points)
 
-        self.wave_manager = WaveManager(spawn_points, self.enemies, fire)
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
 
-        light_manager = LightManager(fire)
+        light_manager = LightManager(self.fire)
         light_manager.update()
         while True:
             for event in pygame.event.get():
@@ -136,9 +136,9 @@ class Game:
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             # Update Fire
-            fire.update(self.DELTA_TIME)
-            self.check_player_interaction(self.__player, fire)
-            self.check_enemies_interaction(self.enemies, fire)
+            self.fire.update(self.DELTA_TIME)
+            self.check_player_interaction(self.__player, self.fire)
+            self.check_enemies_interaction(self.enemies, self.fire)
 
             # Update Enemies
             for enemy in self.enemies:
@@ -171,7 +171,7 @@ class Game:
             # Update and draw fire object and health bar
             self.fire.update(self.DELTA_TIME)
             self.fire.draw(self.__displaysurface)
-            fire_health_bar.current_value = self.fire.lifePoints
+            fire_health_bar.current_value = self.fire.life_points
             fire_health_bar.draw(self.__displaysurface)
 
             # Draw Player
@@ -183,7 +183,7 @@ class Game:
 
             self.particleHolder.draw(self.__displaysurface)
 
-            if fire.has_life_points_changed():
+            if self.fire.has_life_points_changed():
                 light_manager.update()
             light_manager.draw(self.__displaysurface)
 
