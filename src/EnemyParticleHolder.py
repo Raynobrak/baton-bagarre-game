@@ -1,6 +1,5 @@
 import pygame
 
-from src.surface_utils import *
 from src.ImageManager import ImageManager
 from src.EnemyParticle import EnemyParticle
 from src.Enemy import Enemy

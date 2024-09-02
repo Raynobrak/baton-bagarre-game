@@ -18,7 +18,6 @@ from src.ProgressBar import ProgressBar
 
 from src.Fire import Fire
 from src.WaveManager import WaveManager
-from src.surface_utils import *
 
 from src.EnemyParticleHolder import EnemyParticleHolder
 
