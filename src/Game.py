@@ -36,7 +36,6 @@ class Game():
         pygame.display.set_caption("Game")
         self.load_all_images()
 
-        self.fire = None
         self.visibility = 1
         self.score = 0
 
@@ -91,30 +90,30 @@ class Game():
 
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
-        if (player.position + player.size / 2).distance_to(self.fire.position + self.fire.size / 2) < player.size.x:
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
             if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
                 player.go_levitate()
 
             # Check if player has finished reigniting the fire
             has_finished_reigniting = player.try_stop_levitate()
             if has_finished_reigniting:
-                self.fire.reignite()
+                fire.reignite()
 
     def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        platforms, self.fire, self.spawn_points = LevelGenerator(
+        platforms, fire, self.spawn_points = LevelGenerator(
 
         ).load_level_infos(
             './assets/levels/level1.png')
-        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
-                                      max_value=Constant.FIRE_HEALTH, current_value=self.fire.life_points)
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
+                                      max_value=Constant.FIRE_HEALTH, current_value=fire.life_points)
 
         self.wave_manager = WaveManager(self.spawn_points,self.enemies,
                                         self.__player)
 
-        light_manager = LightManager(self.fire)
+        light_manager = LightManager(fire)
         light_manager.update()
         while True:
             #print("Ennemy size = " + str(len(self.enemies)))
@@ -130,8 +129,8 @@ class Game():
             self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             # Update Fire
-            self.fire.update(self.DELTA_TIME)
-            self.check_player_interaction(self.__player, self.fire)
+            fire.update(self.DELTA_TIME)
+            self.check_player_interaction(self.__player, fire)
 
             # Update Enemies
             for enemy in self.enemies:
@@ -159,11 +158,11 @@ class Game():
                 platform.draw(self.__displaysurface)
 
             # Draw fire object and health bar
-            self.fire.draw(self.__displaysurface)
-            fire_health_bar.current_value = self.fire.life_points
+            fire.draw(self.__displaysurface)
+            fire_health_bar.current_value = fire.life_points
             fire_health_bar.draw(self.__displaysurface)
 
-            if self.fire.life_points <= 0:
+            if fire.life_points <= 0:
                 self.end_menu()
                 break
 
@@ -173,7 +172,7 @@ class Game():
                 enemy.draw(self.__displaysurface)
 
             # Update and draw light
-            if self.fire.has_life_points_changed():
+            if fire.has_life_points_changed():
                 light_manager.update()
 
             light_manager.draw(self.__displaysurface)
@@ -214,9 +213,8 @@ class Game():
 
     def end_menu(self):
         end_menu = EndMenu(self.__displaysurface, self.score,
-                             self.__player, self.enemies,self.fire)
+                             self.__player, self.enemies)
         end_menu.display()
-        self.fire.update_life_animation()
         while True:
             action = end_menu.handle_input()
 
