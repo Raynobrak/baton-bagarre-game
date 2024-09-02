@@ -1,7 +1,7 @@
 class VolumeManager:
-    generalVolume : float = 1.0
-    soundVolume : float = 1.0
-    musicVolume : float = 1.0
+    generalVolume: float = 1.0
+    soundVolume: float = 1.0
+    musicVolume: float = 1.0
 
     def __init__(self):
         pass

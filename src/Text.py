@@ -7,6 +7,7 @@ import pygame
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
+
 class Text(Entity):
 
     __font: pygame.font.Font

@@ -1,5 +1,6 @@
 import pygame
 
+
 class FontManager:
     fonts = dict()  # static attribute
 

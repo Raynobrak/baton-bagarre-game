@@ -12,7 +12,8 @@ DOWN_VEC = vec(0,1)
 LEFT_VEC = vec(-1,0)
 RIGHT_VEC = vec(1,0)
 
-class RectCollisionInfo():
+
+class RectCollisionInfo:
     def __init__(self, normal, delta):
         self.normal = normal
         self.delta = delta

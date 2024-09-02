@@ -12,15 +12,17 @@ from src.ImageManager import ImageManager
 from src.Stickman import Stickman, StickmanState, Direction
 
 from pygame.locals import *
+
 vec = pygame.math.Vector2  # 2 for two dimensional
+
 
 class Hit(Entity):
     HIT_IMPULSE_ACCELERATION = 200
     IMPULSE_ANGLE = 45
 
     def __init__(self, position: vec, size: vec, hitter: Entity, lifetime: float):
-        super().__init__(position, size, vec(0,0))
-        
+        super().__init__(position, size, vec(0, 0))
+
         self.timeLeft = lifetime
         self.hitter = hitter
 
@@ -38,7 +40,7 @@ class Hit(Entity):
             self.timeLeft = 0
             enemy.take_damage(30)
 
-            impulse = vec(1,0)
+            impulse = vec(1, 0)
             impulse.rotate_ip(self.IMPULSE_ANGLE)
             impulse *= self.HIT_IMPULSE_ACCELERATION
             impulse.y = -impulse.y
@@ -47,6 +49,7 @@ class Hit(Entity):
                 impulse.x = -impulse.x
 
             enemy.accelerate(impulse)
+
 
 class PunchHit(Hit):
     def __init__(self, hitter: Entity):
@@ -61,6 +64,7 @@ class PunchHit(Hit):
             punchHitboxXPos -= 2 * punchOffset
 
         super().__init__(vec(punchHitboxXPos, playerHitbox.top), punchHitboxSize, hitter, 0.01)
+
 
 class KickHit(Hit):
     def __init__(self, hitter: Entity):

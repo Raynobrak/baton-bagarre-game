@@ -7,15 +7,13 @@ from src.LevelGenerator import LevelGenerator
 from src.OptionView import OptionView
 from src.Player import Player
 from src.Enemy import Enemy
-from src.Animation import SpritesheetAnimInfos, Animation
 from src.CollisionUtils import *
 from src.ImageManager import ImageManager
 from src.Constant import Constant
-from src.Button import Button
 from src.MainMenu import MainMenu
 from src.PauseMenu import PauseMenu
 from src.ProgressBar import ProgressBar
-
+from src.LightManager import LightManager
 from src.Fire import Fire
 from src.WaveManager import WaveManager
 
@@ -24,15 +22,14 @@ from src.EnemyParticleHolder import EnemyParticleHolder
 vec = pygame.math.Vector2  # 2 for two dimensional
 FramePerSec = pygame.time.Clock()
 
-import src.Constant
 
-
-class Game():
+class Game:
     DELTA_TIME = 1 / Constant.FPS
+
     def __init__(self):
         pygame.init()
         pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
-        self.enemies : list[Enemy] = []
+        self.enemies: list[Enemy] = []
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
         self.load_all_images()
@@ -43,7 +40,7 @@ class Game():
 
         self.particleHolder = EnemyParticleHolder(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT), self.platforms)
 
-        self.__player = Player(vec(100,100))
+        self.__player = Player(vec(100, 100))
         self.wave_manager = None
         self.main_menu()
 
@@ -88,38 +85,9 @@ class Game():
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
-    def update_light(self, fire: Fire, original_circle: pygame.Surface):
-        # Center the circle with the fire and scale it based on fire's life points
-        fire_pos = self.fire.get_position()
-        fire_size = self.fire.size
-        fire_life_points = self.fire.lifePoints
-
-        circle_size = fire_size.x + (Constant.WINDOW_WIDTH * 3) * (fire_life_points / Constant.FIRE_HEALTH)
-
-        # Scale the circle image
-        circle = pygame.transform.smoothscale(original_circle, vec(int(circle_size), int(circle_size)))
-
-        sub_pos = vec(circle_size, circle_size) / 2 - (fire_pos + fire_size / 2)
-        if circle_size > Constant.WINDOW_WIDTH and circle_size > Constant.WINDOW_HEIGHT and sub_pos.x > 0 and sub_pos.y > 0:
-            # Get the sub-surface of the circle image to fit in the screen
-            sub_size = vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT)
-            circle = circle.subsurface(pygame.Rect(sub_pos, sub_size))
-            circle_pos = (0, 0)
-        else:
-            # Calculate position to center the circle with the fireee
-            circle_pos = (fire_pos.x + fire_size.x / 2 - circle.get_width() / 2,
-                          fire_pos.y + fire_size.y / 2 - circle.get_height() / 2)
-
-        # Create a light filter to darken the screen
-        light_filter = pygame.surface.Surface((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-        color_ratio = 255 * (1 - fire_life_points / Constant.FIRE_HEALTH)
-        light_filter.fill((color_ratio, color_ratio, color_ratio))
-        light_filter.blit(circle, circle_pos)
-        self.__displaysurface.blit(light_filter, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
-
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
-        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) < player.size.x:
+        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) <= player.size.x:
             if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
                 player.go_levitate()
 
@@ -131,29 +99,53 @@ class Game():
     def make_enemy_explode(self, enemy: Enemy):
         self.particleHolder.generate_destruction_particles_for_enemy(enemy)
 
+    def check_enemies_interaction(self, enemies: list[Enemy], fire: Fire):
+        # Check if an enemy is in range of fire
+        for enemy in enemies:
+            if (enemy.position + enemy.size / 2).distance_to(fire.position + fire.size / 2) <= enemy.size.x:
+                enemy.go_water_bucket()
+
+            # Check if enemy has finished throwing water bucket
+            has_finished_water_bucket = enemy.try_stop_water_bucket()
+            if has_finished_water_bucket:
+                fire.splash()
+
     def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         original_circle = ImageManager().get_image('circle')
-        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
-                                      max_value=Constant.FIRE_HEALTH, current_value=self.fire.lifePoints)
 
-        self.wave_manager = WaveManager(self.spawn_points,self.enemies, self.__player)
+        fire_health_bar = ProgressBar(fire.position - vec(0, fire.size.y / 2), vec(fire.size.x, 10),
+                                      max_value=Fire.MAX_HEALTH, current_value=fire.life_points)
+
+        self.wave_manager = WaveManager(spawn_points, self.enemies, fire)
+
+        light_manager = LightManager(fire)
+        light_manager.update()
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.pause_menu()
-                    
+
+            # Update Player
             self.wave_manager.update_wave(self.DELTA_TIME)
             self.__player.update(self.DELTA_TIME)
+            self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+
+            # Update Fire
+            fire.update(self.DELTA_TIME)
+            self.check_player_interaction(self.__player, fire)
+            self.check_enemies_interaction(self.enemies, fire)
+
+            # Update Enemies
             for enemy in self.enemies:
                 enemy.update(self.DELTA_TIME)
                 enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
-            self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            # Check fighting behavior
             for enemy in self.enemies:
                 self.__player.check_if_entity_is_hit(enemy)
 
@@ -188,9 +180,12 @@ class Game():
                 enemy.draw(self.__displaysurface)
 
             # Update and draw light
-            self.update_light(self.fire, original_circle)
 
             self.particleHolder.draw(self.__displaysurface)
+
+            if fire.has_life_points_changed():
+                light_manager.update()
+            light_manager.draw(self.__displaysurface)
 
             pygame.display.update()
 
@@ -207,7 +202,6 @@ class Game():
                 self.run()
             elif action == 'options':
                 option_menu.display_option()
-
 
     def pause_menu(self):
         pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])
