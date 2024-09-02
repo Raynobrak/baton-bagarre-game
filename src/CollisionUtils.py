@@ -4,6 +4,7 @@ from enum import IntEnum
 
 from src.UnmovablePlatform import UnmovablePlatform
 from src.Stickman import Stickman
+from src.EnemyParticle import EnemyParticle
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 UP_VEC = vec(0,-1)
@@ -55,6 +56,10 @@ def rects_intersect(r1 : pygame.Rect, r2 : pygame.Rect):
     extended = pygame.Rect(pos, size)
     return rect_contains_point(extended, vec(r1.topleft))
 
+def rect_contains_rect(container : pygame.Rect, r : pygame.Rect):
+    extended = pygame.Rect(container.left, container.top, container.width + r.width, container.height + r.height)
+    return rect_contains_point(extended, vec(r.topleft))
+
 def rect_collision_info(first: pygame.Rect, other: pygame.Rect) -> RectCollisionInfo:
     if not rects_intersect(first, other):
         return NO_COLLISION
@@ -93,6 +98,63 @@ def rect_collision_info(first: pygame.Rect, other: pygame.Rect) -> RectCollision
             collisionNormal = RIGHT_VEC
 
     return RectCollisionInfo(collisionNormal, delta)
+
+def handle_particle_vs_platform_collision(particle: EnemyParticle, platform: UnmovablePlatform):
+    platformRect = platform.get_hitbox()
+    particleRect = particle.get_hitbox()
+
+    collisionInfos = rect_collision_info(platformRect, particleRect)
+    if collisionInfos == NO_COLLISION:
+        return False
+    
+    correction = collisionInfos.normal * collisionInfos.absolutePenetrationDepthAlongNormal()
+
+    velocityAlongNormal = abs(particle.velocity.dot(collisionInfos.normal))
+
+    impulse = 0.9 * velocityAlongNormal * collisionInfos.normal
+
+    if collisionInfos.normal == UP_VEC or collisionInfos.normal == DOWN_VEC:
+        particle.velocity.y = 0
+    else:
+        particle.velocity.x = 0
+
+    particle.accelerate(impulse)
+
+    return True
+
+def handle_particle_vs_map_collision(particle: EnemyParticle, mapSize: vec):
+    mapRect = pygame.Rect(vec(0,0), mapSize)
+    particleRect = particle.get_hitbox()
+
+    particleSize = vec(particleRect.size)
+    particlePos = vec(particleRect.topleft)
+    shrunkRect = pygame.Rect(vec(0,0), mapSize - particleSize)
+
+    if rect_contains_point(shrunkRect, particlePos):
+        return False
+    
+    dir = vec(0,0)
+    depth = 0
+    if particlePos.x < shrunkRect.left:
+        depth = particlePos.x
+        dir = LEFT_VEC
+    elif particlePos.x > shrunkRect.width:
+        depth = particlePos.x - shrunkRect.width
+        dir = RIGHT_VEC
+    elif particlePos.y > shrunkRect.height:
+        depth = particlePos.y - shrunkRect.height
+        dir = DOWN_VEC
+    
+    if depth == 0:
+        return False
+    
+    correction = abs(depth) * -dir
+    particle.move(correction)
+
+    velocityAlongNormal = abs(particle.velocity.dot(dir))
+    impulse = 0.9 * velocityAlongNormal * -dir
+    particle.accelerate(impulse + velocityAlongNormal * -dir)
+
 
 def handle_collision_stickman_vs_platform(stickman: Stickman, platform: UnmovablePlatform):
     platformRect = pygame.Rect(platform.position, platform.size)
