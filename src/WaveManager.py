@@ -18,12 +18,7 @@ class WaveManager:
         self.wave_ennemy_cooldown = CooldownVariable(1)
         self.enemy_per_wave = 10
         self.enemy_in_wave = 0
-
-
-    def create_wave(self):
-        self.wave_ennemy_cooldown
-
-
+        self.wave_count = 0
 
     def update_wave(self, dt):
         if not self.wave_started : self.normal_cooldown.update_cooldown(dt)
@@ -46,7 +41,14 @@ class WaveManager:
                     self.wave_started = False
                     self.wave_cooldown.reset()
                     self.enemy_in_wave = 0
+                    self.wave_count += 1
                     print("Wave ended")
+
+        if self.wave_count % 5:
+            self.enemy_per_wave += 1
+
+        if self.wave_count % 10:
+            self.wave_cooldown.max -= 0.5
 
     def spawn_enemy(self):
         spawn = randint(0, len(self.spawn_points) - 1)
