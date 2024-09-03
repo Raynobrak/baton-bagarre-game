@@ -69,7 +69,7 @@ class Enemy(Stickman):
         self.waterBucketCooldown.reset()
 
         if self.is_dead():
-            AudioManager().play_sound_random(["Enemy_Dead1", "Enemy_Dead2", "Enemy_Dead3"])
+            AudioManager().play_sound_random(["Enemy_Dead1", "Enemy_Dead2", "Enemy_Dead3", "Enemy_Dead4"])
 
     def is_dead(self):
         return self.health <= 0
