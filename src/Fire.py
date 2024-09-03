@@ -2,6 +2,7 @@ import pygame
 
 from src.Entity import Entity
 from src.Animation import *
+from src.ProgressBar import ProgressBar
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
@@ -24,6 +25,9 @@ class Fire(Entity):
         self.time_since_last_reduction = 0  # Track time since last reduction
         self.has_lifePoints_changed_since_last_update = False
 
+        self.health_bar = ProgressBar(self.position - vec(0, self.size.y / 2), vec(self.size.x, 10),
+                                      max_value=Fire.MAX_HEALTH, current_value=self.life_points)
+
     def set_animation(self, animInfos):
         if self.current_animation != animInfos:  # Only set animation if different
             self.animation = Animation(animInfos, self.position, self.size)
@@ -42,6 +46,8 @@ class Fire(Entity):
             self.set_animation(ANIM_FIRE_MEDIUM)
         elif self.life_points >= 25:
             self.set_animation(ANIM_FIRE_SMALL)
+        elif self.life_points == 0:
+            self.set_animation(ANIM_FIRE_DEAD)
         else:
             self.set_animation(ANIM_FIRE_VERY_SMALL)
 
@@ -58,7 +64,9 @@ class Fire(Entity):
             self.life_points = self.MAX_HEALTH
         else:
             self.life_points = life_points
+        self.health_bar.update_value(self.life_points)
         self.has_lifePoints_changed_since_last_update = True
+        self.update_life_animation()
 
     def reduce_life_points_per_time(self, dt: float):
         self.time_since_last_reduction += dt
@@ -73,13 +81,15 @@ class Fire(Entity):
     def splash(self):
         self.remove_life_points(self.WATER_BUCKET_DAMAGE)
 
+    def is_dead(self) -> bool:
+        return self.life_points <= 0
+
     def get_position(self):
         return self.position
 
     def update(self, dt: float):
         self.has_lifePoints_changed_since_last_update = False
         self.reduce_life_points_per_time(dt)
-        self.update_life_animation()
         self.update_animation(dt)
 
     def has_life_points_changed(self):
@@ -87,3 +97,4 @@ class Fire(Entity):
 
     def draw(self, display):
         self.animation.draw(display)
+        self.health_bar.draw(display)

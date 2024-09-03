@@ -51,7 +51,3 @@ class WaveManager:
     def spawn_enemy(self):
         spawn = randint(0, len(self.spawn_points) - 1)
         self.spawn_points[spawn].spawn_enemy(self.enemies, self.target)
-
-
-
-

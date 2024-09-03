@@ -95,6 +95,10 @@ class Animation:
     def goto_next_frame(self):
         self.spriteIndex = (self.spriteIndex + 1) % self.infos.frameCount
 
+    # todo : use this function in the class
+    def get_current_frame(self):
+        return self.surfaces[self.spriteIndex]
+
     def draw(self, surface, filter=None):
         if filter is None:
             surface.blit(self.surfaces[self.spriteIndex], self.animSprite.rect)
@@ -122,8 +126,9 @@ ANIM_ENEMY_WALKING = SpritesheetAnimInfos("enemy_walking", vec(32, 32), vec(0, 0
 ANIM_ENEMY_JUMPING = SpritesheetAnimInfos("enemy_jumping", vec(32, 32), vec(0, 0), 1, ANIM_TIME)
 ANIM_ENEMY_WATER_BUCKET = SpritesheetAnimInfos("enemy_water_bucket", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
 
-ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
-ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
-ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32, 32), vec(0, 0), 4, ANIM_TIME)
-ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32, 32),
-                                            vec(0, 0), 4, ANIM_TIME)
+
+ANIM_FIRE_BIG = SpritesheetAnimInfos("fire_big", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_MEDIUM = SpritesheetAnimInfos("fire_medium", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_SMALL = SpritesheetAnimInfos("fire_small", vec(32,32), vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_VERY_SMALL = SpritesheetAnimInfos("fire_very_small", vec(32,32),vec(0,0), 4, ANIM_TIME)
+ANIM_FIRE_DEAD = SpritesheetAnimInfos("fire_dead", vec(32,32), vec(0,0), 4,ANIM_TIME)
