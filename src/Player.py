@@ -17,6 +17,11 @@ class Player(Stickman):
 
     REIGNITE_FIRE_COOLDOWN = 2
 
+    KICK_PBAR_SIZE = vec(40,5)
+    KICK_PBAR_OFFSET = 30
+    KICK_PBAR_COLOR_FRONT = (80,88,102)
+    KICK_PBAR_COLOR_BACK = (255,255,255)
+
     def __init__(self, position, hitboxSize=PLAYER_HITBOX_SIZE):
         self.animation = None
         self.isPunching = False
@@ -26,6 +31,8 @@ class Player(Stickman):
         self.levitatingTime = CooldownVariable(self.REIGNITE_FIRE_COOLDOWN)
         self.reignitProgressBar = ProgressBar(position, vec(hitboxSize.x, hitboxSize.y / 10), (255, 255, 0),
                                               (100, 100, 100))
+        
+        self.kickProgressBar = ProgressBar(position, self.KICK_PBAR_SIZE, self.KICK_PBAR_COLOR_FRONT, self.KICK_PBAR_COLOR_BACK)
 
         self.punchingTime = CooldownVariable(0.1)
         self.kickingTime = CooldownVariable(0.2)
@@ -180,3 +187,9 @@ class Player(Stickman):
             self.reignitProgressBar.set_position(self.position + vec(0, -self.size.y / 5))
             self.reignitProgressBar.update_value(100 - self.levitatingTime.get_percentage() * 100)
             self.reignitProgressBar.draw(surface)
+
+        if not self.kickCooldown.ready():
+            pos = vec(self.position.x + self.size.x / 2, self.position.y)
+            self.kickProgressBar.set_center(pos + vec(0, -self.KICK_PBAR_OFFSET))
+            self.kickProgressBar.update_value((1 - self.kickCooldown.get_percentage()) * 100)
+            self.kickProgressBar.draw(surface)
