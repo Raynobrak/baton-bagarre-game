@@ -130,6 +130,9 @@ class Game:
         self.particleHolder.generate_destruction_particles_for_enemy(enemy)
 
     def run(self):
+
+        pygame.display.set_caption("Game")
+
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
@@ -220,6 +223,7 @@ class Game:
             pause_menu.display_menu()
             action = pause_menu.handle_input()
             if action == 'Resume':
+                pygame.display.set_caption("Game")
                 break
             elif action == 'Options':
                 option_menu.display_option()

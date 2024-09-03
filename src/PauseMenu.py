@@ -14,6 +14,9 @@ class PauseMenu:
         self.options.append(option)
 
     def display_menu(self):
+
+        pygame.display.set_caption("Pause Menu")
+
         # Create a transparent overlay
         overlay = pygame.Surface(self.display_surface.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 1))
