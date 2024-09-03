@@ -1,5 +1,6 @@
 from random import random, randint
 
+from src.AudioManager import AudioManager
 from src.CooldownVariable import CooldownVariable
 from src.Entity import Entity
 from src.Enemy import Enemy
@@ -26,6 +27,7 @@ class WaveManager:
 
         if not self.wave_started and self.wave_cooldown.ready():
             print("Wave started")
+            AudioManager().play_sound_random(["New_Wave1", "New_Wave2", "New_Wave3"])
             self.wave_started = True
 
         if not self.wave_started and  self.normal_cooldown.try_reset():
