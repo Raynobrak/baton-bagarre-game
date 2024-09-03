@@ -16,6 +16,7 @@ from src.EndMenu import EndMenu
 from src.LightManager import LightManager
 from src.Fire import Fire
 from src.WaveManager import WaveManager
+from src.Text import Text
 
 from src.EnemyParticleHolder import EnemyParticleHolder
 
@@ -85,6 +86,7 @@ class Game:
         AudioManager().load_sound('./assets/audio/Enemy_Dead1.wav', 'Enemy_Dead1')
         AudioManager().load_sound('./assets/audio/Enemy_Dead2.wav', 'Enemy_Dead2')
         AudioManager().load_sound('./assets/audio/Enemy_Dead3.wav', 'Enemy_Dead3')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead4.wav', 'Enemy_Dead4')
         AudioManager().load_sound('./assets/audio/Game_Over.wav', 'Game_Over')
         AudioManager().load_sound('./assets/audio/Kick1.wav', 'Kick1')
         AudioManager().load_sound('./assets/audio/Kick2.wav', 'Kick2')
@@ -94,12 +96,12 @@ class Game:
         AudioManager().load_sound('./assets/audio/Punch3.wav', 'Punch3')
         AudioManager().load_sound('./assets/audio/New_Wave1.wav', 'New_Wave1')
         AudioManager().load_sound('./assets/audio/New_Wave2.wav', 'New_Wave2')
-        AudioManager().load_sound('./assets/audio/New_Wave3.wav', 'New_Wave3')
         AudioManager().load_sound('./assets/audio/Yoga.wav', 'Yoga')
         AudioManager().load_sound('./assets/audio/Water_Bucket1.wav', 'Water_Bucket1')
         AudioManager().load_sound('./assets/audio/Water_Bucket2.wav', 'Water_Bucket2')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'default_small', font_size=15)
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
 
     def check_player_interaction(self, player: Player, fire: Fire):
@@ -126,6 +128,14 @@ class Game:
 
     def make_enemy_explode(self, enemy: Enemy):
         self.particleHolder.generate_destruction_particles_for_enemy(enemy)
+
+    def show_score(self, display):
+        text = Text(vec(Constant.WINDOW_WIDTH/2, 20), "Score: " + str(self.score), color=(255, 255, 255))
+        text.draw_center(display)
+
+    def show_wave(self, display):
+        text = Text(vec(Constant.WINDOW_WIDTH/2, 40), "Wave: " + str(self.wave_manager.get_wave_number()), color=(255, 255, 255), font='default_small')
+        text.draw_center(display)
 
     def run(self):
         # Load level
@@ -194,6 +204,10 @@ class Game:
             if self.fire.has_life_points_changed():
                 self.light_manager.update()
             self.light_manager.draw(self.__displaysurface)
+
+            # Show score
+            self.show_score(self.__displaysurface)
+            self.show_wave(self.__displaysurface)
 
             pygame.display.update()
             FramePerSec.tick(Constant.FPS)
