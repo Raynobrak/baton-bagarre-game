@@ -46,7 +46,7 @@ class Fire(Entity):
             self.set_animation(ANIM_FIRE_MEDIUM)
         elif self.life_points >= 25:
             self.set_animation(ANIM_FIRE_SMALL)
-        elif self.life_points==0:
+        elif self.life_points == 0:
             self.set_animation(ANIM_FIRE_DEAD)
         else:
             self.set_animation(ANIM_FIRE_VERY_SMALL)
@@ -66,6 +66,7 @@ class Fire(Entity):
             self.life_points = life_points
         self.health_bar.update_value(self.life_points)
         self.has_lifePoints_changed_since_last_update = True
+        self.update_life_animation()
 
     def reduce_life_points_per_time(self, dt: float):
         self.time_since_last_reduction += dt
@@ -89,7 +90,6 @@ class Fire(Entity):
     def update(self, dt: float):
         self.has_lifePoints_changed_since_last_update = False
         self.reduce_life_points_per_time(dt)
-        self.update_life_animation()
         self.update_animation(dt)
 
     def has_life_points_changed(self):
