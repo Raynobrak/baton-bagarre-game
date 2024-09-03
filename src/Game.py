@@ -13,7 +13,6 @@ from src.Constant import Constant
 from src.MainMenu import MainMenu
 from src.PauseMenu import PauseMenu
 from src.EndMenu import EndMenu
-from src.ProgressBar import ProgressBar
 from src.LightManager import LightManager
 from src.Fire import Fire
 from src.WaveManager import WaveManager
@@ -29,7 +28,6 @@ class Game:
 
     def __init__(self):
         pygame.init()
-        pygame.display.gl_set_attribute(pygame.GL_MULTISAMPLEBUFFERS, 1)
         self.enemies: list[Enemy] = []
         self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
@@ -102,9 +100,6 @@ class Game:
             if has_finished_reigniting:
                 fire.reignite()
 
-    def make_enemy_explode(self, enemy: Enemy):
-        self.particleHolder.generate_destruction_particles_for_enemy(enemy)
-
     def check_enemies_interaction(self, enemies: list[Enemy], fire: Fire):
         # Check if an enemy is in range of fire
         for enemy in enemies:
@@ -116,13 +111,13 @@ class Game:
             if has_finished_water_bucket:
                 fire.splash()
 
+    def make_enemy_explode(self, enemy: Enemy):
+        self.particleHolder.generate_destruction_particles_for_enemy(enemy)
+
     def run(self):
         # Load level
         bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
-
-        fire_health_bar = ProgressBar(self.fire.position - vec(0, self.fire.size.y / 2), vec(self.fire.size.x, 10),
-                                      max_value=Fire.MAX_HEALTH, current_value=self.fire.life_points)
 
         self.light_manager.update()
         while True:
@@ -150,17 +145,14 @@ class Game:
             # Check fighting behavior
             for enemy in self.enemies:
                 self.__player.check_if_entity_is_hit(enemy)
-
             self.particleHolder.update(self.DELTA_TIME)
-
             for enemy in self.enemies:
                 if enemy.is_dead():
                     self.make_enemy_explode(enemy)
                     self.enemies.remove(enemy)
                     self.score += 100
 
-            self.check_player_interaction(self.__player, self.fire)
-
+            # Check collision
             for platform in self.platforms:
                 handle_collision_stickman_vs_platform(self.__player, platform)
                 for enemy in self.enemies:
@@ -171,31 +163,26 @@ class Game:
             for platform in self.platforms:
                 platform.draw(self.__displaysurface)
 
-            # Update and draw fire object and health bar
+            # Draw fire
             self.fire.draw(self.__displaysurface)
-            fire_health_bar.current_value = self.fire.life_points
-            fire_health_bar.draw(self.__displaysurface)
 
+            # Check game over
             if self.fire.is_dead():
                 self.end_menu()
                 break
 
-            # Draw Player
+            # Draw Player and Enemies
             self.__player.draw(self.__displaysurface)
             for enemy in self.enemies:
                 enemy.draw(self.__displaysurface)
-
-            # Update and draw light
-
             self.particleHolder.draw(self.__displaysurface)
 
+            # Update and draw light
             if self.fire.has_life_points_changed():
                 self.light_manager.update()
-
             self.light_manager.draw(self.__displaysurface)
 
             pygame.display.update()
-
             FramePerSec.tick(Constant.FPS)
 
     def main_menu(self):

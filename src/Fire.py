@@ -2,6 +2,7 @@ import pygame
 
 from src.Entity import Entity
 from src.Animation import *
+from src.ProgressBar import ProgressBar
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
@@ -23,6 +24,9 @@ class Fire(Entity):
         self.life_points = self.MAX_HEALTH  # Initialize life points
         self.time_since_last_reduction = 0  # Track time since last reduction
         self.has_lifePoints_changed_since_last_update = False
+
+        self.health_bar = ProgressBar(self.position - vec(0, self.size.y / 2), vec(self.size.x, 10),
+                                      max_value=Fire.MAX_HEALTH, current_value=self.life_points)
 
     def set_animation(self, animInfos):
         if self.current_animation != animInfos:  # Only set animation if different
@@ -60,6 +64,7 @@ class Fire(Entity):
             self.life_points = self.MAX_HEALTH
         else:
             self.life_points = life_points
+        self.health_bar.update_value(self.life_points)
         self.has_lifePoints_changed_since_last_update = True
 
     def reduce_life_points_per_time(self, dt: float):
@@ -92,3 +97,4 @@ class Fire(Entity):
 
     def draw(self, display):
         self.animation.draw(display)
+        self.health_bar.draw(display)
