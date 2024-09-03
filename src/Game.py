@@ -51,8 +51,6 @@ class Game:
         ImageManager().load_image('./assets/textures/player_default.png', 'player')
 
         ImageManager().load_image('./assets/textures/background.png', 'background')
-        ImageManager().load_image('./assets/textures/background2.png', 'background2')
-        ImageManager().load_image('./assets/textures/background3.png', 'background3')
         ImageManager().load_image('./assets/textures/platform_left.png', 'platform_left')
         ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
         ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
@@ -134,7 +132,7 @@ class Game:
         pygame.display.set_caption("Game")
 
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background2'),
+        bg = pygame.transform.smoothscale(ImageManager().get_image('background'),
                                           (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
         self.light_manager.update()
