@@ -18,7 +18,7 @@ class Player(Stickman):
 
     KICK_PBAR_SIZE = vec(40,5)
     KICK_PBAR_OFFSET = 30
-    KICK_PBAR_COLOR_FRONT = (0,255,0)
+    KICK_PBAR_COLOR_FRONT = (80,88,102)
     KICK_PBAR_COLOR_BACK = (255,255,255)
 
     def __init__(self, position, hitboxSize=PLAYER_HITBOX_SIZE):
