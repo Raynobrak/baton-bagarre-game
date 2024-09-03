@@ -20,6 +20,10 @@ class WaveManager:
         self.enemy_per_wave = 10
         self.enemy_in_wave = 0
         self.wave_count = 0
+        self.wave_number = 0
+
+    def get_wave_number(self):
+        return self.wave_number
 
     def update_wave(self, dt):
         if not self.wave_started : self.normal_cooldown.update_cooldown(dt)
@@ -27,7 +31,8 @@ class WaveManager:
 
         if not self.wave_started and self.wave_cooldown.ready():
             print("Wave started")
-            AudioManager().play_sound_random(["New_Wave1", "New_Wave2", "New_Wave3"])
+            self.wave_number += 1
+            AudioManager().play_sound_random(["New_Wave1", "New_Wave2"])
             self.wave_started = True
 
         if not self.wave_started and  self.normal_cooldown.try_reset():
