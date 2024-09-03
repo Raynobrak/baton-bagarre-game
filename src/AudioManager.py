@@ -22,11 +22,24 @@ class AudioManager:
         sound.set_volume(VolumeManager().soundVolume)
         sound.play()
 
+    def stop_sound(self, key):
+        sound: pygame.mixer.Sound = AudioManager.sound[key]
+        sound.stop()
+
+    def stop_music(self):
+        music: pygame.mixer.Sound = AudioManager.sound['music']
+        music.stop()
+
     def play_music(self):
-        music: pygame.mixer.Sound= AudioManager.sound['music']
+        music: pygame.mixer.Sound = AudioManager.sound['music']
         music.set_volume(VolumeManager().musicVolume * VolumeManager().generalVolume)
         music.play(loops=1)
 
     def update_music_volume(self):
         music: pygame.mixer.Sound = AudioManager.sound['music']
         music.set_volume(VolumeManager().musicVolume * VolumeManager().generalVolume)
+
+    def play_sound_random(self, keys: list):
+        import random
+        key = random.choice(keys)
+        self.play_sound(key)

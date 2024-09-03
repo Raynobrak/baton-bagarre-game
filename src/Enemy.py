@@ -2,6 +2,7 @@ import pygame
 
 import math
 
+from src.AudioManager import AudioManager
 from src.CooldownVariable import CooldownVariable
 from src.Animation import *
 from src.Stickman import Stickman, StickmanState, Direction
@@ -67,6 +68,9 @@ class Enemy(Stickman):
         self.update_state(self.lookingDirection, StickmanState.IDLE)
         self.waterBucketCooldown.reset()
 
+        if self.is_dead():
+            AudioManager().play_sound_random(["Enemy_Dead1", "Enemy_Dead2", "Enemy_Dead3"])
+
     def is_dead(self):
         return self.health <= 0
 
@@ -80,6 +84,7 @@ class Enemy(Stickman):
         if self.state is StickmanState.ATTACKING_FIRE and self.waterBucketCooldown.ready():
             self.update_state(self.lookingDirection, StickmanState.IDLE)
             self.apply_strategy()
+            AudioManager().play_sound_random(["Water_Bucket1", "Water_Bucket2"])
             return True
         return False
 

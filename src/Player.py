@@ -1,4 +1,5 @@
 from src.Animation import *
+from src.AudioManager import AudioManager
 from src.CooldownVariable import CooldownVariable
 from src.Entity import Entity
 from src.Stickman import Stickman, StickmanState, Direction
@@ -118,6 +119,7 @@ class Player(Stickman):
             self.levitatingTime.reset()
 
             self.update_state(self.lookingDirection, StickmanState.REIGNITE_FIRE)
+            AudioManager().play_sound("Yoga")
 
     def try_stop_levitate(self) -> bool:
         if self.isLevitating and self.levitatingTime.ready():
@@ -131,12 +133,15 @@ class Player(Stickman):
 
             self.update_state(self.lookingDirection, StickmanState.IDLE)
             self.on_state_changed()
+            AudioManager().stop_sound("Yoga")
 
     def generate_punch(self):
         self.hits.append(PunchHit(self))
+        AudioManager().play_sound_random(["Punch1", "Punch2", "Punch3"])
 
     def generate_kick(self):
         self.hits.append(KickHit(self))
+        AudioManager().play_sound_random(["Kick1", "Kick2", "Kick3"])
 
     def check_if_entity_is_hit(self, entity: Entity):
         for hit in self.hits:

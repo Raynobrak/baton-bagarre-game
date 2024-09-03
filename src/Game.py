@@ -81,10 +81,25 @@ class Game:
         ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
         ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
-
         ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead1.wav', 'Enemy_Dead1')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead2.wav', 'Enemy_Dead2')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead3.wav', 'Enemy_Dead3')
+        AudioManager().load_sound('./assets/audio/Game_Over.wav', 'Game_Over')
+        AudioManager().load_sound('./assets/audio/Kick1.wav', 'Kick1')
+        AudioManager().load_sound('./assets/audio/Kick2.wav', 'Kick2')
+        AudioManager().load_sound('./assets/audio/Kick3.wav', 'Kick3')
+        AudioManager().load_sound('./assets/audio/Punch1.wav', 'Punch1')
+        AudioManager().load_sound('./assets/audio/Punch2.wav', 'Punch2')
+        AudioManager().load_sound('./assets/audio/Punch3.wav', 'Punch3')
+        AudioManager().load_sound('./assets/audio/New_Wave1.wav', 'New_Wave1')
+        AudioManager().load_sound('./assets/audio/New_Wave2.wav', 'New_Wave2')
+        AudioManager().load_sound('./assets/audio/New_Wave3.wav', 'New_Wave3')
+        AudioManager().load_sound('./assets/audio/Yoga.wav', 'Yoga')
+        AudioManager().load_sound('./assets/audio/Water_Bucket1.wav', 'Water_Bucket1')
+        AudioManager().load_sound('./assets/audio/Water_Bucket2.wav', 'Water_Bucket2')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
         FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
@@ -217,10 +232,13 @@ class Game:
         end_menu = EndMenu(self.__displaysurface, self.score,
                            self.__player, self.enemies)
         end_menu.display()
+        AudioManager().play_sound('Game_Over')
+        AudioManager().stop_music()
         while True:
             action = end_menu.handle_input()
 
             if action == 'play_again':
+                AudioManager().play_music()
                 self.reset_game()
                 self.run()
 
