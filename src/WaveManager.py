@@ -46,11 +46,11 @@ class WaveManager:
                     self.wave_count += 1
                     print("Wave ended")
 
-        if self.wave_count % 5:
-            self.enemy_per_wave += 1
+                    if self.wave_count % 5 == 0 and self.wave_count != 0:
+                        self.enemy_per_wave += 1
 
-        if self.wave_count % 10:
-            self.wave_cooldown.max -= 0.5
+                    if self.wave_count % 10 == 0 and self.wave_count != 0:
+                        self.wave_cooldown.max -= 0.5
 
     def spawn_enemy(self):
         spawn = randint(0, len(self.spawn_points) - 1)
