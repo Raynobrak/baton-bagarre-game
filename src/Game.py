@@ -188,6 +188,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
+                    exit()
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.pause_menu()
 
@@ -297,7 +298,7 @@ class Game:
 
     def end_menu(self):
         end_menu = EndMenu(self.__displaysurface, self.score,
-                           self.__player, self.enemies)
+                           self.__player, self.enemies,self.wave_manager.get_wave_number())
         end_menu.display()
         AudioManager().play_sound('Game_Over')
         AudioManager().stop_music()
