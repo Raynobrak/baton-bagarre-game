@@ -13,8 +13,6 @@ class EnemyParticleHolder():
         self.particles = list()
         self.mapSize = mapSize
         self.platforms = platforms
-        pass
-        #todo
 
     def generate_destruction_particles_for_enemy(self, enemy):
         LINES = 5
@@ -43,7 +41,7 @@ class EnemyParticleHolder():
 
                 particleTopleft = vec(imgXPos, imgYPos) + enemyPos
 
-                dir = enemyCenter - particleTopleft + subrectSize / 2 #todo : check 
+                dir = enemyCenter - particleTopleft + subrectSize / 2
                 if dir != vec(0,0):
                     dir.normalize_ip()
                 else:
@@ -56,10 +54,9 @@ class EnemyParticleHolder():
     def update(self, dt: float):
         for p in self.particles:
             p.update(dt)
-        #todo
+
         self.check_for_collisions()
         self.remove_destroyed_particles()
-        pass
     
     def check_for_collisions(self):
         for particle in self.particles:
@@ -71,10 +68,7 @@ class EnemyParticleHolder():
         for p in self.particles:
             if p.needs_to_disappear():
                 self.particles.remove(p)
-        #todo
     
     def draw(self, surface):
         for p in self.particles:
             p.draw(surface)
-        #todo
-        pass
