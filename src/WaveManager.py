@@ -51,6 +51,7 @@ class WaveManager:
 
                     if self.wave_count % 5 == 0 and self.wave_count != 0:
                         self.enemy_per_wave += 1
+                        self.wave_ennemy_cooldown.max = 10 / self.enemy_per_wave  # n enemies per 10 seconds
 
                     if self.wave_count % 10 == 0 and self.wave_count != 0:
                         self.wave_cooldown.max -= 0.5
