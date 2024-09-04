@@ -69,7 +69,7 @@ def rect_collision_info(first: pygame.Rect, other: pygame.Rect) -> RectCollision
     otherCorners = get_corners(other)
     otherCenter = other.center
     
-    closestCornerDistanceSquared = 999999;
+    closestCornerDistanceSquared = 999999
     closestCorner = None
 
     for corner in Corner:
