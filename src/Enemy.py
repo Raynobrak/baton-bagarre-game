@@ -147,5 +147,5 @@ class Enemy(Stickman):
         xPos = self.position.x + self.size.x / 2
         yPos = self.position.y - 30
         self.healthbar.set_center(vec(xPos, yPos))
-        self.healthbar.update_value(100 * self.health / self.ENEMY_HEALTH)
+        self.healthbar.set_value(100 * self.health / self.ENEMY_HEALTH)
         self.healthbar.draw(surface)

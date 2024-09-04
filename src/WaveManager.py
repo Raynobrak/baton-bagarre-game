@@ -30,7 +30,6 @@ class WaveManager:
         if not self.wave_started :self.wave_cooldown.update_cooldown(dt)
 
         if not self.wave_started and self.wave_cooldown.ready():
-            print("Wave started")
             self.wave_number += 1
             AudioManager().play_sound_random(["New_Wave1", "New_Wave2"])
             self.wave_started = True
@@ -49,7 +48,6 @@ class WaveManager:
                     self.wave_cooldown.reset()
                     self.enemy_in_wave = 0
                     self.wave_count += 1
-                    print("Wave ended")
 
                     if self.wave_count % 5 == 0 and self.wave_count != 0:
                         self.enemy_per_wave += 1

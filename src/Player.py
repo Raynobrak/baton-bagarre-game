@@ -172,7 +172,8 @@ class Player(Stickman):
 
                 if enemy.is_dead():
                     self.shockwave_controller.notify_enemy_killed()
-            # todo: delete if not active anymore
+            else:                
+                self.hits.remove(hit)
 
         if self.shockwave is not None:
             self.shockwave.apply_to_enemy(enemy)
@@ -216,13 +217,13 @@ class Player(Stickman):
 
         if self.isLevitating:
             self.reignitProgressBar.set_position(self.position + vec(0, -self.size.y / 5))
-            self.reignitProgressBar.update_value(100 - self.levitatingTime.get_percentage() * 100)
+            self.reignitProgressBar.set_value(100 - self.levitatingTime.get_percentage() * 100)
             self.reignitProgressBar.draw(surface)
 
         if not self.kickCooldown.ready():
             pos = vec(self.position.x + self.size.x / 2, self.position.y)
             self.kickProgressBar.set_center(pos + vec(0, -self.KICK_PBAR_OFFSET))
-            self.kickProgressBar.update_value((1 - self.kickCooldown.get_percentage()) * 100)
+            self.kickProgressBar.set_value((1 - self.kickCooldown.get_percentage()) * 100)
             self.kickProgressBar.draw(surface)
 
         if self.shockwave is not None:
