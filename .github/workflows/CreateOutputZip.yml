@@ -18,7 +18,7 @@ jobs:
         run: mkdir -p output
 
       - name: Add files and folders to ZIP
-        run: zip -r output/BatonBagarre_${{ github.ref_name }}.zip assets src requirements.txt run.py
+        run: zip -r output/BatonBagarre_${{ github.ref_name }}.zip assets src requirements.txt run.py installation.txt
 
       - name: Upload ZIP file as an artifact
         uses: actions/upload-artifact@v3
