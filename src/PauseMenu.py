@@ -1,18 +1,15 @@
 import pygame
 
-
 class PauseMenu:
     def __init__(self, display_surface, options=None):
         self.option_rects = None
         self.display_surface = display_surface
         self.font = pygame.font.Font('./assets/font/upheavtt.ttf', 50)
-        self.options = options if options else ['Resume', 'Quit']
+        self.options = options if options else ['Resume', 'Options', 'Main Menu', 'Quit']
         self.selected_option = 0
         self.hovered_option = None
 
-
     def display_menu(self):
-
         pygame.display.set_caption("Pause Menu")
 
         # Create a transparent overlay

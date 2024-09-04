@@ -263,16 +263,21 @@ class Game:
 
             action = main_menu.display_menu()
             if action == 'play':
+                self.reset_game()
                 AudioManager().play_music()
                 self.run()
             elif action == 'options':
                 option_menu.display_option()
             elif action == 'controls':
                 control_menu.display_controls()
+            elif action == 'quit':
+                pygame.quit()
+                exit()
 
     def pause_menu(self):
         pause_menu = PauseMenu(self.__displaysurface,
-                               options=['Resume', 'Options', 'Quit'])
+                               options=['Resume', 'Options','Main Menu',
+                                        'Quit'])
         option_menu = OptionView(self.__displaysurface)
 
         while True:
@@ -284,6 +289,8 @@ class Game:
             elif action == 'Options':
                 option_menu.display_option()
                 pass
+            elif action == 'Main Menu':
+                self.main_menu()
             elif action == 'Quit':
                 pygame.quit()
                 exit()
@@ -301,6 +308,8 @@ class Game:
                 AudioManager().play_music()
                 self.reset_game()
                 self.run()
+            elif action == 'main_menu':
+                self.main_menu()
 
             pygame.display.update()
 

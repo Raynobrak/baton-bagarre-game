@@ -36,12 +36,12 @@ class ControlMenu:
 
             # Render the controls text
             controls_text = [
-                "Move Up: W or Up Arrow",
-                "Move Down: S or Down Arrow",
-                "Move Left: A or Left Arrow",
-                "Move Right: D or Right Arrow",
+                "Jump: W",
+                "Move Left: A",
+                "Move Right: D",
+                "Punch: Space",
                 "Kick: K",
-                "Special Power: Q",
+                "Shockwave: Q",
                 "Pause: ESC",
                 "Select: Enter",
             ]
