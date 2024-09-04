@@ -64,7 +64,7 @@ class Fire(Entity):
             self.life_points = self.MAX_HEALTH
         else:
             self.life_points = life_points
-        self.health_bar.update_value(self.life_points)
+        self.health_bar.set_value(self.life_points)
         self.has_lifePoints_changed_since_last_update = True
         self.update_life_animation()
 

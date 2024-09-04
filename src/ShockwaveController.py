@@ -30,6 +30,6 @@ class ShockwaveController():
         self.enemiesKilledCounter = 0
     
     def draw(self, surface):
-        self.progress_bar.update_value(self.enemiesKilledCounter)
+        self.progress_bar.set_value(self.enemiesKilledCounter)
         self.progress_bar.draw(surface)
         
