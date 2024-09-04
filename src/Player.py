@@ -172,7 +172,8 @@ class Player(Stickman):
 
                 if enemy.is_dead():
                     self.shockwave_controller.notify_enemy_killed()
-            # todo: delete if not active anymore
+            else:                
+                self.hits.remove(hit)
 
         if self.shockwave is not None:
             self.shockwave.apply_to_enemy(enemy)
