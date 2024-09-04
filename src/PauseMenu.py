@@ -10,8 +10,6 @@ class PauseMenu:
         self.selected_option = 0
         self.hovered_option = None
 
-    def add_option(self, option):
-        self.options.append(option)
 
     def display_menu(self):
 

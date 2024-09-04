@@ -13,6 +13,7 @@ from src.Constant import Constant
 from src.MainMenu import MainMenu
 from src.PauseMenu import PauseMenu
 from src.EndMenu import EndMenu
+from src.ControlMenu import ControlMenu
 from src.LightManager import LightManager
 from src.Fire import Fire
 from src.WaveManager import WaveManager
@@ -30,7 +31,8 @@ class Game:
     def __init__(self):
         pygame.init()
         self.enemies: list[Enemy] = []
-        self.__displaysurface = pygame.display.set_mode((Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        self.__displaysurface = pygame.display.set_mode(
+            (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
         pygame.display.set_caption("Game")
         self.load_all_images()
 
@@ -38,55 +40,80 @@ class Game:
 
         self.score = 0
 
-        self.platforms, self.fire, self.spawn_points = LevelGenerator().load_level_infos('./assets/levels/level1.png')
+        self.platforms, self.fire, self.spawn_points = LevelGenerator().load_level_infos(
+            './assets/levels/level1.png')
 
-        self.particleHolder = EnemyParticleHolder(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT), self.platforms)
+        self.particleHolder = EnemyParticleHolder(
+            vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT), self.platforms)
 
         self.__player = Player(vec(100, 100))
-        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies,
+                                        self.fire)
         self.light_manager = LightManager(self.fire)
 
         self.main_menu()
 
     def load_all_images(self):
-        ImageManager().load_image('./assets/textures/player_default.png', 'player')
+        ImageManager().load_image('./assets/textures/player_default.png',
+                                  'player')
 
-        ImageManager().load_image('./assets/textures/background.png', 'background')
-        ImageManager().load_image('./assets/textures/platform_left.png', 'platform_left')
-        ImageManager().load_image('./assets/textures/platform_mid_1.png', 'platform_mid_1')
-        ImageManager().load_image('./assets/textures/platform_mid_2.png', 'platform_mid_2')
-        ImageManager().load_image('./assets/textures/platform_right.png', 'platform_right')
+        ImageManager().load_image('./assets/textures/background.png',
+                                  'background')
+        ImageManager().load_image('./assets/textures/platform_left.png',
+                                  'platform_left')
+        ImageManager().load_image('./assets/textures/platform_mid_1.png',
+                                  'platform_mid_1')
+        ImageManager().load_image('./assets/textures/platform_mid_2.png',
+                                  'platform_mid_2')
+        ImageManager().load_image('./assets/textures/platform_right.png',
+                                  'platform_right')
 
-        ImageManager().load_image('./assets/textures/player_idle.png', 'player_idle')
-        ImageManager().load_image('./assets/textures/player_move.png', 'player_walking')
+        ImageManager().load_image('./assets/textures/player_idle.png',
+                                  'player_idle')
+        ImageManager().load_image('./assets/textures/player_move.png',
+                                  'player_walking')
 
-        ImageManager().load_image('./assets/textures/player_jump.png', 'player_jumping')
-        ImageManager().load_image('./assets/textures/player_attack.png', 'player_punch')
-        ImageManager().load_image('./assets/textures/player_kick.png', 'player_kick')
+        ImageManager().load_image('./assets/textures/player_jump.png',
+                                  'player_jumping')
+        ImageManager().load_image('./assets/textures/player_attack.png',
+                                  'player_punch')
+        ImageManager().load_image('./assets/textures/player_kick.png',
+                                  'player_kick')
 
-        ImageManager().load_image('./assets/textures/player_yoga.png', 'player_reignite')
+        ImageManager().load_image('./assets/textures/player_yoga.png',
+                                  'player_reignite')
 
-        ImageManager().load_image('./assets/textures/enemy_idle.png', 'enemy_idle')
-        ImageManager().load_image('./assets/textures/enemy_move.png', 'enemy_walking')
-        ImageManager().load_image('./assets/textures/enemy_jump.png', 'enemy_jumping')
-        ImageManager().load_image('./assets/textures/enemy_water_bucket.png', 'enemy_water_bucket')
+        ImageManager().load_image('./assets/textures/enemy_idle.png',
+                                  'enemy_idle')
+        ImageManager().load_image('./assets/textures/enemy_move.png',
+                                  'enemy_walking')
+        ImageManager().load_image('./assets/textures/enemy_jump.png',
+                                  'enemy_jumping')
+        ImageManager().load_image('./assets/textures/enemy_water_bucket.png',
+                                  'enemy_water_bucket')
 
         ImageManager().load_image('./assets/textures/fire_big.png', 'fire_big')
-        ImageManager().load_image('./assets/textures/fire_medium.png', 'fire_medium')
-        ImageManager().load_image('./assets/textures/fire_small.png', 'fire_small')
-        ImageManager().load_image('./assets/textures/fire_very_small.png', 'fire_very_small')
-        ImageManager().load_image('./assets/textures/fire_dead.png', 'fire_dead')
+        ImageManager().load_image('./assets/textures/fire_medium.png',
+                                  'fire_medium')
+        ImageManager().load_image('./assets/textures/fire_small.png',
+                                  'fire_small')
+        ImageManager().load_image('./assets/textures/fire_very_small.png',
+                                  'fire_very_small')
+        ImageManager().load_image('./assets/textures/fire_dead.png',
+                                  'fire_dead')
 
-        ImageManager().load_image('./assets/textures/play_button.png', 'play_button')
-        ImageManager().load_image('./assets/textures/options_button.png', 'options_button')
         ImageManager().load_image('./assets/textures/logo.png', 'logo')
         ImageManager().load_image('./assets/textures/circle.png', 'circle')
 
         AudioManager().load_sound('./assets/audio/BatonBagarre.mp3', 'music')
-        AudioManager().load_sound('./assets/audio/Enemy_Dead1.wav', 'Enemy_Dead1')
-        AudioManager().load_sound('./assets/audio/Enemy_Dead2.wav', 'Enemy_Dead2')
-        AudioManager().load_sound('./assets/audio/Enemy_Dead3.wav', 'Enemy_Dead3')
-        AudioManager().load_sound('./assets/audio/Enemy_Dead4.wav', 'Enemy_Dead4')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead1.wav',
+                                  'Enemy_Dead1')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead2.wav',
+                                  'Enemy_Dead2')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead3.wav',
+                                  'Enemy_Dead3')
+        AudioManager().load_sound('./assets/audio/Enemy_Dead4.wav',
+                                  'Enemy_Dead4')
         AudioManager().load_sound('./assets/audio/Game_Over.wav', 'Game_Over')
         AudioManager().load_sound('./assets/audio/Kick1.wav', 'Kick1')
         AudioManager().load_sound('./assets/audio/Kick2.wav', 'Kick2')
@@ -97,17 +124,23 @@ class Game:
         AudioManager().load_sound('./assets/audio/New_Wave1.wav', 'New_Wave1')
         AudioManager().load_sound('./assets/audio/New_Wave2.wav', 'New_Wave2')
         AudioManager().load_sound('./assets/audio/Yoga.wav', 'Yoga')
-        AudioManager().load_sound('./assets/audio/Water_Bucket1.wav', 'Water_Bucket1')
-        AudioManager().load_sound('./assets/audio/Water_Bucket2.wav', 'Water_Bucket2')
+        AudioManager().load_sound('./assets/audio/Water_Bucket1.wav',
+                                  'Water_Bucket1')
+        AudioManager().load_sound('./assets/audio/Water_Bucket2.wav',
+                                  'Water_Bucket2')
 
         FontManager().load_font('./assets/font/upheavtt.ttf', 'default')
-        FontManager().load_font('./assets/font/upheavtt.ttf', 'default_small', font_size=15)
-        FontManager().load_font('./assets/font/upheavtt.ttf', 'menu', font_size=50)
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'default_small',
+                                font_size=15)
+        FontManager().load_font('./assets/font/upheavtt.ttf', 'menu',
+                                font_size=50)
 
     def check_player_interaction(self, player: Player, fire: Fire):
         # Check if player is in range of fire and press E to interact
-        if (player.position + player.size / 2).distance_to(fire.position + fire.size / 2) <= player.size.x:
-            if pygame.key.get_pressed()[pygame.K_e] and player.isLevitating is False:
+        if (player.position + player.size / 2).distance_to(
+                fire.position + fire.size / 2) <= player.size.x:
+            if pygame.key.get_pressed()[
+                pygame.K_e] and player.isLevitating is False:
                 player.go_levitate()
 
             # Check if player has finished reigniting the fire
@@ -118,7 +151,8 @@ class Game:
     def check_enemies_interaction(self, enemies: list[Enemy], fire: Fire):
         # Check if an enemy is in range of fire
         for enemy in enemies:
-            if (enemy.position + enemy.size / 2).distance_to(fire.position + fire.size / 2) <= enemy.size.x:
+            if (enemy.position + enemy.size / 2).distance_to(
+                    fire.position + fire.size / 2) <= enemy.size.x:
                 enemy.go_water_bucket()
 
             # Check if enemy has finished throwing water bucket
@@ -130,11 +164,14 @@ class Game:
         self.particleHolder.generate_destruction_particles_for_enemy(enemy)
 
     def show_score(self, display):
-        text = Text(vec(Constant.WINDOW_WIDTH/2, 20), "Score: " + str(self.score), color=(255, 255, 255))
+        text = Text(vec(Constant.WINDOW_WIDTH / 2, 20),
+                    "Score: " + str(self.score), color=(255, 255, 255))
         text.draw_center(display)
 
     def show_wave(self, display):
-        text = Text(vec(Constant.WINDOW_WIDTH/2, 40), "Wave: " + str(self.wave_manager.get_wave_number()), color=(255, 255, 255), font='default_small')
+        text = Text(vec(Constant.WINDOW_WIDTH / 2, 40),
+                    "Wave: " + str(self.wave_manager.get_wave_number()),
+                    color=(255, 255, 255), font='default_small')
         text.draw_center(display)
 
     def run(self):
@@ -142,8 +179,9 @@ class Game:
         pygame.display.set_caption("Game")
 
         # Load level
-        bg = pygame.transform.smoothscale(ImageManager().get_image('background'),
-                                          (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+        bg = pygame.transform.smoothscale(
+            ImageManager().get_image('background'),
+            (Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
         self.light_manager.update()
         while True:
@@ -156,7 +194,8 @@ class Game:
             # Update Player
             self.wave_manager.update_wave(self.DELTA_TIME)
             self.__player.update(self.DELTA_TIME)
-            self.__player.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+            self.__player.check_collision_with_walls(
+                vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             # Update Fire
             self.fire.update(self.DELTA_TIME)
@@ -166,7 +205,8 @@ class Game:
             # Update Enemies
             for enemy in self.enemies:
                 enemy.update(self.DELTA_TIME)
-                enemy.check_collision_with_walls(vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
+                enemy.check_collision_with_walls(
+                    vec(Constant.WINDOW_WIDTH, Constant.WINDOW_HEIGHT))
 
             # Check fighting behavior
             for enemy in self.enemies:
@@ -218,6 +258,7 @@ class Game:
     def main_menu(self):
         main_menu = MainMenu(self.__displaysurface)
         option_menu = OptionView(self.__displaysurface)
+        control_menu = ControlMenu(self.__displaysurface)
         while True:
 
             action = main_menu.display_menu()
@@ -226,9 +267,12 @@ class Game:
                 self.run()
             elif action == 'options':
                 option_menu.display_option()
+            elif action == 'controls':
+                control_menu.display_controls()
 
     def pause_menu(self):
-        pause_menu = PauseMenu(self.__displaysurface, options=['Resume', 'Options', 'Quit'])
+        pause_menu = PauseMenu(self.__displaysurface,
+                               options=['Resume', 'Options', 'Quit'])
         option_menu = OptionView(self.__displaysurface)
 
         while True:
@@ -267,7 +311,8 @@ class Game:
         self.__player = Player(vec(100, 100))
         self.enemies = []
         self.fire.set_life_points(Fire.MAX_HEALTH)
-        self.wave_manager = WaveManager(self.spawn_points, self.enemies, self.fire)
+        self.wave_manager = WaveManager(self.spawn_points, self.enemies,
+                                        self.fire)
 
 
 if __name__ == "__main__":
