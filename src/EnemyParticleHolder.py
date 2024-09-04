@@ -23,8 +23,6 @@ class EnemyParticleHolder():
         hitboxLeft = (Enemy.ENEMY_SPRITE_SIZE.x - Enemy.ENEMY_HITBOX_SIZE.x) / 2
         enemyHitboxSubsurface = enemyImage.subsurface(pygame.Rect(vec(hitboxLeft, 0), Enemy.ENEMY_HITBOX_SIZE))
 
-        print(enemyImage.get_size(), enemyHitboxSubsurface.get_size())
-
         enemyHitbox = enemy.get_hitbox()
         enemySize = vec(enemyHitbox.size)
         enemyCenter = vec(enemyHitbox.center)

@@ -103,7 +103,6 @@ class Enemy(Stickman):
             self.go_right()
 
         if self.position.y > self.target.position.y:
-            print("enemy: ", self.position.y, "player: ", self.target.position.y)
             self.try_jump()
 
     def update(self, dt: float):
