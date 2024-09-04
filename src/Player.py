@@ -5,6 +5,10 @@ from src.Entity import Entity
 from src.Stickman import Stickman, StickmanState, Direction
 from src.Hit import PunchHit, KickHit
 from src.ProgressBar import ProgressBar
+from src.Enemy import Enemy
+from src.Shockwave import Shockwave
+from src.ShockwaveController import ShockwaveController
+
 
 vec = pygame.math.Vector2  # 2 for two dimensional
 
@@ -38,6 +42,9 @@ class Player(Stickman):
         self.kickingTime = CooldownVariable(0.2)
         self.punchCooldown = CooldownVariable(0.3)
         self.kickCooldown = CooldownVariable(0.5)
+
+        self.shockwave = None
+        self.shockwave_controller = ShockwaveController()
 
         self.hits = list()
 
@@ -81,14 +88,20 @@ class Player(Stickman):
             self.try_punch()
         elif keysPressed[pygame.K_k]:
             self.try_kick()
+        elif keysPressed[pygame.K_q]:
+            self.try_shockwave()
 
         if not keysPressed[pygame.K_a] and not keysPressed[pygame.K_d]:
             self.go_idle()
 
     def update(self, dt: float):
-
         for hit in self.hits:
             hit.update(dt)
+
+        if self.shockwave is not None:
+            self.shockwave.update(dt)
+            if not self.shockwave.is_active():
+                self.shockwave = None
 
         if not self.isLevitating:
             self.handle_events()
@@ -96,6 +109,8 @@ class Player(Stickman):
         self.apply_gravity(dt)
 
         super().update_position(dt)
+
+
 
         self.update_animation(dt)
 
@@ -150,11 +165,17 @@ class Player(Stickman):
         self.hits.append(KickHit(self))
         AudioManager().play_sound_random(["Kick1", "Kick2", "Kick3"])
 
-    def check_if_entity_is_hit(self, entity: Entity):
+    def check_if_enemy_is_hit(self, enemy: Enemy):
         for hit in self.hits:
             if hit.is_active():
-                hit.check_for_collision(entity)
+                hit.check_for_collision(enemy)
+
+                if enemy.is_dead():
+                    self.shockwave_controller.notify_enemy_killed()
             # todo: delete if not active anymore
+
+        if self.shockwave is not None:
+            self.shockwave.apply_to_enemy(enemy)
 
     def try_punch(self):
         if self.is_attacking():
@@ -178,6 +199,16 @@ class Player(Stickman):
             if self.lookingDirection is Direction.RIGHT:
                 self.animation.flip_horizontally()
 
+    def try_shockwave(self):
+        if self.is_attacking():
+            return
+        
+        if not self.shockwave_controller.is_shockwave_available():
+            return
+        self.shockwave_controller.reset()
+
+        self.shockwave = Shockwave(vec(self.position.x + self.size.x / 2, self.position.y + self.size.y))
+
     def draw(self, surface):
         sprites_pos = self.get_sprite_pos_centered_around_hitbox(self.PLAYER_SPRITE_SIZE)
         self.animation.set_position(sprites_pos)
@@ -193,3 +224,8 @@ class Player(Stickman):
             self.kickProgressBar.set_center(pos + vec(0, -self.KICK_PBAR_OFFSET))
             self.kickProgressBar.update_value((1 - self.kickCooldown.get_percentage()) * 100)
             self.kickProgressBar.draw(surface)
+
+        if self.shockwave is not None:
+            self.shockwave.draw(surface)
+
+        self.shockwave_controller.draw(surface)

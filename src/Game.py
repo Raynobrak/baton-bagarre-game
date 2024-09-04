@@ -210,7 +210,7 @@ class Game:
 
             # Check fighting behavior
             for enemy in self.enemies:
-                self.__player.check_if_entity_is_hit(enemy)
+                self.__player.check_if_enemy_is_hit(enemy)
             self.particleHolder.update(self.DELTA_TIME)
             for enemy in self.enemies:
                 if enemy.is_dead():
