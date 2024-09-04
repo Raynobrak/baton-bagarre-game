@@ -14,7 +14,6 @@ class ControlMenu:
         self.hovered_option = None
 
     def display_controls(self):
-        print("Displaying controls")
         pygame.display.set_caption("Controls")
 
         running = True

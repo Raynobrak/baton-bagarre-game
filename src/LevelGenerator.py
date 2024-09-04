@@ -34,9 +34,8 @@ class LevelGenerator:
         image_ratio = width / height
 
         if widow_ratio != image_ratio:
-            print("Image ratio is not the same as window ratio")
-            return None, None, None
-
+            raise Exception('error', 'Image ratio is not the same as window ratio')
+        
         scale = math.ceil(window_width / width)
 
         # Get the color of each pixel and determine the type of platform
@@ -62,21 +61,17 @@ class LevelGenerator:
                             src.UnmovablePlatform.UnmovablePlatform(x * scale, y * scale, scale, scale, "RIGHT"))
                     case self.FIRE:
                         if fire is not None:
-                            print("More than one fire in the level")
-                            return None, None, None
+                            raise Exception('error', 'More than one fire in the level')
                         fire = src.Fire.Fire(x * scale, y * scale, scale, scale)
                     case self.SPAWN_POINT:
                         spawn_points.append(src.SpawnPoint.SpawnPoint(vec(x * scale, y * scale), vec(scale, scale)))
                         if len(spawn_points) > 4:
-                            print("More than four spawn point in the level")
-                            return None, None, None
+                            raise Exception('error', 'More than four spawn point in the level')
 
         if fire is None:
-            print("No fire in the level")
-            return None, None, None
+            raise Exception('error', 'No fire in the level')
 
         if len(spawn_points) < 2:
-            print("Less than two spawn points in the level")
-            return None, None, None
+            raise Exception('error', 'Less than two spawn points in the level')
 
         return platforms, fire, spawn_points
