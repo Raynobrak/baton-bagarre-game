@@ -46,6 +46,9 @@ class PauseMenu:
                 return self.handle_mouse_click(event.pos)
             elif event.type == pygame.MOUSEMOTION:
                 self.handle_mouse_hover(event.pos)
+            elif event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
         return None
 
     def handle_mouse_click(self, mouse_pos):
