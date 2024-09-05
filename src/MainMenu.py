@@ -72,7 +72,7 @@ class MainMenu:
                         return 'controls'
                     if self.quit_rect.collidepoint(menu_mouse_pos):
                         pygame.quit()
-                        sys.exit()
+                        exit()
                 if event.type == KEYDOWN:
                     if event.key == K_UP or event.key == K_DOWN:
                         self.selected_option = (
@@ -87,7 +87,7 @@ class MainMenu:
                             return 'controls'
                         elif self.selected_option == 3:
                             pygame.quit()
-                            sys.exit()
+                            exit()
 
             pygame.display.update()
 

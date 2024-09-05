@@ -260,6 +260,8 @@ class Game:
         main_menu = MainMenu(self.__displaysurface)
         option_menu = OptionView(self.__displaysurface)
         control_menu = ControlMenu(self.__displaysurface)
+
+        AudioManager().stop_music()
         while True:
 
             action = main_menu.display_menu()

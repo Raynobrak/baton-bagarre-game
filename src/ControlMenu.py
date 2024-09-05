@@ -30,7 +30,7 @@ class ControlMenu:
             title_surface = self.title_font.render("Controls:", True,
                                                    (255, 255, 255))
             title_rect = title_surface.get_rect(
-                center=(self.display_surface.get_width() // 2, 100))
+                center=(self.display_surface.get_width() / 2, 100))
             self.display_surface.blit(title_surface, title_rect)
 
             # Render the controls text
@@ -49,13 +49,13 @@ class ControlMenu:
                 text_surface = self.controls_font.render(line, True,
                                                          (255, 255, 255))
                 text_rect = text_surface.get_rect(center=(
-                self.display_surface.get_width() // 2, 150 + i * 50))
+                self.display_surface.get_width() / 2, 150 + i * 50))
                 self.display_surface.blit(text_surface, text_rect)
 
             # Render the 'Back' option
             back_surface = self.title_font.render("Back", True, (255, 255, 255))
             back_rect = back_surface.get_rect(center=(
-            self.display_surface.get_width() // 2,
+            self.display_surface.get_width() / 2,
             150 + len(controls_text) * 50))
             self.display_surface.blit(back_surface, back_rect)
             self.option_rects = [back_rect]

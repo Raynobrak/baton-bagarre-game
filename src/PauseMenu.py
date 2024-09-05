@@ -28,7 +28,7 @@ class PauseMenu:
             else:
                 color = (100, 100, 100)
             text_surface = self.font.render(option, True, color)
-            text_rect = text_surface.get_rect(center=(self.display_surface.get_width() // 2, 200 + i * 100))
+            text_rect = text_surface.get_rect(center=(self.display_surface.get_width() / 2, 200 + i * 100))
             self.display_surface.blit(text_surface, text_rect)
             self.option_rects.append(text_rect)
         pygame.display.update()

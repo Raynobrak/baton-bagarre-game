@@ -12,11 +12,11 @@ class EndMenu:
 
         # Play Again button
         self.play_again_button_rect = pygame.Rect(0, 0, 200, 50)
-        self.play_again_button_rect.center = (display_surface.get_width() // 2, display_surface.get_height() // 2 + 50)
+        self.play_again_button_rect.center = (display_surface.get_width() / 2, display_surface.get_height() / 2 + 50)
 
         # Main Menu button
         self.main_menu_button_rect = pygame.Rect(0, 0, 200, 50)
-        self.main_menu_button_rect.center = (display_surface.get_width() // 2, display_surface.get_height() // 2 + 150)
+        self.main_menu_button_rect.center = (display_surface.get_width() / 2, display_surface.get_height() / 2 + 150)
 
         self.background_surface = pygame.Surface(display_surface.get_size())
 
@@ -24,15 +24,15 @@ class EndMenu:
         # Display score
         score_text = self.font.render(f'Score: {self.score}', True, (0, 0, 0))
         score_rect = score_text.get_rect(center=(
-            self.display_surface.get_width() // 2,
-            self.display_surface.get_height() // 2 - 125))
+            self.display_surface.get_width() / 2,
+            self.display_surface.get_height() / 2 - 125))
         self.display_surface.blit(score_text, score_rect)
 
         # Display wave number
         wave_text = self.font.render(f'Wave: {self.wave_number}', True, (0, 0, 0))
         wave_rect = wave_text.get_rect(center=(
-            self.display_surface.get_width() // 2,
-            self.display_surface.get_height() // 2 - 25))
+            self.display_surface.get_width() / 2,
+            self.display_surface.get_height() / 2 - 25))
         self.display_surface.blit(wave_text, wave_rect)
 
         # Display "Play Again" button
