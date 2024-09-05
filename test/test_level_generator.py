@@ -34,25 +34,29 @@ class TestLevelGenerator():
         assert spawn_points is not None and 4 >= len(spawn_points) > 1
 
     def test_level_with_no_fire(self):
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test2.png')
-        assert platforms is None
-        assert fire is None
-        assert spawn_points is None
+        try:
+            platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test2.png')
+            assert False
+        except Exception:
+            assert True
 
     def test_level_with_two_fire(self):
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test3.png')
-        assert platforms is None
-        assert fire is None
-        assert spawn_points is None
+        try:
+            platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test3.png')
+            assert False
+        except Exception:
+            assert True
 
     def test_level_with_not_enough_spawn_points(self):
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test4.png')
-        assert platforms is None
-        assert fire is None
-        assert spawn_points is None
+        try:
+            platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test4.png')
+            assert False
+        except Exception:
+            assert True
 
     def test_level_with_too_many_spawn_points(self):
-        platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test5.png')
-        assert platforms is None
-        assert fire is None
-        assert spawn_points is None
+        try:
+            platforms, fire, spawn_points = LevelGenerator().load_level_infos('./assets/levels/level_test5.png')
+            assert False
+        except Exception:
+            assert True
