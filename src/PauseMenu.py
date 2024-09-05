@@ -1,14 +1,20 @@
 import pygame
 
+from src.FontManager import FontManager
+
+
+# This class is responsible for displaying the pause menu
+# It displays the options: "Resume", "Options", "Main Menu", and "Quit"
 class PauseMenu:
     def __init__(self, display_surface, options=None):
         self.option_rects = None
         self.display_surface = display_surface
-        self.font = pygame.font.Font('./assets/font/upheavtt.ttf', 50)
+        self.font = FontManager().get_font('menu')
         self.options = options if options else ['Resume', 'Options', 'Main Menu', 'Quit']
         self.selected_option = 0
         self.hovered_option = None
 
+    # Display the pause menu
     def display_menu(self):
         pygame.display.set_caption("Pause Menu")
 
@@ -20,6 +26,7 @@ class PauseMenu:
         self.display_surface.blit(overlay, (0, 0))
 
         self.option_rects = []
+
         for i, option in enumerate(self.options):
             if i == self.selected_option:
                 color = (255, 255, 255)
@@ -33,6 +40,7 @@ class PauseMenu:
             self.option_rects.append(text_rect)
         pygame.display.update()
 
+    # Handle input for the pause menu
     def handle_input(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -51,12 +59,13 @@ class PauseMenu:
                 exit()
         return None
 
+    # Handle mouse click
     def handle_mouse_click(self, mouse_pos):
         for i, rect in enumerate(self.option_rects):
             if rect.collidepoint(mouse_pos):
                 return self.options[i]
         return None
-
+    # Handle mouse hover
     def handle_mouse_hover(self, mouse_pos):
         for i, rect in enumerate(self.option_rects):
             if rect.collidepoint(mouse_pos):
