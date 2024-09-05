@@ -15,6 +15,7 @@ class ShockwaveController():
 
     def __init__(self):
         self.enemiesKilledCounter = 0
+        self.game_over = False
         left = Constant.WINDOW_WIDTH / 2 - self.PROGRESS_BAR_SIZE.x / 2
 
         self.progress_bar = ProgressBar(vec(left, self.PROGRESS_BAR_TOP_MARGIN), self.PROGRESS_BAR_SIZE, self.PBAR_FRONT_COLOR, self.PBAR_BACK_COLOR, self.ENEMIES_THRESHOLD)
@@ -28,8 +29,15 @@ class ShockwaveController():
 
     def reset(self):
         self.enemiesKilledCounter = 0
-    
+        self.game_over = False
+
+    def set_game_over(self):
+        self.game_over = True
+
     def draw(self, surface):
+        if self.game_over:
+            return
+
         self.progress_bar.set_value(self.enemiesKilledCounter)
         self.progress_bar.draw(surface)
         

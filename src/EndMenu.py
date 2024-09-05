@@ -25,6 +25,7 @@ class EndMenu:
 
         self.background_surface = pygame.Surface(display_surface.get_size())
 
+        self.player.shockwave_controller.set_game_over()
     # Display the end menu
     def display(self):
 
