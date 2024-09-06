@@ -153,7 +153,7 @@ def handle_particle_vs_map_collision(particle: EnemyParticle, mapSize: vec):
     particle.move(correction)
 
     velocityAlongNormal = abs(particle.velocity.dot(dir))
-    impulse = 0.9 * velocityAlongNormal * -dir
+    impulse = 0.5 * velocityAlongNormal * -dir
     particle.accelerate(impulse + velocityAlongNormal * -dir)
 
 
