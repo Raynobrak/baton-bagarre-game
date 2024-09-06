@@ -15,9 +15,9 @@ from src.Stickman import Stickman, StickmanState, Direction
 vec = pygame.math.Vector2  # 2 for two dimensional
 
 class Shockwave():
-    SHOCKWAVE_RADIUS = 300
+    SHOCKWAVE_RADIUS = 200
     SHOCKWAVE_RADIUS_SQUARED = SHOCKWAVE_RADIUS * SHOCKWAVE_RADIUS
-    SHOCKWAVE_ANIMATION_DURATION = 2
+    SHOCKWAVE_ANIMATION_DURATION = 3
     SHOCKWAVE_EFFECT_DURATION = 0.01
     SHOCKWAVE_DMG = 1000 # shockwave one-shots enemies
     SHOCKWAVE_IMPULSE = 800
