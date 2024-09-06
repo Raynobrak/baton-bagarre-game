@@ -2,7 +2,13 @@
 
 ## Description du Projet
 
-**Bâton Bagarre** est un jeu d'action en 2D développé en Python à l'aide de la bibliothèque PyGame. Le jeu met en scène un stickman dont l'objectif est de protéger un feu de divers ennemis qui tentent de l'éteindre. Le feu s'éteint progressivement, réduisant la visibilité du joueur. Le stickman peut raviver le feu en intéragissant avec, mais cela prend du temps et doit également combattre les ennemis pour les empêcher de détruire le feu.
+**Bâton Bagarre** est un jeu d'action en 2D développé en Python à l'aide de la bibliothèque PyGame. Bâton Bagarre est un jeu ou le joueur incarne un stickman, ou "homme-bâton" en français, qui doit protéger un feu de camp face à des hordes d'ennemis de plus en plus grandes qui tenteront de l'éteindre. Si le feu s'éteint, la partie est terminée.
+
+## Histoire du jeu
+
+Le monde des stickmen, ou "hommes-bâtons" en français, fait face à une mystérieuse apocalypse qui semble corrompre sa population dans le but de réduire la lumière à néant.​
+
+Le joueur incarne le seul survivant des hommes-bâtons n'ayant pas encore succombé à l'obscurité. Le dernier espoir du peuple des Bâtons est un feu de camp, que le joueur devra protéger à tout prix face aux vagues d'ennemis corrompus. S'il échoue, les ténèbres règneront à tout jamais et la lumière sera réduite à néant.​
 
 ### Objectif
 

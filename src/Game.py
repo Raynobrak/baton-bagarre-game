@@ -260,6 +260,8 @@ class Game:
         main_menu = MainMenu(self.__displaysurface)
         option_menu = OptionView(self.__displaysurface)
         control_menu = ControlMenu(self.__displaysurface)
+
+        AudioManager().stop_music()
         while True:
 
             action = main_menu.display_menu()
@@ -299,6 +301,7 @@ class Game:
     def end_menu(self):
         end_menu = EndMenu(self.__displaysurface, self.score,
                            self.__player, self.enemies,self.wave_manager.get_wave_number())
+
         end_menu.display()
         AudioManager().play_sound('Game_Over')
         AudioManager().stop_music()
