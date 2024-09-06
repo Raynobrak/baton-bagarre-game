@@ -15,8 +15,8 @@ class EnemyParticleHolder():
         self.platforms = platforms
 
     def generate_destruction_particles_for_enemy(self, enemy):
-        LINES = 5
-        COLUMNS = 3
+        LINES = 3
+        COLUMNS = 4
 
         enemyImage = enemy.get_current_frame()
         enemyImage = pygame.transform.scale(enemyImage, Enemy.ENEMY_SPRITE_SIZE)
